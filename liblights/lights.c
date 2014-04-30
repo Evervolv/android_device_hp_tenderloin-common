@@ -109,7 +109,7 @@ static int write_int(char const *path, int value)
 
 	if (fd >= 0) {
 		char buffer[20];
-		int bytes = sprintf(buffer, "%d\n", value);
+		int bytes = snprintf(buffer, sizeof(buffer), "%d\n", value);
 		int amt = write(fd, buffer, bytes);
 		close(fd);
 		return amt == -1 ? -errno : 0;
@@ -349,6 +349,9 @@ static int open_lights(const struct hw_module_t *module, char const *name,
 
 	struct light_device_t *dev = malloc(sizeof(struct light_device_t));
 	memset(dev, 0, sizeof(*dev));
+
+	if(!dev)
+		return -ENOMEM;
 
 	dev->common.tag = HARDWARE_DEVICE_TAG;
 	dev->common.version = 0;
