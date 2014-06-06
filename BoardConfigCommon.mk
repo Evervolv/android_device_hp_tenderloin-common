@@ -114,7 +114,7 @@ BOARD_USES_UBOOT_MULTIIMAGE := true
 BOARD_USES_CUSTOM_FSCK_MSDOS := true
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/hp/tenderloin
+TARGET_KERNEL_SOURCE := kernel/htc/msm8960
 
 TARGET_RECOVERY_INITRC := device/hp/tenderloin-common/recovery/init.rc
 BOARD_USES_ALT_KMSG_LOCATION := "/proc/last_klog"
