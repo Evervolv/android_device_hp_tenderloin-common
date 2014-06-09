@@ -1,3 +1,5 @@
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
+
 ifneq ($(TARGET_SIMULATOR),true)
 LOCAL_PATH:= $(call my-dir)
 
@@ -50,4 +52,5 @@ LOCAL_MODULE = mkdosfs
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_EXECUTABLE)
 
+endif
 endif

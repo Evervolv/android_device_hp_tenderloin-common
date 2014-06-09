@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
 ifeq ($(BOARD_HAVE_BLUETOOTH_HCI),true)
 
 LOCAL_PATH := $(call my-dir)
@@ -54,4 +54,5 @@ include $(LOCAL_PATH)/vnd_buildcfg.mk
 
 include $(BUILD_SHARED_LIBRARY)
 
+endif
 endif

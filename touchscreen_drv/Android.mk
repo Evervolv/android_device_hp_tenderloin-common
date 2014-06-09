@@ -1,3 +1,5 @@
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
+
 LOCAL_PATH:= $(call my-dir)
 kernel_includes += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 
@@ -33,3 +35,4 @@ LOCAL_MODULE_TAGS:= eng
 LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
 include $(BUILD_EXECUTABLE)
+endif

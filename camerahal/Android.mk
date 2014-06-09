@@ -1,3 +1,5 @@
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
+
 LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -44,3 +46,4 @@ ifeq ($(BOARD_DEBUG_MEMLEAKS),true)
 endif
 
 include $(BUILD_SHARED_LIBRARY)
+endif
