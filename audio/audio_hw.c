@@ -622,7 +622,7 @@ static int out_set_sample_rate(struct audio_stream *stream, uint32_t rate)
 static size_t out_get_buffer_size(const struct audio_stream *stream)
 {
     return pcm_config_out.period_size *
-            audio_stream_out_frame_size((const struct audio_stream_out *)stream);
+               audio_stream_out_frame_size((const struct audio_stream_out *)stream);
 }
 
 static uint32_t out_get_channels(const struct audio_stream *stream)
@@ -850,7 +850,7 @@ exit:
 
     if (ret != 0) {
         ALOGW("pcm_write: %s\n", pcm_get_error(out->pcm));
-        usleep(bytes * 1000000 / audio_stream_out_frame_size(stream) /
+        usleep(bytes * 1000000 / audio_stream_out_frame_size(&stream->common) /
                out_get_sample_rate(&stream->common));
     }
 
@@ -933,7 +933,7 @@ static size_t in_get_buffer_size(const struct audio_stream *stream)
             in->pcm_config->rate;
     size = ((size + 15) / 16) * 16;
 
-    return size * audio_stream_in_frame_size((const struct audio_stream_in *)stream);
+    return size * audio_stream_in_frame_size(&in->stream);
 }
 
 static uint32_t in_get_channels(const struct audio_stream *stream)
