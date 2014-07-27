@@ -50,6 +50,7 @@
 #define OUT_SAMPLING_RATE 48000
 
 #define IN_PERIOD_SIZE 2400
+#define IN_PERIOD_SIZE_LOW_LATENCY 1200
 #define IN_PERIOD_COUNT 2
 #define IN_SAMPLING_RATE 48000
 
@@ -94,6 +95,16 @@ struct pcm_config pcm_config_in = {
     .format = PCM_FORMAT_S16_LE,
     .start_threshold = 1,
     .stop_threshold = (IN_PERIOD_SIZE * IN_PERIOD_COUNT),
+};
+
+struct pcm_config pcm_config_in_low_latency = {
+    .channels = 1,
+    .rate = IN_SAMPLING_RATE,
+    .period_size = IN_PERIOD_SIZE_LOW_LATENCY,
+    .period_count = IN_PERIOD_COUNT,
+    .format = PCM_FORMAT_S16_LE,
+    .start_threshold = 1,
+    .stop_threshold = (IN_PERIOD_SIZE_LOW_LATENCY * IN_PERIOD_COUNT),
 };
 
 struct pcm_config pcm_config_sco = {
@@ -144,7 +155,8 @@ struct stream_in {
 
     pthread_mutex_t lock; /* see note below on mutex acquisition order */
     struct pcm *pcm;
-    struct pcm_config *pcm_config;
+    struct pcm_config *pcm_config;          /* current configuration */
+    struct pcm_config *pcm_config_non_sco;  /* configuration to return after SCO is done */
     bool standby;
 
     unsigned int requested_rate;
@@ -452,7 +464,7 @@ static int start_input_stream(struct stream_in *in)
         in->pcm_config = &pcm_config_sco;
     } else {
         device = PCM_DEVICE_IN;
-        in->pcm_config = &pcm_config_in;
+        in->pcm_config = in->pcm_config_non_sco;
     }
 
     /*
@@ -1268,7 +1280,7 @@ static int adev_open_input_stream(struct audio_hw_device *dev,
                                   audio_devices_t devices,
                                   struct audio_config *config,
                                   struct audio_stream_in **stream_in,
-                                  audio_input_flags_t flags __unused,
+                                  audio_input_flags_t flags,
                                   const char *address __unused,
                                   audio_source_t source __unused)
 {
@@ -1307,7 +1319,10 @@ static int adev_open_input_stream(struct audio_hw_device *dev,
     in->dev = adev;
     in->standby = true;
     in->requested_rate = config->sample_rate;
-    in->pcm_config = &pcm_config_in; /* default PCM config */
+    /* default PCM config */
+    in->pcm_config = (config->sample_rate == IN_SAMPLING_RATE) && (flags & AUDIO_INPUT_FLAG_FAST) ?
+            &pcm_config_in_low_latency : &pcm_config_in;
+    in->pcm_config_non_sco = in->pcm_config;
 
     *stream_in = &in->stream;
     return 0;
