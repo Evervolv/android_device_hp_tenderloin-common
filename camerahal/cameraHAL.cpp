@@ -70,17 +70,23 @@ static struct hw_module_methods_t camera_module_methods = {
 camera_module_t HAL_MODULE_INFO_SYM = {
     common: {
         tag: HARDWARE_MODULE_TAG,
-        version_major: 1,
-        version_minor: 0,
-        id: CAMERA_HARDWARE_MODULE_ID,
-        name: "Tenderloin CameraHal Module",
-        author: "Tomasz Rostanski",
-        methods: &camera_module_methods,
-        dso: NULL, /* remove compilation warnings */
-        reserved: {0}, /* remove compilation warnings */
+        .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
+        .hal_api_version = HARDWARE_HAL_API_VERSION,
+        .id = CAMERA_HARDWARE_MODULE_ID,
+        .name = "Tenderloin CameraHal Module",
+        .author = "Tomasz Rostanski",
+        .methods = &camera_module_methods,
+        .dso = NULL, /* remove compilation warnings */
+        .reserved = {0}, /* remove compilation warnings */
     },
-    get_number_of_cameras: camera_get_number_of_cameras,
-    get_camera_info: camera_get_camera_info,
+    .get_number_of_cameras = camera_get_number_of_cameras,
+    .get_camera_info = camera_get_camera_info,
+    .set_callbacks = NULL,
+    .get_vendor_tag_ops = NULL, /* remove compilation warnings */
+    .open_legacy = NULL, /* remove compilation warnings */
+    .set_torch_mode = NULL, /* remove compilation warnings */
+    .init = NULL, /* remove compilation warnings */
+    .reserved = {0},
 };
 
 typedef struct priv_camera_device {
@@ -91,7 +97,6 @@ typedef struct priv_camera_device {
     int rotation;
     int released;
 } priv_camera_device_t;
-
 
 static struct {
     int type;
@@ -735,7 +740,7 @@ int camera_device_open(const hw_module_t* module, const char* name,
         memset(camera_ops, 0, sizeof(*camera_ops));
 
         priv_camera_device->base.common.tag = HARDWARE_DEVICE_TAG;
-        priv_camera_device->base.common.version = 0;
+        priv_camera_device->base.common.version = CAMERA_DEVICE_API_VERSION_1_0;
         priv_camera_device->base.common.module = (hw_module_t *)(module);
         priv_camera_device->base.common.close = camera_device_close;
         priv_camera_device->base.ops = camera_ops;
