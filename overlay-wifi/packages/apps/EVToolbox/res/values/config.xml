@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Notification toolbox widges -->
-    <bool name="config_has_gps" translatable="false">false</bool>
-    <bool name="config_has_wimax" translatable="false">false</bool>
-    <bool name="config_has_mobile_data" translatable="false">false</bool>
-    <bool name="config_has_mobile_radio" translatable="false">false</bool>
-    <bool name="config_disableOldLocks" translatable="false">true</bool>
-</resources>

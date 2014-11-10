@@ -99,8 +99,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
 # Comments during install added for Evervolv by cocide
   script.Print("Installing Evervolv")
   script.UnpackPackageDir("system", "/system")
+  system_items = ItemSet("system", "META/filesystem_config.txt")
 
-  symlinks = CopySystemFiles(input_zip, output_zip)
+  symlinks = CopyPartitionFiles(system_items, input_zip, output_zip)
   script.MakeSymlinks(symlinks)
 
   # -- tenderloin build change starting
@@ -111,10 +112,10 @@ def WriteFullOTAPackage(input_zip, output_zip):
   #MakeRecoveryPatch(output_zip, recovery_img, boot_img)
   # -- tenderloin build change done
 
-  Item.GetMetadata(input_zip)
+  system_items.GetMetadata(input_zip)
 # Comments during install added for Evervolv by cocide
   script.Print("Setting permissions")
-  Item.Get("system").SetPermissions(script)
+  system_items.Get("system").SetPermissions(script)
 
   # -- tenderloin build change starting
   #common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)

@@ -18,7 +18,7 @@
 #include <errno.h>
 #include <math.h>
 #include <poll.h>
-#include <linux/delay.h>
+#include "delay.h"
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/select.h>

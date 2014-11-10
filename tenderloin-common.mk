@@ -109,14 +109,14 @@ PRODUCT_PACKAGES += \
     libOmxAmrEnc
 
 # Camera
-PRODUCT_PACKAGES += \
-    camera.msm8660
+#PRODUCT_PACKAGES += \
+ #  camera.msm8660
 
 # Audio
 PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    audio.primary.tenderloin \
-    libsrec_jni
+   audio.a2dp.default \
+   audio.primary.tenderloin \
+   libsrec_jni
 
 # Sensors, misc
 PRODUCT_PACKAGES += \
@@ -133,7 +133,8 @@ PRODUCT_PACKAGES += \
     dosfsck \
     serial \
     com.android.future.usb.accessory \
-    rebootcmd
+    wpa_supplicant \
+    wpa_supplicant.conf
 
 PRODUCT_PACKAGES += \
 	make_ext4fs
