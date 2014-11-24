@@ -220,6 +220,19 @@ struct board_property{
 
 namespace android {
 
+struct FPSRange{
+int minFPS;
+int maxFPS;
+FPSRange(){
+minFPS=0;
+maxFPS=0;
+};
+FPSRange(int min,int max){
+minFPS=min;
+maxFPS=max;
+};
+};
+
 class QualcommCameraHardware : public RefBase{
 public:
 
