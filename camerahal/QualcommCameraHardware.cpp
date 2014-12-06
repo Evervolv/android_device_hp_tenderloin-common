@@ -4360,12 +4360,13 @@ void QualcommCameraHardware::receiveLiveSnapshot(uint32_t jpeg_size)
 #endif
 
     Mutex::Autolock cbLock(&mCallbackLock);
+#ifdef MEDIA_RECORDER_MSG_COMPRESSED_IMAGE
     if (mDataCallback && (mMsgEnabled & MEDIA_RECORDER_MSG_COMPRESSED_IMAGE)) {
         mDataCallback(CAMERA_MSG_COMPRESSED_IMAGE, mJpegMapped, data_counter,
                           NULL, mCallbackCookie);
     }
     else ALOGV("JPEG callback was cancelled--not delivering image.");
-
+#endif
     //Reset the Gps Information & relieve memory
     exif_table_numEntries = 0;
 
