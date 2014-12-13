@@ -100,6 +100,7 @@ PRODUCT_PACKAGES += \
 # QCOM OMX
 PRODUCT_PACKAGES += \
     libstagefrighthw \
+    libstagefright_soft_ffmpegvdec \
     libOmxCore \
     libmm-omxcore \
     libdivxdrmdecrypt \
