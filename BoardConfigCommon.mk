@@ -3,8 +3,8 @@
 
 TARGET_SPECIFIC_HEADER_PATH := device/hp/tenderloin-common/include 
 
-#art hacks
-ART_USE_CUSTOM_NMSC := 32
+#art Required to prevent overlapping of memory
+LIBART_IMG_BASE := 0x60000000
 ART_DONT_CHECK_GAP := true
 
 # We have so much memory 3:1 split is detrimental to us.
@@ -102,7 +102,6 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x40200000
 BOARD_PAGE_SIZE := 2048
 TARGET_KERNEL_NO_MODULES := true
-KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-eabi-4.7/bin/arm-eabi-
 BOARD_NEEDS_CUTILS_LOG := true
 
 TARGET_PROVIDES_RELEASETOOLS := true
