@@ -19,6 +19,8 @@
 #include <fcntl.h>
 #include <sys/mount.h>
 
+#include "property_service.h"
+
 int main()
 {
     char serial[50];
@@ -34,14 +36,7 @@ int main()
     if (strlen(serial) <= 0)
         return -1;
 
-    mount("rootfs", "/", "rootfs", MS_REMOUNT|0, NULL);
-
-    if ((fd = fopen("/default.prop", "a")) == NULL)
-        return -1;
-
-    sprintf(out, "ro.serialno=%s", serial);
-    fputs(out, fd);
-    fclose(fd);
+    property_set("ro.serialno", serial);
 
     return 0;
 }
