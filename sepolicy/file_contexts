@@ -1,0 +1,8 @@
+/dev/mmcblk0(.*)	u:object_r:mmc_block_device:s0
+/dev/block/mmcblk0(.*)	u:object_r:mmc_block_device:s0
+/dev/mapper(/.*)?	u:object_r:mmc_block_device:s0
+
+/dev/block/zram0	u:object_r:ram_device:s0
+/lvm(/.*)?		u:object_r:lvm_file:s0
+
+/dev/kgsl-2d(.*)	u:object_r:gpu_device:s0

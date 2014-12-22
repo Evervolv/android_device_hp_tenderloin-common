@@ -1,0 +1,7 @@
+type serial, domain;
+type serial_exec, exec_type, file_type;
+init_daemon_domain(serial)
+
+allow serial rootfs:file { entrypoint }; #FIXME: avc:  denied  { append } for  pid=101 comm="serial" name="default.prop" dev="rootfs" ino=3078 scontext=u:r:serial:s0 tcontext=u:object_r:rootfs:s0 tclass=file
+#allow serial rootfs:filesystem remount; # FIXME: avc:  denied  { remount } for  pid=101 comm="serial" scontext=u:r:serial:s0 tcontext=u:object_r:rootfs:s0 tclass=filesystem 
+allow serial tmpfs:chr_file rw_file_perms;

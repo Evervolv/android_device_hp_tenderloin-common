@@ -15,6 +15,7 @@ on init
     mkdir /lvm
     restorecon_recursive /lvm
     start lvm
+    restorecon_recursive /dev/mapper/
  
     # remove moboot next boot indicator and remount /boot read-only
     mkdir /boot
@@ -141,6 +142,8 @@ on fs
     # Enable zRAM
     swapon_all /fstab.tenderloin
 
+    restorecon /data/.layout_version
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
@@ -226,6 +229,7 @@ service lvm /sbin/lvm.static vgchange -ay
     class core
     disabled
     oneshot
+    seclabel u:r:lvm:s0
 
 service reboot_recovery /system/bin/moboot_control.sh recovery
      class core
