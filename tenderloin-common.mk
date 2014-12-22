@@ -220,7 +220,8 @@ PRODUCT_PACKAGES += \
     libmlplatform \
     ts_srv \
     ts_srv_set \
-    mkbootimg
+    mkbootimg \
+    lvm.static
 
 # Vibrator
 PRODUCT_PACKAGES += \
