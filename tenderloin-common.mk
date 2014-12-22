@@ -1,3 +1,5 @@
+DEVICE_PACKAGE_OVERLAYS += device/hp/tenderloin-common/overlay
+
 # Add touchcreen configuration file
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/HPTouchpad.idc:system/usr/idc/HPTouchpad.idc
