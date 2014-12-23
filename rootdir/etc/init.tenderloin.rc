@@ -224,6 +224,7 @@ service tsdriver /system/bin/ts_srv
     class core
     user root
     critical
+    seclabel u:r:ts_srv:s0
 
 service lvm /sbin/lvm.static vgchange -ay
     class core

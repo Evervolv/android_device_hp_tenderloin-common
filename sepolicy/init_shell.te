@@ -1,0 +1,6 @@
+allow init_shell mmc_block_device:blk_file getattr;
+
+# FIXME: This is needed for rebootcmd...we could really stand to have a better way to do this...
+# avc: denied { remount } for pid=2425 comm="busybox" scontext=u:r:init_shell:s0 tcontext=u:object_r:labeledfs:s0 tclass=filesystem
+# libsepol.check_assertion_helper: neverallow on line 264 of external/sepolicy/domain.te (or line 5255 of policy.conf) violated by allow init_shell labeledfs:filesystem { remount };
+# allow init_shell labeledfs:filesystem remount;
