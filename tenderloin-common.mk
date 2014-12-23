@@ -1,5 +1,8 @@
 DEVICE_PACKAGE_OVERLAYS += device/hp/tenderloin-common/overlay
 
+PRODUCT_COPY_FILES += \
+    device/hp/tenderloin-common/fstab.tenderloin:root/fstab.tenderloin
+
 # Add touchcreen configuration file
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/HPTouchpad.idc:system/usr/idc/HPTouchpad.idc
@@ -12,11 +15,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/bluetooth/bt_vendor.conf:/system/etc/bluetooth/bt_vendor.conf \
     device/hp/tenderloin-common/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
-
-# Recovery
-PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/recovery/sbin/ts_srv:recovery/root/sbin/ts_srv \
-	device/hp/tenderloin-common/recovery/twrp.fstab:recovery/root/etc/twrp.fstab
 
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/prebuilt/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \

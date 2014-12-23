@@ -102,7 +102,9 @@ USE_CAMERA_STUB := false
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x40200000
 BOARD_PAGE_SIZE := 2048
+ifndef RECOVERY_BUILD
 TARGET_KERNEL_NO_MODULES := true
+endif
 BOARD_NEEDS_CUTILS_LOG := true
 
 TARGET_PROVIDES_RELEASETOOLS := true
@@ -117,8 +119,6 @@ BOARD_USES_CUSTOM_FSCK_MSDOS := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/htc/msm8960
-
-TARGET_RECOVERY_INITRC := device/hp/tenderloin-common/recovery/init.rc
 BOARD_USES_ALT_KMSG_LOCATION := "/proc/last_klog"
 
 # tenderloin - these partition sizes are temporary to complete build
@@ -143,6 +143,7 @@ BOARD_CUSTOM_BOOTIMG_MK := device/hp/tenderloin-common/uboot-bootimg.mk
 ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0
 
 # Twrp
+TARGET_RECOVERY_DEVICE_DIRS := device/hp/tenderloin-common
 DEVICE_RESOLUTION = 1024x768
 RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := true
@@ -156,6 +157,13 @@ HAVE_SELINUX := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
 TW_WHITELIST_INPUT := "HPTouchpad"
+TW_NO_CPU_TEMP := true
+
+ifdef RECOVERY_BUILD
+TARGET_NEEDS_NON_PIE_SUPPORT :=true
+else
+TARGET_RECOVERY_FSTAB := device/hp/tenderloin-common/fstab.tenderloin
+endif
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
