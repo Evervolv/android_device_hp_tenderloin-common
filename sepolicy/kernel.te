@@ -1,0 +1,3 @@
+allow kernel ts_srv_file:dir relabelto;
+allow kernel ts_srv_file:file relabelto;
+allow kernel ts_srv_file:lnk_file relabelto;

@@ -1,1 +1,2 @@
 allow sysinit mmc_block_device:blk_file getattr;
+allow sysinit mmc_block_device:dir search;

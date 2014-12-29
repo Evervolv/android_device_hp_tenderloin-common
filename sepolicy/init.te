@@ -1,0 +1,4 @@
+allow init device:blk_file relabelfrom;
+allow init mmc_block_device:chr_file relabelto;
+allow init mmc_block_device:dir relabelto;
+allow init mmc_block_device:blk_file relabelto;

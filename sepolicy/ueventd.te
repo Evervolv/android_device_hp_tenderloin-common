@@ -1,0 +1,4 @@
+allow ueventd ts_srv_file:chr_file { create setattr };
+allow ueventd ts_srv_file:dir { r_dir_perms relabelto };
+allow ueventd ts_srv_file:file { rw_file_perms relabelto };
+allow ueventd ts_srv_file:lnk_file { getattr };
