@@ -225,6 +225,10 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Mount("/boot")
   script.UnpackPackageFile("boot.img", "/boot/uImage.Evervolv")
 
+  tptoolbox_cfg = open(OPTIONS.device_out + "/tptoolbox.cfg")
+  common.ZipWriteStr(output_zip, "tptoolbox.cfg", tptoolbox_cfg.read())
+  tptoolbox_cfg.close()
+
   moboot_tga = open(OPTIONS.device_out + "/moboot.splash.Evervolv.tga")
   common.ZipWriteStr(output_zip, "moboot.splash.Evervolv.tga", moboot_tga.read())
   moboot_tga.close()
