@@ -143,4 +143,10 @@
          specified -->
     <string name="default_wallpaper_component">@null</string>
 
+    <!-- Maximum number of supported users -->
+    <integer name="config_multiuserMaximumUsers">4</integer>
+
+    <!-- Whether UI for multi user should be shown -->
+    <bool name="config_enableMultiUserUI">true</bool>
+
 </resources>
