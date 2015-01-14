@@ -18,7 +18,6 @@ import sys
 import os
 import tenderloin_common as common
 
-
 LOCAL_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 RELEASETOOLS_DIR = os.path.abspath(os.path.join(LOCAL_DIR, '../../../build/tools/releasetools'))
 
@@ -41,12 +40,21 @@ def WriteFullOTAPackage(input_zip, output_zip):
   # change very often.
   script = edify_generator.EdifyGenerator(3, OPTIONS.info_dict)
 
+  oem_props = OPTIONS.info_dict.get("oem_fingerprint_properties")
+  recovery_mount_options = OPTIONS.info_dict.get("recovery_mount_options")
+  oem_dict = None
+  if oem_props is not None and len(oem_props) > 0:
+    if OPTIONS.oem_source is None:
+      raise common.ExternalError("OEM source required for this build")
+    script.Mount("/oem", recovery_mount_options)
+    oem_dict = common.LoadDictionaryFromLines(open(OPTIONS.oem_source).readlines())
+
   metadata = {"post-build": GetBuildProp("ro.build.fingerprint",
-                                         OPTIONS.info_dict),
+                                       OPTIONS.info_dict),
               "pre-device": GetBuildProp("ro.product.device",
-                                         OPTIONS.info_dict),
+                                       OPTIONS.info_dict),
               "post-timestamp": GetBuildProp("ro.build.date.utc",
-                                             OPTIONS.info_dict),
+                                           OPTIONS.info_dict),
               }
 
   device_specific = common.DeviceSpecificParams(
@@ -58,11 +66,59 @@ def WriteFullOTAPackage(input_zip, output_zip):
       metadata=metadata,
       info_dict=OPTIONS.info_dict)
 
-  AppendAssertions(script, OPTIONS.info_dict)
+  has_recovery_patch = HasRecoveryPatch(input_zip)
+  block_based = True
+
+  #if not OPTIONS.omit_prereq:
+  #  ts = GetBuildProp("ro.build.date.utc", OPTIONS.info_dict)
+  #  ts_text = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+  #  script.AssertOlderBuild(ts, ts_text)
+
+  AppendAssertions(script, OPTIONS.info_dict, oem_dict)
   device_specific.FullOTA_Assertions()
+
+  # Two-step package strategy (in chronological order, which is *not*
+  # the order in which the generated script has things):
+  #
+  # if stage is not "2/3" or "3/3":
+  #    write recovery image to boot partition
+  #    set stage to "2/3"
+  #    reboot to boot partition and restart recovery
+  # else if stage is "2/3":
+  #    write recovery image to recovery partition
+  #    set stage to "3/3"
+  #    reboot to recovery partition and restart recovery
+  # else:
+  #    (stage must be "3/3")
+  #    set stage to ""
+  #    do normal full package installation:
+  #       wipe and install system, boot image, etc.
+  #       set up system to update recovery partition on first boot
+  #    complete script normally (allow recovery to mark itself finished and reboot)
+
+  #recovery_img = common.GetBootableImage("recovery.img", "recovery.img",
+  #                                      OPTIONS.input_tmp, "RECOVERY")
+  if OPTIONS.two_step:
+    if not OPTIONS.info_dict.get("multistage_support", None):
+      assert False, "two-step packages not supported by this build"
+    fs = OPTIONS.info_dict["fstab"]["/misc"]
+    assert fs.fs_type.upper() == "EMMC", \
+        "two-step packages only supported on devices with EMMC /misc partitions"
+    bcb_dev = {"bcb_dev": fs.device}
+   # common.ZipWriteStr(output_zip, "recovery.img", recovery_img.data)
+    script.AppendExtra("""
+if get_stage("%(bcb_dev)s") == "2/3" then
+""" % bcb_dev)
+   # script.WriteRawImage("/recovery", "recovery.img")
+    script.AppendExtra("""
+set_stage("%(bcb_dev)s", "3/3");
+reboot_now("%(bcb_dev)s", "recovery");
+else if get_stage("%(bcb_dev)s") == "3/3" then
+""" % bcb_dev)
+
+  script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
-# MOTD during flash added for Evervolv by cocide
   if (OPTIONS.motd != None):
     eachRawMotd = OPTIONS.motd.split("\\n")
     for eachMotd in eachRawMotd:
@@ -84,51 +140,84 @@ def WriteFullOTAPackage(input_zip, output_zip):
       for line in motdLine:
         script.Print(line)
 
-  script.ShowProgress(0.5, 0)
+  system_progress = 0.75
 
   if OPTIONS.wipe_user_data:
-# Comments during install added for Evervolv by cocide
-    script.Print("Wiping user data")
-    script.FormatPartition("/data")
+    system_progress -= 0.1
+  if HasVendorPartition(input_zip):
+    system_progress -= 0.1
 
-# Comments during install added for Evervolv by cocide
-  script.Print("Formatting system")
-  script.FormatPartition("/system")
-  script.Mount("/system")
-  script.UnpackPackageDir("recovery", "/system")
-# Comments during install added for Evervolv by cocide
-  script.Print("Installing Evervolv")
-  script.UnpackPackageDir("system", "/system")
+  if "selinux_fc" in OPTIONS.info_dict:
+    WritePolicyConfig(OPTIONS.info_dict["selinux_fc"], output_zip)
+
+  recovery_mount_options = OPTIONS.info_dict.get("recovery_mount_options")
+
   system_items = ItemSet("system", "META/filesystem_config.txt")
+  script.ShowProgress(system_progress, 0)
+  if block_based:
+    # Full OTA is done as an "incremental" against an empty source
+    # image.  This has the effect of writing new data from the package
+    # to the entire partition, but lets us reuse the updater code that
+    # writes incrementals to do it.
+    system_tgt = GetImage("system", OPTIONS.input_tmp, OPTIONS.info_dict)
+    system_tgt.ResetFileMap()
+    system_diff = common.BlockDifference("system", system_tgt, src=None)
+    system_diff.WriteScript(script, output_zip)
+  else:
+    script.Print("Formatting system")
+    script.FormatPartition("/system")
+    script.Mount("/system", recovery_mount_options)
+    #if not has_recovery_patch:
+    #  script.UnpackPackageDir("recovery", "/system")
+    script.Print("Installing Evervolv")
+    script.UnpackPackageDir("system", "/system")
+    symlinks = CopyPartitionFiles(system_items, input_zip, output_zip)
+    script.Print("Creating symlinks")
+    script.MakeSymlinks(symlinks)
 
-  symlinks = CopyPartitionFiles(system_items, input_zip, output_zip)
-  script.MakeSymlinks(symlinks)
+  boot_img = common.GetBootableImage("boot.img", "boot.img",
+                                     OPTIONS.input_tmp, "BOOT")
 
-  # -- tenderloin build change starting
-  #boot_img = common.File("boot.img", common.BuildBootableImage(
-  #    os.path.join(OPTIONS.input_tmp, "BOOT")))
-  #recovery_img = common.File("recovery.img", common.BuildBootableImage(
-  #    os.path.join(OPTIONS.input_tmp, "RECOVERY")))
-  #MakeRecoveryPatch(output_zip, recovery_img, boot_img)
-  # -- tenderloin build change done
+  if not block_based:
+    def output_sink(fn, data):
+      common.ZipWriteStr(output_zip, "recovery/" + fn, data)
+      system_items.Get("system/" + fn, dir=False)
 
-  system_items.GetMetadata(input_zip)
-# Comments during install added for Evervolv by cocide
-  script.Print("Setting permissions")
-  system_items.Get("system").SetPermissions(script)
+  ######## tenderloin build change start ########
+  #  common.MakeRecoveryPatch(OPTIONS.input_tmp, output_sink,
+  #                           recovery_img, boot_img)
+  ######## tenderloin build change stop ########
 
-  # -- tenderloin build change starting
-  #common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
-  #common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
-  # -- tenderloin build change done
-  script.ShowProgress(0.2, 0)
+    system_items.GetMetadata(input_zip)
+    system_items.Get("system").SetPermissions(script)
 
-#  script.RunVerifyCachePartitionSize()
+  if HasVendorPartition(input_zip):
+    vendor_items = ItemSet("vendor", "META/vendor_filesystem_config.txt")
+    script.ShowProgress(0.1, 0)
 
-  script.ShowProgress(0.2, 10)
-  # -- tenderloin build change starting
-  #script.WriteRawImage("/boot", "boot.img")
+    if block_based:
+      vendor_tgt = GetImage("vendor", OPTIONS.input_tmp, OPTIONS.info_dict)
+      vendor_tgt.ResetFileMap()
+      vendor_diff = common.BlockDifference("vendor", vendor_tgt)
+      vendor_diff.WriteScript(script, output_zip)
+    else:
+      script.FormatPartition("/vendor")
+      script.Mount("/vendor", recovery_mount_options)
+      script.UnpackPackageDir("vendor", "/vendor")
 
+      symlinks = CopyPartitionFiles(vendor_items, input_zip, output_zip)
+      script.MakeSymlinks(symlinks)
+
+      vendor_items.GetMetadata(input_zip)
+      vendor_items.Get("vendor").SetPermissions(script)
+
+  common.CheckSize(boot_img.data, "boot.img", OPTIONS.info_dict)
+  common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
+
+  script.ShowProgress(0.05, 5)
+
+  ######## tenderloin build change start ########
+  # script.WriteRawImage("/boot", "boot.img")
   boot_img = open(OPTIONS.device_out + "/boot.img", "r")
   common.ZipWriteStr(output_zip, "boot.img", boot_img.read())
   boot_img.close()
@@ -142,31 +231,47 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   moboot_default = open(OPTIONS.device_out + "/moboot.default")
   common.ZipWriteStr(output_zip, "moboot.default", moboot_default.read())
-  moboot_tga.close()
+  moboot_default.close()
 
   script.UnpackPackageFile("moboot.splash.Evervolv.tga", "/boot/moboot.splash.Evervolv.tga")
   script.UnpackPackageFile("moboot.default", "/boot/moboot.default")
 
   # Delete other uImage traces.
-
-  um = ["/boot/uImage.CyanogenMod", "/boot/moboot.splash.CyanogenMod.tga", "/boot/uImage.ICS", 
-        "/boot/moboot.splash.ICS.tga", "/boot/uImage.AOKP", "/boot/moboot.splash.AOKP.tga",
-        "/boot/uImage.Classicnerd", "/boot/moboot.splash.Classicnerd"]
+  um = ["/boot/uImage.CyanogenMod", "/boot/moboot.splash.CyanogenMod.tga", "/boot/uImage.ICS",
+  "/boot/moboot.splash.ICS.tga", "/boot/uImage.AOKP", "/boot/moboot.splash.AOKP.tga",
+  "/boot/uImage.Classicnerd", "/boot/moboot.splash.Classicnerd"]
   script.DeleteFiles(um)
 
-  # -- tenderloin build change done
+  ######## tenderloin build change done ########
 
-  script.ShowProgress(0.1, 0)
+  script.ShowProgress(0.2, 10)
   device_specific.FullOTA_InstallEnd()
 
   if OPTIONS.extra_script is not None:
     script.AppendExtra(OPTIONS.extra_script)
 
   script.UnmountAll()
-  script.AddToZip(input_zip, output_zip)
-  WriteMetadata(metadata, output_zip)
-ota_from_target_files.WriteFullOTAPackage = WriteFullOTAPackage
 
+  if OPTIONS.wipe_user_data:
+    script.ShowProgress(0.1, 10)
+    script.FormatPartition("/data")
+
+  if OPTIONS.two_step:
+    script.AppendExtra("""
+set_stage("%(bcb_dev)s", "");
+""" % bcb_dev)
+    script.AppendExtra("else\n")
+    script.WriteRawImage("/boot", "recovery.img")
+    script.AppendExtra("""
+set_stage("%(bcb_dev)s", "2/3");
+reboot_now("%(bcb_dev)s", "");
+endif;
+endif;
+""" % bcb_dev)
+  script.AddToZip(input_zip, output_zip, input_path=OPTIONS.updater_binary)
+  WriteMetadata(metadata, output_zip)
+
+ota_from_target_files.WriteFullOTAPackage = WriteFullOTAPackage
 
 def WriteIncrementalOTAPackage(target_zip, source_zip, output_zip):
     print "Incremental OTA Packages are not support on the hp tenderloin at this time"
