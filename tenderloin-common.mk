@@ -142,7 +142,12 @@ PRODUCT_PACKAGES += \
     ts_srv_set \
     dosfsck \
     serial \
-    com.android.future.usb.accessory \
+    com.android.future.usb.accessory
+
+# Wifi
+PRODUCT_PACKAGES += \
+    dhcpcd.conf \
+    libwpa_client \
     wpa_supplicant \
     wpa_supplicant.conf
 
