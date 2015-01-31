@@ -143,7 +143,8 @@ PRODUCT_PACKAGES += \
     ts_srv_set \
     dosfsck \
     serial \
-    com.android.future.usb.accessory
+    com.android.future.usb.accessory \
+    rebootcmd
 
 # Wifi
 PRODUCT_PACKAGES += \
