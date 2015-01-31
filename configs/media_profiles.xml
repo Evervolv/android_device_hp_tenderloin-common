@@ -91,7 +91,7 @@
                    sampleRate="16000"
                    channels="1" />
         </EncoderProfile>
-<!-- TODO: Not implimented yet
+
         <EncoderProfile quality="vga" fileFormat="mp4" duration="60">
             <Video codec="h264"
                    bitRate="3000000"
@@ -104,7 +104,7 @@
                    sampleRate="16000"
                    channels="1" />
         </EncoderProfile>
--->
+
         <EncoderProfile quality="high" fileFormat="mp4" duration="60">
             <Video codec="h264"
                    bitRate="3000000"
