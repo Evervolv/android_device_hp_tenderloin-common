@@ -72,7 +72,7 @@
   void CameraParameters::setPreviewFrameRateMode(const char *mode) { set(KEY_PREVIEW_FRAME_RATE_MODE, mode); }; \
   void CameraParameters::getTouchIndexAec(int *x, int *y) const { }; \
   void CameraParameters::getTouchIndexAf(int *x, int *y) const { }; \
-  void CameraParameters::setPreviewFpsRange(int minFPS, int maxFPS) { };
+  void CameraParameters::setPreviewFpsRange(int minFPS, int maxFPS) { set(CameraParameters::KEY_PREVIEW_FPS_RANGE, String8::format("%d,%d", minFPS, maxFPS)); };
 
 #define CAMERA_PARAMETERS_EXTRA_H \
   static const char KEY_EXIF_DATETIME[]; \
