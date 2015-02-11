@@ -122,6 +122,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
    camera.msm8660
 
+# F2FS filesystem
+PRODUCT_PACKAGES += \
+   mkfs.f2fs \
+   fsck.f2fs \
+   fibmap.f2fs \
+   f2fstat*
+
 # Audio
 PRODUCT_PACKAGES += \
    audio.a2dp.default \
