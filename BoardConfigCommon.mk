@@ -162,9 +162,7 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun0/
 TW_WHITELIST_INPUT := "HPTouchpad"
 TW_NO_CPU_TEMP := true
 
-ifdef RECOVERY_BUILD
-TARGET_NEEDS_NON_PIE_SUPPORT :=true
-else
+ifndef RECOVERY_BUILD
 TARGET_RECOVERY_FSTAB := device/hp/tenderloin-common/fstab.tenderloin
 endif
 
