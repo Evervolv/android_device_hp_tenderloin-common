@@ -11,3 +11,6 @@
 /devices/virtual/block/dm-6		auto		vfat	defaults						voldmanaged=sdcard1:auto,nonremovable,noemulatedsd
 /devices/platform/msm_hsusb_host.0	auto		auto	defaults						voldmanaged=usbdisk:auto
 /dev/block/mmcblk0p13			/boot		ext3	ro,noatime,barrier=0					recoveryonly
+
+# zRAM
+/dev/block/zram0			none		swap	defaults						zramsize=134217728
