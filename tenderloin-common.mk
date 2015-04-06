@@ -143,6 +143,7 @@ PRODUCT_PACKAGES += \
     libnetcmdiface \
     libmllite \
     libmlplatform \
+    power.tenderloin \
     sensors.tenderloin \
     lights.tenderloin \
     memtrack.msm8660 \

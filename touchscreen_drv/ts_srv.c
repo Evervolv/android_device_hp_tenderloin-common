@@ -34,23 +34,19 @@
 #include <linux/input.h>
 #include <linux/uinput.h>
 #include <linux/hsuart.h>
-
+#include <sched.h>
+#include <sys/types.h>
+#include <sys/ioctl.h>
+#include <sys/time.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <signal.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdlib.h>
-
-#include <sys/socket.h>
+#include <math.h>
 #include <sys/select.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/types.h>
+#include <sys/socket.h>
 #include <sys/un.h>
-
 
 #include "digitizer.h"
 
@@ -64,7 +60,7 @@
 
 #define TS_SOCKET_LOCATION "/dev/socket/tsdriver"
 // Set to 1 to enable socket debug information
-#define DEBUG_SOCKET 1
+#define DEBUG_SOCKET 0
 
 #define TS_SETTINGS_FILE "/data/tssettings"
 // Set to 1 to enable settings file debug information
@@ -959,6 +955,7 @@ int calc_point(void)
 				tp[tpoint][k].touch_major);
 			send_uevent(uinput_fd, EV_ABS, ABS_MT_POSITION_X, tp[tpoint][k].x);
 			send_uevent(uinput_fd, EV_ABS, ABS_MT_POSITION_Y, tp[tpoint][k].y);
+			send_uevent(uinput_fd, EV_ABS, ABS_MT_PRESSURE, tp[tpoint][k].pw);
 #if !USE_B_PROTOCOL
 			send_uevent(uinput_fd, EV_SYN, SYN_MT_REPORT, 0);
 #endif
@@ -1065,6 +1062,11 @@ void open_uinput(void)
 	device.absfuzz[ABS_MT_POSITION_Y] = 1;
 	device.absflat[ABS_MT_POSITION_Y] = 0;
 
+	device.absmax[ABS_MT_PRESSURE] = 2000;
+	device.absmin[ABS_MT_PRESSURE] = 250;
+	device.absfuzz[ABS_MT_PRESSURE] = 0;
+	device.absflat[ABS_MT_PRESSURE] = 0;
+
 	if (write(uinput_fd,&device,sizeof(device)) != sizeof(device))
 		ALOGE("error setup\n");
 
@@ -1083,6 +1085,9 @@ void open_uinput(void)
 		ALOGE("error trkid rel\n");
 
 	if (ioctl(uinput_fd,UI_SET_ABSBIT,ABS_MT_TOUCH_MAJOR) < 0)
+		ALOGE("error tool rel\n");
+
+	if (ioctl(uinput_fd,UI_SET_ABSBIT,ABS_MT_PRESSURE) < 0)
 		ALOGE("error tool rel\n");
 
 	//if (ioctl(uinput_fd,UI_SET_ABSBIT,ABS_MT_WIDTH_MAJOR) < 0)
@@ -1161,20 +1166,14 @@ void create_ts_socket(int *socket_fd) {
 		if (bind_fd >= 0) {
 			int listen_fd;
 			listen_fd = listen(*socket_fd, 3);
-#if DEBUG_SOCKET
 			if (listen_fd < 0)
 				ALOGE("Error listening to socket\n");
-#endif
 		}
-#if DEBUG_SOCKET
 		else
 			ALOGE("Error binding socket\n");
-#endif
 	}
-#if DEBUG_SOCKET
 	else
 		ALOGE("Error creating socket\n");
-#endif
 	// change perms to 0666 (438 decimal)
 	chmod(TS_SOCKET_LOCATION, 438);
 }
@@ -1265,13 +1264,14 @@ void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
 
 	for (i=0; i<buffer_len; i++) {
 		buf = (int)buffer[i];
+
 		if (buf == 67 /* 'C' */ && *uart_fd >= 0) {
-			return_val = close(*uart_fd);
+			close(*uart_fd);
 			*uart_fd = -1;
-#if DEBUG_SOCKET
-			ALOGD("uart closed: %i\n", return_val);
-#endif
 			touchscreen_power(0);
+#if DEBUG_SOCKET
+			ALOGD("uart closed\n");
+#endif
 		}
 		if (buf == 79 /* 'O' */ && *uart_fd < 0) {
 			open_uart(uart_fd);
@@ -1301,9 +1301,9 @@ void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
 			current_mode[0] = read_settings_file();
 			send_ret = send(accept_fd, (char*)current_mode,
 				sizeof(*current_mode), 0);
-#if DEBUG_SOCKET
 			if (send_ret <= 0)
 				ALOGE("Unable to send data to socket\n");
+#if DEBUG_SOCKET
 			else
 				ALOGD("Sent current mode of %i to socket\n",
 					(int)current_mode[0]);
@@ -1331,6 +1331,7 @@ int main(int argc, char** argv)
 	open_uart(&uart_fd);
 	init_digitizer_fd();
 	touchscreen_power(1);
+
 
 	open_uinput();
 
@@ -1429,7 +1430,6 @@ int main(int argc, char** argv)
 					process_socket_buffer(recv_str, recv_ret,
 						&uart_fd, accept_fd);
 				}
-#if DEBUG_SOCKET
 				else {
 					if (recv_ret < 0)
 						ALOGE("Receive error\n");
@@ -1439,7 +1439,6 @@ int main(int argc, char** argv)
 				close(accept_fd);
 			} else {
 				ALOGE("Accept failed\n");
-#endif
 			}
 		}
 	}
