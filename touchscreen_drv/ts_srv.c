@@ -285,6 +285,9 @@ int send_uevent(int fd, __u16 type, __u16 code, __s32 value)
 		case ABS_MT_POSITION_Y:
 			strcpy(ccode, "ABS_MT_POSITION_Y");
 			break;
+		case ABS_MT_PRESSURE:
+			strcpy(ccode, "ABS_MT_PRESSURE");
+			break;
 		case SYN_MT_REPORT:
 			strcpy(ccode, "SYN_MT_REPORT");
 			break;
