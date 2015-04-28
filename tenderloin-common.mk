@@ -139,7 +139,6 @@ PRODUCT_PACKAGES += \
 # Sensors, misc
 PRODUCT_PACKAGES += \
     librs_jni \
-    wpa_supplicant.conf \
     libnetcmdiface \
     libmllite \
     libmlplatform \
