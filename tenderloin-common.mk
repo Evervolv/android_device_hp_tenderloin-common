@@ -167,4 +167,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
     ro.com.google.networklocation=1 \
     dalvik.vm.lockprof.threshold=500 \
-    dalvik.vm.dexopt-flags=m=y
+    dalvik.vm.dexopt-flags=m=y \
+    dalvik.vm.dex2oat-flags=--no-watch-dog
