@@ -168,4 +168,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.networklocation=1 \
     dalvik.vm.lockprof.threshold=500 \
     dalvik.vm.dexopt-flags=m=y \
-    dalvik.vm.dex2oat-flags=--no-watch-dog
+    dalvik.vm.dex2oat-flags=--no-watch-dog \
+    dalvik.vm.dex2oat-filter=interpret-only \
+    dalvik.vm.image-dex2oat-filter=speed
