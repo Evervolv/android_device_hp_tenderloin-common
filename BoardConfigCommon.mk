@@ -100,7 +100,7 @@ BOARD_OVERLAY_FORMAT_YCbCr_420_SP := true
 USE_CAMERA_STUB := false
 
 # tenderloin- these kernel settings are temporary to complete build
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom
+BOARD_KERNEL_CMDLINE := console=none  androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x40200000
 BOARD_PAGE_SIZE := 2048
 ifndef RECOVERY_BUILD
