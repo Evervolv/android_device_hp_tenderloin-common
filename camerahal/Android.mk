@@ -1,4 +1,4 @@
-ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin-disable)
 
 LOCAL_PATH:= $(call my-dir)
 
