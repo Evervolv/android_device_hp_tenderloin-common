@@ -94,6 +94,10 @@ PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_AAPT_CONFIG := xlarge mdpi
 PRODUCT_AAPT_PREF_CONFIG := mdpi
 
+# BoringSSL compatability wrapper
+PRODUCT_PACKAGES += \
+    libboringssl-compat
+
 # QCOM Hal
 PRODUCT_PACKAGES += \
     copybit.msm8660 \
