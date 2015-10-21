@@ -166,6 +166,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	make_ext4fs
 
+# Display
+PRODUCT_PACKAGES += \
+	libstlport \
+	libstlport_static
+
 # Property overrides.
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
