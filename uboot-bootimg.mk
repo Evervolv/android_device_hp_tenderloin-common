@@ -83,7 +83,6 @@ recovery_uboot_ramdisk := $(recovery_ramdisk:%.img=%.ub)
 
 $(recovery_uboot_ramdisk): $(MKIMAGE) $(recovery_ramdisk)
 	@echo ----- Making recovery image ------
-	$(call build-recoveryimage-target, $@)
 	$(MKIMAGE) $(INTERNAL_RECOVERYRAMDISKIMAGE_ARGS) $@
 	@echo ----- Made recovery uboot ramdisk -------- $@
 
