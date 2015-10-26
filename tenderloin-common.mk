@@ -137,7 +137,9 @@ PRODUCT_PACKAGES += \
    audio.a2dp.default \
    audio.primary.tenderloin \
    audio.r_submix.default \
-   libsrec_jni
+   libsrec_jni \
+   libavextensions \
+   libavmediaextentions
 
 # Sensors, misc
 PRODUCT_PACKAGES += \
