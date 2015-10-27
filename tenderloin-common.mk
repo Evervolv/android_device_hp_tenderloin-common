@@ -86,6 +86,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/configs/audio_policy.conf:system/etc/audio_policy.conf
 
+# To be inline with Build repo
+PRODUCT_COPY_FILES += \
+    device/hp/tenderloin-common/releasetools/install-recovery.sh:$(PRODUCT_OUT)/ota_temp/SYSTEM/bin/install-recovery.sh
+
 # We have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
