@@ -754,37 +754,6 @@ static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
         int total_sleep_time_us = 0;
         size_t period_size = out->pcm_config->period_size;
 
-        /* do not allow more than out->cur_write_threshold frames in kernel
-         * pcm driver buffer */
-        do {
-            struct timespec time_stamp;
-            if (pcm_get_htimestamp(out->pcm,
-                                   (unsigned int *)&kernel_frames,
-                                   &time_stamp) < 0)
-                break;
-            kernel_frames = pcm_get_buffer_size(out->pcm) - kernel_frames;
-
-            if (kernel_frames > out->cur_write_threshold) {
-                int sleep_time_us =
-                    (int)(((int64_t)(kernel_frames - out->cur_write_threshold)
-                                    * 1000000) / out->pcm_config->rate);
-                if (sleep_time_us < MIN_WRITE_SLEEP_US)
-                    break;
-                total_sleep_time_us += sleep_time_us;
-                if (total_sleep_time_us > MAX_WRITE_SLEEP_US) {
-#if 0
-                    ALOGW("out_write() limiting sleep time %d to %d",
-                          total_sleep_time_us, MAX_WRITE_SLEEP_US);
-#endif
-                    sleep_time_us = MAX_WRITE_SLEEP_US -
-                                        (total_sleep_time_us - sleep_time_us);
-                }
-                usleep(sleep_time_us);
-            }
-
-        } while ((kernel_frames > out->cur_write_threshold) &&
-                (total_sleep_time_us <= MAX_WRITE_SLEEP_US));
-
         /* do not allow abrupt changes on buffer size. Increasing/decreasing
          * the threshold by steps of 1/4th of the buffer size keeps the write
          * time within a reasonable range during transitions.
