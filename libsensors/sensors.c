@@ -68,16 +68,17 @@ static struct hw_module_methods_t sensors_module_methods = {
 };
 
 struct sensors_module_t HAL_MODULE_INFO_SYM = {
-    .common = {
-        .tag = HARDWARE_MODULE_TAG,
-        .version_major = 1,
-        .version_minor = 0,
-        .id = SENSORS_HARDWARE_MODULE_ID,
-        .name = "Hewlet Packard Sensors Module",
-        .author = "Erik Hardesty",
-        .methods = &sensors_module_methods,
-    },
-    .get_sensors_list = sensors__get_sensors_list
+        common: {
+                tag: HARDWARE_MODULE_TAG,
+                version_major: 1,
+                version_minor: 0,
+                id: SENSORS_HARDWARE_MODULE_ID,
+                name: "Hewlet Packard Sensors Module",
+                author: "Erik Hardesty",
+                methods: &sensors_module_methods,
+         },
+         get_sensors_list: sensors__get_sensors_list,
+         set_operation_mode: NULL
 };
 
 /*****************************************************************************/
