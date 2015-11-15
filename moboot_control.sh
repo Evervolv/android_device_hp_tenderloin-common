@@ -4,7 +4,7 @@ export PATH=/system/xbin:/system/bin
 
 DEFAULT_RECOVERY_CFG=/boot/android.default.recovery
 
-busybox mount /boot -o remount,rw
+toybox mount /boot -o remount,rw
 
 case "$1" in
     recovery)
@@ -26,4 +26,4 @@ esac
 # currently moboot ignores invalid targets so we are good
 echo -n $CMD >/boot/moboot.next
 sync
-busybox mount /boot -o remount,ro
+toybox mount /boot -o remount,ro
