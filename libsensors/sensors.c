@@ -76,6 +76,8 @@ struct sensors_module_t HAL_MODULE_INFO_SYM = {
                 name: "Hewlet Packard Sensors Module",
                 author: "Erik Hardesty",
                 methods: &sensors_module_methods,
+                dso: NULL,
+                reserved: {0}
          },
          get_sensors_list: sensors__get_sensors_list,
          set_operation_mode: NULL
