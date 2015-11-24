@@ -126,7 +126,7 @@ int Lsm303dlhGSensor::readEvents(sensors_event_t* data, int count)
         if (type == EV_ABS) {
             processEvent(event->code, event->value);
         } else if (type == EV_SYN) {
-            mPendingEvent.timestamp = timevalToNano(event->time);
+            mPendingEvent.timestamp = getTimestamp();
             *data++ = mPendingEvent;
             count--;
             numEventReceived++;
