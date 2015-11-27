@@ -5,7 +5,6 @@ TARGET_SPECIFIC_HEADER_PATH := device/hp/tenderloin-common/include
 
 #art Required to prevent overlapping of memory
 LIBART_IMG_BASE := 0x60000000
-ART_DONT_CHECK_GAP := true
 
 # We have so much memory 3:1 split is detrimental to us.
 TARGET_USES_2G_VM_SPLIT := true
