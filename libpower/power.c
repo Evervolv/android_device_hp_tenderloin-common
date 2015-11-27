@@ -32,7 +32,7 @@
 #define SCALING_GOVERNOR_PATH "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
 #define BOOSTPULSE_ONDEMAND "/sys/devices/system/cpu/cpufreq/ondemand/boostpulse"
 #define BOOSTPULSE_INTERACTIVE "/sys/devices/system/cpu/cpufreq/interactive/boostpulse"
-#define NOTIFY_ON_MIGRATE "/dev/cpuctl/apps/cpu.notify_on_migrate"
+#define NOTIFY_ON_MIGRATE "/dev/cpuctl/cpu.notify_on_migrate"
 
 #define TS_SOCKET_LOCATION "/dev/socket/tsdriver"
 #define TS_SOCKET_DEBUG 0
