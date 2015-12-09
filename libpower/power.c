@@ -167,13 +167,13 @@ static void configure_governor()
         sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/optimal_freq", "918000");
         sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/sync_freq", "1026000");
         sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load", "80");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/input_boost", "1242000");
+        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/input_boost", "1512000");
         sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/sampling_rate", "50000");
 
     } else if (strncmp(governor, "interactive", 11) == 0) {
         sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/min_sample_time", "90000");
         sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/io_is_busy", "1");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/hispeed_freq", "1242000");
+        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/hispeed_freq", "1512000");
         sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay", "30000");
         sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/timer_rate", "30000");
     }
