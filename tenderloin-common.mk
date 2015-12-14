@@ -82,6 +82,11 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/configs/media_profiles.xml:system/etc/media_profiles.xml \
     device/hp/tenderloin-common/configs/media_codecs.xml:system/etc/media_codecs.xml 
 
+#permissions
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml
+
 # Audio Policy Configuration
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/configs/audio_policy.conf:system/etc/audio_policy.conf
