@@ -9,7 +9,8 @@ PRODUCT_COPY_FILES += \
 
 # Dualboot Magic
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/moboot_control.sh:system/bin/moboot_control.sh
+    device/hp/tenderloin-common/moboot_control.sh:system/bin/moboot_control.sh \
+    device/hp/tenderloin-common/recovery/root/sbin/rebootrecovery.sh:recovery/root/sbin/rebootrecovery.sh
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
