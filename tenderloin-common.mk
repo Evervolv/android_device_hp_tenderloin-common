@@ -136,8 +136,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Media
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml \
     device/hp/tenderloin-common/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    device/hp/tenderloin-common/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    device/hp/tenderloin-common/configs/media_codecs_google_performance.xml:system/etc/media_codecs_google_performance.xml \
+    device/hp/tenderloin-common/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
+
+PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
