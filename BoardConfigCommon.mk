@@ -51,9 +51,11 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DICS_CAMERA_BLOB -DQCOM_BSP
 
 # Wifi related defines
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_ath6kl
-WPA_SUPPLICANT_VERSION           := VER_0_8_X
-BOARD_WLAN_DEVICE                := ath6kl
+WPA_SUPPLICANT_VERSION      := VER_0_8_X
+BOARD_WLAN_DEVICE           := ath6kl
+WIFI_DRIVER_MODULE_PATH     := "/system/lib/modules/ath6kl.ko"
+WIFI_DRIVER_MODULE_NAME     := "ath6kl"
+WIFI_DRIVER_LOADER_DELAY    := 1000000
 
 TARGET_BOOTANIMATION_USE_RGB565 := true
 TARGET_BOOTANIMATION_PRELOAD := true
@@ -103,9 +105,6 @@ USE_CAMERA_STUB := false
 BOARD_KERNEL_CMDLINE := console=none  androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x40200000
 BOARD_PAGE_SIZE := 2048
-ifndef RECOVERY_BUILD
-TARGET_KERNEL_NO_MODULES := true
-endif
 KERNEL_TOOLCHAIN_PREFIX := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-eabi-4.8/bin/arm-eabi-
 BOARD_NEEDS_CUTILS_LOG := true
 
@@ -121,6 +120,14 @@ BOARD_USES_CUSTOM_FSCK_MSDOS := true
 
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/htc/msm8960
+KERNEL_WIFI_MODULES:
+	$(MAKE) -C external/backports-wireless defconfig-ath6kl
+	export CROSS_COMPILE=$(KERNEL_TOOLCHAIN)/$(KERNEL_TOOLCHAIN_PREFIX); $(MAKE) -C external/backports-wireless KLIB=$(KERNEL_SRC) KLIB_BUILD=$(KERNEL_OUT) ARCH=$(TARGET_ARCH) $(ARM_CROSS_COMPILE)
+	cp `find external/backports-wireless -name *.ko` $(KERNEL_MODULES_OUT)/
+	arm-eabi-strip --strip-debug `find $(KERNEL_MODULES_OUT) -name *.ko`
+	$(MAKE) -C external/backports-wireless clean
+
+TARGET_KERNEL_MODULES := KERNEL_WIFI_MODULES
 BOARD_USES_ALT_KMSG_LOCATION := "/proc/last_klog"
 
 # tenderloin - these partition sizes are temporary to complete build
