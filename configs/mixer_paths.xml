@@ -7,16 +7,20 @@
   <ctl name="Speaker Switch" value="1,1" />
   <ctl name="Speaker Volume" value="63,63" />
   <ctl name="Speaker Switch" value="1,1" />
-  <ctl name="Headphone Volume" value="63,45" />
-  <ctl name="Headphone Switch" value="1,1" />
   <ctl name="Headphone Volume" value="63,63" />
-  <ctl name="Headphone Switch" value="1,1" />
+  <ctl name="Headphone Switch" value="0,0" />
 
-  <ctl name="LINEOUT1 Mixer Output Switch" value="1" /> <!-- line1mix_id -->
+<!--
+  <ctl name="LINEOUT1 Mixer Output Switch" value="1" />
+-->
+  <ctl name="LINEOUT1 Mixer Output Switch" value="0" />
+  <ctl name="LINEOUT2 Mixer Output Switch" value="0" />
   <ctl name="LINEOUT1N Switch" value="1" /> <!-- dsp.line1outn_id -->
   <ctl name="LINEOUT1P Switch" value="1" /> <!-- dsp.line1outp_id -->
 
-  <ctl name="LINEOUT2 Mixer Output Switch" value="1" /> <!-- line2mix_id -->
+<!--
+  <ctl name="LINEOUT2 Mixer Output Switch" value="1" />
+-->
   <ctl name="LINEOUT2N Switch" value="1" /> <!-- dsp.line2outn_id -->
   <ctl name="LINEOUT2P Switch" value="1" /> <!-- dsp.line2outp_id -->
 
@@ -29,20 +33,34 @@
   <ctl name="DAC2 Left Sidetone Volume" value="12" /> <!-- dac2vol_id -->
 
   <ctl name="IN1L PGA IN1LN Switch" value="1" /> <!-- in1pgan_id -->
-  <ctl name="IN1L PGA IN1LP Switch" value="1" /> <!-- in1pgap_id -->
+  <ctl name="IN2L PGA IN2LN Switch" value="1" /> <!-- in1pgan_id -->
+<!--
+	not needed ?
+  <ctl name="IN1L PGA IN1LP Switch" value="1" />
+-->
   <ctl name="MIXINL Output Record Volume" value="1" /> <!-- mixinl_id -->
-  <ctl name="IN1L Switch" value="1" /> <!-- in1l_id -->
+  <ctl name="IN1L Switch" value="0" /> <!-- in1l_id -->
   <ctl name="IN1L Volume" value="27" /> <!-- in1lvol_id -->
   <ctl name="IN1L ZC Switch" value="0" /> <!-- in1lzc_id -->
+  <ctl name="IN2L Switch" value="0" /> <!-- in1l_id -->
+  <ctl name="IN2L Volume" value="27" /> <!-- in1lvol_id -->
+  <ctl name="IN2L ZC Switch" value="0" /> <!-- in1lzc_id -->
 
-  <ctl name="MIXINL IN1L Switch" value="1" /> <!-- mixinl1_id -->
+<!--
+  <ctl name="MIXINL IN1L Switch" value="1" />
+-->
+  <ctl name="MIXINL IN1L Switch" value="0" />
+  <ctl name="MIXINL IN2L Switch" value="0" />
+
   <ctl name="MIXINL IN1L Volume" value="0" /> <!-- mixinlvol_id -->
+  <ctl name="MIXINL IN2L Volume" value="0" /> <!-- mixinlvol_id -->
   <ctl name="Output Volume" value="59,59" /> <!-- dsp.outvol_id -->
   <ctl name="DAC1L Mixer AIF1.1 Switch" value="1" /> <!-- dac1aifl_id -->
   <ctl name="DAC1R Mixer AIF1.1 Switch" value="1" /> <!-- dac1aifr_id -->
 
   <ctl name="DAC1 Switch" value="1,1" /> <!-- dac1_id -->
   <ctl name="DAC2 Switch" value="1,1" /> <!-- dac2_id -->
+
   </path>
 
   <!-- fixup for misread values? -->
@@ -286,47 +304,57 @@
   <ctl name="IN1R PGA IN1RP Switch" ignore="1" />
   <ctl name="IN1R PGA IN1RN Switch" ignore="1" />
 
-  <path name="speaker-enable">
-	<ctl name="PCM Playback Sink" value="0,0,0" /> <!-- dsp.pcm_playback_id -->
-	<ctl name="speaker_stereo_rx" value="0" /> <!-- dsp.speaker_stereo_rx_id -->
+  <path name="out-enable">
 	<ctl name="PCM Playback Sink" value="0,0,1" /> <!-- dsp.pcm_playback_id -->
 	<ctl name="speaker_stereo_rx" value="1" /> <!-- dsp.speaker_stereo_rx_id -->
-	<ctl name="LINEOUT1N Switch" value="1" /> <!-- dsp.line1outn_id -->
-	<ctl name="LINEOUT1P Switch" value="1" /> <!-- dsp.line1outp_id -->
-	<ctl name="LINEOUT2N Switch" value="1" /> <!-- dsp.line2outn_id -->
-	<ctl name="LINEOUT2P Switch" value="1" /> <!-- dsp.line2outp_id -->
-	<ctl name="Output Volume" value="59,59" /> <!-- dsp.outvol_id -->
   </path>
-  <path name="speaker-disable">
+  <path name="out-disable">
 	<ctl name="PCM Playback Sink" value="0,0,0" /> <!-- dsp.pcm_playback_id -->
 	<ctl name="speaker_stereo_rx" value="0" /> <!-- dsp.speaker_stereo_rx_id -->
   </path>
-
-  <path name="headphone-enable">
-	<ctl name="PCM Playback Sink" value="0,0,0" /> <!-- dsp.pcm_playback_id -->
-	<ctl name="speaker_stereo_rx" value="0" /> <!-- dsp.speaker_stereo_rx_id -->
-	<ctl name="PCM Playback Sink" value="0,0,1" /> <!-- dsp.pcm_playback_id -->
-	<ctl name="speaker_stereo_rx" value="1" /> <!-- dsp.speaker_stereo_rx_id -->
-	<ctl name="Output Volume" value="117,117" /> <!-- dsp.outvol_id -->
-	<ctl name="LINEOUT1N Switch" value="0" /> <!-- dsp.line1outn_id -->
-	<ctl name="LINEOUT1P Switch" value="0" /> <!-- dsp.line1outp_id -->
-	<ctl name="LINEOUT2N Switch" value="0" /> <!-- dsp.line2outn_id -->
-	<ctl name="LINEOUT2P Switch" value="0" /> <!-- dsp.line2outp_id -->
+  <path name="out-reset">
+	<ctl name="speaker_stereo_rx" value="1" />
+	<ctl name="speaker_stereo_rx" value="0" />
   </path>
-  <path name="headphone-disable">
-	<ctl name="PCM Playback Sink" value="0,0,0" /> <!-- dsp.pcm_playback_id -->
-	<ctl name="speaker_stereo_rx" value="0" /> <!-- dsp.speaker_stereo_rx_id -->
-  </path>
-
-  <path name="mic-enable">
-	<ctl name="PCM Capture Source" value="0,1,0" /> <!-- dsp.pcm_capture_id -->
-	<ctl name="speaker_mono_tx" value="0" /> <!-- dsp.speaker_mono_tx_id -->
+  <path name="in-enable">
 	<ctl name="PCM Capture Source" value="0,1,1" /> <!-- dsp.pcm_capture_id -->
 	<ctl name="speaker_mono_tx" value="1" /> <!-- dsp.speaker_mono_tx_id -->
   </path>
-  <path name="mic-disable">
+  <path name="in-disable">
 	<ctl name="PCM Capture Source" value="0,1,0" /> <!-- dsp.pcm_capture_id -->
 	<ctl name="speaker_mono_tx" value="0" /> <!-- dsp.speaker_mono_tx_id -->
+  </path>
+
+  <path name="speaker-enable">
+   <ctl name="LINEOUT1 Mixer Output Switch" value="1" />
+   <ctl name="LINEOUT2 Mixer Output Switch" value="1" />
+  </path>
+  <path name="speaker-disable">
+   <ctl name="LINEOUT1 Mixer Output Switch" value="0" />
+   <ctl name="LINEOUT2 Mixer Output Switch" value="0" />
+  </path>
+  <path name="headphone-enable">
+   <ctl name="Headphone Switch" value="1,1" />
+  </path>
+  <path name="headphone-disable">
+   <ctl name="Headphone Switch" value="0,0" />
+  </path>
+
+  <path name="imic-enable">
+   <ctl name="MIXINL IN1L Switch" value="1" />
+   <ctl name="IN1L Switch" value="1" />
+  </path>
+  <path name="imic-disable">
+   <ctl name="MIXINL IN1L Switch" value="0" />
+   <ctl name="IN1L Switch" value="0" />
+  </path>
+  <path name="wmic-enable">
+   <ctl name="MIXINL IN2L Switch" value="1" />
+   <ctl name="IN2L Switch" value="1" />
+  </path>
+  <path name="wmic-disable">
+   <ctl name="MIXINL IN2L Switch" value="0" />
+   <ctl name="IN2L Switch" value="0" />
   </path>
 
 </mixer>

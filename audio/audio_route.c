@@ -221,7 +221,7 @@ static void path_print(struct mixer_path *path)
     ALOGV("Path: %s, length: %d", path->name, path->length);
     for (i = 0; i < path->length; i++)
 		for (j = 0; j < path->setting[i].ctl_vals; j++)
-        	ALOGV("  %d: %s [%d]-> %d", i,
+           ALOGV("  %d: %s [%d]-> %ld", i,
 					mixer_ctl_get_name(path->setting[i].ctl),
 					j, path->setting[i].value[j]);
 }
@@ -255,13 +255,6 @@ static int path_apply(struct audio_route *ar, struct mixer_path *path)
 		for (k = 0; k < path->setting[i].ctl_vals; k++) {
                  ar->mixer_state[j].new_value[k] = path->setting[i].value[k];
 		}
-		ALOGV("mixer_set: '%s' %d,%d,%d\n",
-				mixer_ctl_get_name(ctl),
-				path->setting[i].value[0],
-				path->setting[i].value[1],
-				path->setting[i].value[2]
-				);
-
 		mixer_ctl_set_array(ctl, path->setting[i].value,
 				path->setting[i].ctl_vals);
 #endif
@@ -332,6 +325,7 @@ static void start_tag(void *data, const XML_Char *tag_name,
                 struct mixer_path *sub_path = path_get_by_name(ar, attr_name);
                 path_add_path(state->path, sub_path);
             }
+			ALOGV("path start name='%s'", (char *)attr_name);
         }
     }
 
@@ -368,7 +362,7 @@ static void start_tag(void *data, const XML_Char *tag_name,
 			for (j = 0; j < num_values; j++) {
             	values[j] = atoi(sub_attr_value);
 #if 1
-				ALOGV("attr='%s' idx=%u str='%s' val=%d", attr_name, j,
+				ALOGV("ctl attr='%s' idx=%u str='%s' val=%d", attr_name, j,
 						sub_attr_value, values[j]);
 #endif
 				sub_attr_value += (strlen(sub_attr_value) + 1);
@@ -377,12 +371,12 @@ static void start_tag(void *data, const XML_Char *tag_name,
         case MIXER_CTL_TYPE_ENUM:
 			num_values = 1;
             values[0] = mixer_enum_string_to_value(ctl, (char *)attr_value);
-			ALOGV("attr='%s' attr_val='%s' val=%d", attr_name, attr_value, values[0]);
+			ALOGV("ctl attr='%s' attr_val='%s' val=%d", attr_name, attr_value, values[0]);
             break;
         default:
 			num_values = 1;
             values[0] = 0;
-			ALOGV("attr='%s' UNKNOWN CTL TYPE", attr_name);
+			ALOGV("ctl attr='%s' UNKNOWN CTL TYPE", attr_name);
             break;
         }
 
@@ -418,6 +412,10 @@ static void start_tag(void *data, const XML_Char *tag_name,
 static void end_tag(void *data, const XML_Char *tag_name)
 {
     struct config_parse_state *state = data;
+
+	if (strncmp((char *)tag_name, "path", 4) == 0) {
+		ALOGV("path end\n");
+	}
 
     state->level--;
 }
@@ -537,11 +535,19 @@ void audio_route_apply_path(struct audio_route *ar, const char *name)
         return;
     }
 
+	if (!name) {
+		ALOGE("%s: null name\n", __func__);
+		return;
+	}
+
     path = path_get_by_name(ar, name);
     if (!path) {
-        ALOGE("unable to find path '%s'", name);
+        ALOGE("%s: unable to find path '%s'", __func__, name);
         return;
     }
+	else {
+        ALOGI("%s: %s", __func__, name);
+	}
 
     path_apply(ar, path);
 }
@@ -611,7 +617,9 @@ struct audio_route *audio_route_init(void)
             break;
     }
 
+	ALOGI("applying init path controls\n");
 	audio_route_apply_path(ar, "init");
+	ALOGI("init path controls applied\n");
 
     /* apply the initial mixer values, and save them so we can reset the
        mixer to the original values */
