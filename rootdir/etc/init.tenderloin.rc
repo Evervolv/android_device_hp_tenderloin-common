@@ -31,8 +31,6 @@ on init
     # remount /boot read-only
     mount ext3 /dev/block/mmcblk0p13 /boot remount ro wait noatime barrier=1
 
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
 on fs
