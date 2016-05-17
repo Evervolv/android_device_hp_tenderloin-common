@@ -1,7 +1,10 @@
 DEVICE_PACKAGE_OVERLAYS += device/hp/tenderloin-common/overlay
 
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/fstab.tenderloin:root/fstab.tenderloin
+    device/hp/tenderloin-common/fstab.tenderloin:root/fstab.tenderloin \
+    device/hp/tenderloin-common/init.tenderloin.rc:root/init.tenderloin.rc \
+    device/hp/tenderloin-common/init.tenderloin.usb.rc:root/init.tenderloin.usb.rc \
+    device/hp/tenderloin-common/ueventd.tenderloin.rc:root/ueventd.tenderloin.rc
 
 # Add touchcreen configuration file
 PRODUCT_COPY_FILES += \
