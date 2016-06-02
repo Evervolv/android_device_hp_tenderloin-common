@@ -3718,10 +3718,11 @@ void QualcommCameraHardware::runSnapshotThread(void *data)
     CAMERA_HAL_UNUSED(data);
     ALOGV("runSnapshotThread E");
 
-    ALOGV("%s, libmmcamera: %p\n", __FUNCTION__, libmmcamera);
     if(!libmmcamera){
         ALOGE("FATAL ERROR: could not dlopen liboemcamera.so: %s", dlerror());
     }
+
+    ALOGV("%s, libmmcamera: %p\n", __FUNCTION__, libmmcamera);
 
     mSnapshotCancelLock.lock();
     if (mSnapshotCancel == true) {
