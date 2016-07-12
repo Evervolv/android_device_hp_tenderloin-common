@@ -521,7 +521,7 @@ int64_t MPLSensor::now_ns(void)
     //FUNC_ALOG;
     struct timespec ts;
 
-    clock_gettime(CLOCK_MONOTONIC, &ts);
+    clock_gettime(CLOCK_BOOTTIME, &ts);
     //ALOGV("Time %lld", (int64_t)ts.tv_sec * 1000000000 + ts.tv_nsec);
     return (int64_t) ts.tv_sec * 1000000000 + ts.tv_nsec;
 }
