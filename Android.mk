@@ -15,7 +15,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter tenderloin,tenderloin4g,$(TARGET_DEVICE)),)
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
