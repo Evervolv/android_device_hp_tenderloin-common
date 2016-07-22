@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
-
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -31,5 +28,3 @@ LOCAL_MODULE := serial
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 
 include $(BUILD_EXECUTABLE)
-
-endif

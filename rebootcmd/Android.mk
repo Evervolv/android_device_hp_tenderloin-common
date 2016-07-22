@@ -1,5 +1,3 @@
-ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),tenderloin)
-
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -16,4 +14,3 @@ LOCAL_SHARED_LIBRARIES := \
 	liblog
 LOCAL_MODULE_TAGS:= eng
 include $(BUILD_EXECUTABLE)
-endif
