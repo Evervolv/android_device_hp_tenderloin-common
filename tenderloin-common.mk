@@ -131,8 +131,8 @@ PRODUCT_PACKAGES += \
     libOmxAmrEnc
 
 # Camera
-PRODUCT_PACKAGES += \
-   camera.msm8660
+#PRODUCT_PACKAGES += \
+#   camera.msm8660
 
 # F2FS filesystem
 PRODUCT_PACKAGES += \
