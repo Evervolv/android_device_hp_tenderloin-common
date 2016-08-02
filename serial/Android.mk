@@ -17,12 +17,13 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_C_INCLUDES := system/core/init
-LOCAL_SRC_FILES := serial.c
+LOCAL_SRC_FILES := serial.cpp
 
-LOCAL_PRELINK_MODULE := false
+LOCAL_CLANG := false
 LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT_SBIN)
 LOCAL_STATIC_LIBRARIES := libcutils libc
+
+LOCAL_CXX_STL := libc++_static
 
 LOCAL_MODULE := serial
 LOCAL_FORCE_STATIC_EXECUTABLE := true

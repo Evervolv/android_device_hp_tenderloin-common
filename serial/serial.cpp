@@ -19,7 +19,7 @@
 #include <fcntl.h>
 #include <sys/mount.h>
 
-#include "property_service.h"
+#include <cutils/properties.h>
 
 int main()
 {
