@@ -2,10 +2,10 @@
 
 /dev/store/cm-system			/system		ext4	ro,barrier=0						wait
 
-/dev/store/cm-data			/data		f2fs	rw,discard,nosuid,nodev,noatime,nodiratime,inline_xattr	wait
+/dev/store/cm-data			/data		f2fs	rw,nosuid,nodev,noatime,nodiratime,inline_xattr		wait
 /dev/store/cm-data			/data		ext4	noatime,nosuid,nodev,barrier=0,noauto_da_alloc		wait
 
-/dev/store/cm-cache			/cache		f2fs	rw,discard,nosuid,nodev,noatime,nodiratime,inline_xattr	wait
+/dev/store/cm-cache			/cache		f2fs	rw,nosuid,nodev,noatime,nodiratime,inline_xattr		wait
 /dev/store/cm-cache			/cache		ext4	noatime,nosuid,nodev,barrier=0,noauto_da_alloc		wait
 
 /devices/virtual/block/dm-6		auto		vfat	defaults						voldmanaged=sdcard1:auto,nonremovable,encryptable=userdata 
