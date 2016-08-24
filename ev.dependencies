@@ -10,11 +10,6 @@
     "dep_type": "hardware"
  },
  {
-    "repository": "android_external_backports-wireless",
-    "target_path": "external/backports-wireless",
-    "dep_type": "hardware"
- },
- {
     "repository": "android_hardware_qcom_audio-caf",
     "target_path": "hardware/qcom/audio-caf/msm8960",
     "dep_type": "hardware",
