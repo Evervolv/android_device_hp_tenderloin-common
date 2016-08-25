@@ -132,7 +132,8 @@ PRODUCT_PACKAGES += \
     serial \
     ts_srv \
     ts_srv_set \
-    rebootcmd
+    rebootcmd \
+    mkbootimg
 
 # Wifi
 PRODUCT_PACKAGES += \
