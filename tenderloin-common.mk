@@ -121,7 +121,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-flags=m=y \
     dalvik.vm.image-dex2oat-filter=speed \
     dalvik.vm.lockprof.threshold=500 \
-    ro.com.google.networklocation=1
+    ro.com.google.networklocation=1 \
+    qcom.bluetooth.soc=rome
 
 # Tools
 PRODUCT_PACKAGES += \
