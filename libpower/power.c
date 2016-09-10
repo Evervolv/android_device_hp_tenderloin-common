@@ -179,7 +179,6 @@ static void configure_governor()
     }
 }
 
-#if 0
 static int boostpulse_open(struct tenderloin_power_module *tenderloin)
 {
     char buf[80];
@@ -210,7 +209,6 @@ static int boostpulse_open(struct tenderloin_power_module *tenderloin)
     pthread_mutex_unlock(&tenderloin->lock);
     return tenderloin->boostpulse_fd;
 }
-#endif
 
 static void tenderloin_power_hint(struct power_module *module, power_hint_t hint,
                             void *data)
@@ -222,7 +220,6 @@ static void tenderloin_power_hint(struct power_module *module, power_hint_t hint
 
     switch (hint) {
     case POWER_HINT_INTERACTION:
-#if 0
     case POWER_HINT_CPU_BOOST:
         if (boostpulse_open(tenderloin) >= 0) {
             if (data != NULL)
@@ -243,7 +240,7 @@ static void tenderloin_power_hint(struct power_module *module, power_hint_t hint
             }
         }
         break;
-#endif
+
     case POWER_HINT_VSYNC:
         break;
 
