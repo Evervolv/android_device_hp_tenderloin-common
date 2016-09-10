@@ -46,7 +46,6 @@ LOCAL_CFLAGS += -I$(LOCAL_PATH)/$(MLSDK_ROOT)/mlutils -I$(LOCAL_PATH)/$(MLSDK_RO
 LOCAL_CFLAGS += -I$(LOCAL_PATH)/$(MLSDK_ROOT)/platform/include/linux
 LOCAL_CFLAGS += -I$(LOCAL_PATH)/$(MLSDK_ROOT)/mllite/akmd
 LOCAL_CFLAGS += -I$(LOCAL_PATH)/$(MLPLATFORM_DIR)/linux
-LOCAL_CFLAGS += -Wno-error=date-time
 
 # optionally apply the compass filter. this is set in
 # BoardConfig.mk

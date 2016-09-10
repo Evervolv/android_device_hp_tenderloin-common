@@ -81,9 +81,8 @@ extern "C" {
 #endif
 
 #define INV_VERSION  "InvenSense MPL" " " \
-    "v" INV_VERSION_MAJOR_STR "." INV_VERSION_MINOR_STR "." INV_VERSION_SUB_MINOR_STR " " \
-    INV_VERSION_TYPE \
-    __DATE__ " " __TIME__
+    "v" INV_VERSION_MAJOR_STR "." INV_VERSION_MINOR_STR "." \
+    INV_VERSION_SUB_MINOR_STR " " INV_VERSION_TYPE
 
 /*************************************************************************/
 /*  Motion processing engines                                            */
