@@ -140,6 +140,7 @@ TW_NO_REBOOT_BOOTLOADER := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_WHITELIST_INPUT := "HPTouchpad"
 TW_NO_CPU_TEMP := true
+TW_EXCLUDE_SUPERSU := true
 
 # Vold
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun0/file"
