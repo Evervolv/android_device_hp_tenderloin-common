@@ -400,7 +400,7 @@ static int start_output_stream(struct stream_out *out)
         pthread_mutex_unlock(&in->lock);
     }
 
-    out->pcm = pcm_open(PCM_CARD, device, PCM_OUT | PCM_NORESTART | PCM_MONOTONIC, out->pcm_config);
+    out->pcm = pcm_open(PCM_CARD, device, PCM_OUT | PCM_MMAP | PCM_NORESTART | PCM_MONOTONIC, out->pcm_config);
 
     if (out->pcm && !pcm_is_ready(out->pcm)) {
         ALOGE("pcm_open(out) failed: %s", pcm_get_error(out->pcm));
@@ -755,13 +755,13 @@ static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
     }
     pthread_mutex_unlock(&adev->lock);
 
-    pcm_write(out->pcm, (void *)buffer, bytes);
+    pcm_mmap_write(out->pcm, (void *)buffer, bytes);
 
 exit:
     pthread_mutex_unlock(&out->lock);
 
     if (ret != 0) {
-        ALOGW("pcm_write: %s\n", pcm_get_error(out->pcm));
+        ALOGW("pcm_mmap_write: %s\n", pcm_get_error(out->pcm));
         usleep(bytes * 1000000 / audio_stream_frame_size(&stream->common) /
                out_get_sample_rate(&stream->common));
     }
