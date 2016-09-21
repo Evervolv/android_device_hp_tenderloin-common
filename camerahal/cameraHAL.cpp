@@ -33,7 +33,7 @@
 #include <time.h>
 
 #include <cutils/log.h>
-#include <camera/CameraParameters.h>
+#include "QCameraParameters.h"
 #include <hardware/camera.h>
 #include <binder/IMemory.h>
 #include "QualcommCameraHardware.h"
@@ -44,7 +44,7 @@ using android::sp;
 using android::String8;
 using android::IMemory;
 using android::IMemoryHeap;
-using android::CameraParameters;
+using android::QCameraParameters;
 
 using android::CameraInfo;
 using android::HAL_getCameraInfo;
@@ -152,28 +152,28 @@ static int read_mode_from_config(const char *entry)
  * implementation of priv_camera_device_ops functions
  *******************************************************************/
 
-void CameraHAL_FixupParams(android::CameraParameters &camParams)
+void CameraHAL_FixupParams(android::QCameraParameters &camParams)
 {
     const char *fps_supported_ranges = "(15,31)";
 
-    camParams.set(android::CameraParameters::KEY_VIDEO_FRAME_FORMAT,
-                  android::CameraParameters::PIXEL_FORMAT_YUV420SP);
+    camParams.set(android::QCameraParameters::KEY_VIDEO_FRAME_FORMAT,
+                  android::QCameraParameters::PIXEL_FORMAT_YUV420SP);
 
-    if (!camParams.get(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE)) {
-        camParams.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
+    if (!camParams.get(QCameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE)) {
+        camParams.set(QCameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
                       fps_supported_ranges);
     }
 
     /* Disable auto focus on TouchPad */
-    camParams.set(CameraParameters::KEY_SUPPORTED_FOCUS_MODES,
-                  CameraParameters::FOCUS_MODE_INFINITY);
+    camParams.set(QCameraParameters::KEY_SUPPORTED_FOCUS_MODES,
+                  QCameraParameters::FOCUS_MODE_INFINITY);
 
-    camParams.set(CameraParameters::KEY_FOCUS_MODE,
-                  CameraParameters::FOCUS_MODE_INFINITY);
+    camParams.set(QCameraParameters::KEY_FOCUS_MODE,
+                  QCameraParameters::FOCUS_MODE_INFINITY);
 
-    camParams.set(android::CameraParameters::KEY_MAX_SHARPNESS, "30");
-    camParams.set(android::CameraParameters::KEY_MAX_CONTRAST, "10");
-    camParams.set(android::CameraParameters::KEY_MAX_SATURATION, "10");
+    camParams.set(android::QCameraParameters::KEY_MAX_SHARPNESS, "30");
+    camParams.set(android::QCameraParameters::KEY_MAX_CONTRAST, "10");
+    camParams.set(android::QCameraParameters::KEY_MAX_SATURATION, "10");
     camParams.set("num-snaps-per-shutter", "1");
 }
 
@@ -501,7 +501,7 @@ int camera_set_parameters(struct camera_device * device, const char *params)
 {
     int rv = -EINVAL;
     priv_camera_device_t* dev = NULL;
-    CameraParameters camParams;
+    QCameraParameters camParams;
 
     if(!device)
         return rv;
@@ -521,7 +521,7 @@ int camera_set_parameters(struct camera_device * device, const char *params)
     char str[20] = { 0 };
     const time_t date = time(NULL) + 1;
     if (strftime(str, sizeof(str), "%Y-%m-%d %H.%M.%S", localtime(&date)) > 0)
-        camParams.set(CameraParameters::KEY_EXIF_DATETIME, str);
+        camParams.set(QCameraParameters::KEY_EXIF_DATETIME, str);
 
     rv = gCameraHals[dev->cameraid]->setParameters(camParams);
 
@@ -538,7 +538,7 @@ char* camera_get_parameters(struct camera_device * device)
     char* params = NULL;
     priv_camera_device_t* dev = NULL;
     String8 params_str8;
-    CameraParameters camParams;
+    QCameraParameters camParams;
 
     if(!device)
         return NULL;

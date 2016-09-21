@@ -39,7 +39,7 @@
 #include <linux/android_pmem.h>
 #endif
 #include <linux/ioctl.h>
-#include <camera/CameraParameters.h>
+#include "QCameraParameters.h"
 #include <media/mediarecorder.h>
 #include <genlock.h>
 #include <system/camera.h>
@@ -329,39 +329,39 @@ static const int PICTURE_FORMAT_RAW = 2;
 
 // from aeecamera.h
 static const str_map whitebalance[] = {
-    { CameraParameters::WHITE_BALANCE_AUTO,            CAMERA_WB_AUTO },
-    { CameraParameters::WHITE_BALANCE_INCANDESCENT,    CAMERA_WB_INCANDESCENT },
-    { CameraParameters::WHITE_BALANCE_FLUORESCENT,     CAMERA_WB_FLUORESCENT },
-    { CameraParameters::WHITE_BALANCE_DAYLIGHT,        CAMERA_WB_DAYLIGHT },
-    { CameraParameters::WHITE_BALANCE_CLOUDY_DAYLIGHT, CAMERA_WB_CLOUDY_DAYLIGHT }
+    { QCameraParameters::WHITE_BALANCE_AUTO,            CAMERA_WB_AUTO },
+    { QCameraParameters::WHITE_BALANCE_INCANDESCENT,    CAMERA_WB_INCANDESCENT },
+    { QCameraParameters::WHITE_BALANCE_FLUORESCENT,     CAMERA_WB_FLUORESCENT },
+    { QCameraParameters::WHITE_BALANCE_DAYLIGHT,        CAMERA_WB_DAYLIGHT },
+    { QCameraParameters::WHITE_BALANCE_CLOUDY_DAYLIGHT, CAMERA_WB_CLOUDY_DAYLIGHT }
 };
 
 // from camera_effect_t. This list must match aeecamera.h
 static const str_map effects[] = {
-    { CameraParameters::EFFECT_NONE,       CAMERA_EFFECT_OFF },
-    { CameraParameters::EFFECT_MONO,       CAMERA_EFFECT_MONO },
-    { CameraParameters::EFFECT_NEGATIVE,   CAMERA_EFFECT_NEGATIVE },
-    { CameraParameters::EFFECT_SOLARIZE,   CAMERA_EFFECT_SOLARIZE },
-    { CameraParameters::EFFECT_SEPIA,      CAMERA_EFFECT_SEPIA },
-    { CameraParameters::EFFECT_POSTERIZE,  CAMERA_EFFECT_POSTERIZE },
-    { CameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
-    { CameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
-    { CameraParameters::EFFECT_AQUA,       CAMERA_EFFECT_AQUA }
+    { QCameraParameters::EFFECT_NONE,       CAMERA_EFFECT_OFF },
+    { QCameraParameters::EFFECT_MONO,       CAMERA_EFFECT_MONO },
+    { QCameraParameters::EFFECT_NEGATIVE,   CAMERA_EFFECT_NEGATIVE },
+    { QCameraParameters::EFFECT_SOLARIZE,   CAMERA_EFFECT_SOLARIZE },
+    { QCameraParameters::EFFECT_SEPIA,      CAMERA_EFFECT_SEPIA },
+    { QCameraParameters::EFFECT_POSTERIZE,  CAMERA_EFFECT_POSTERIZE },
+    { QCameraParameters::EFFECT_WHITEBOARD, CAMERA_EFFECT_WHITEBOARD },
+    { QCameraParameters::EFFECT_BLACKBOARD, CAMERA_EFFECT_BLACKBOARD },
+    { QCameraParameters::EFFECT_AQUA,       CAMERA_EFFECT_AQUA }
 };
 
 // from qcamera/common/camera.h
 static const str_map autoexposure[] = {
-    { CameraParameters::AUTO_EXPOSURE_FRAME_AVG,  CAMERA_AEC_FRAME_AVERAGE },
-    { CameraParameters::AUTO_EXPOSURE_CENTER_WEIGHTED, CAMERA_AEC_CENTER_WEIGHTED },
-    { CameraParameters::AUTO_EXPOSURE_SPOT_METERING, CAMERA_AEC_SPOT_METERING }
+    { QCameraParameters::AUTO_EXPOSURE_FRAME_AVG,  CAMERA_AEC_FRAME_AVERAGE },
+    { QCameraParameters::AUTO_EXPOSURE_CENTER_WEIGHTED, CAMERA_AEC_CENTER_WEIGHTED },
+    { QCameraParameters::AUTO_EXPOSURE_SPOT_METERING, CAMERA_AEC_SPOT_METERING }
 };
 
 // from qcamera/common/camera.h
 static const str_map antibanding[] = {
-    { CameraParameters::ANTIBANDING_OFF,  CAMERA_ANTIBANDING_OFF },
-    { CameraParameters::ANTIBANDING_50HZ, CAMERA_ANTIBANDING_50HZ },
-    { CameraParameters::ANTIBANDING_60HZ, CAMERA_ANTIBANDING_60HZ },
-    { CameraParameters::ANTIBANDING_AUTO, CAMERA_ANTIBANDING_AUTO }
+    { QCameraParameters::ANTIBANDING_OFF,  CAMERA_ANTIBANDING_OFF },
+    { QCameraParameters::ANTIBANDING_50HZ, CAMERA_ANTIBANDING_50HZ },
+    { QCameraParameters::ANTIBANDING_60HZ, CAMERA_ANTIBANDING_60HZ },
+    { QCameraParameters::ANTIBANDING_AUTO, CAMERA_ANTIBANDING_AUTO }
 };
 
 /* Mapping from MCC to antibanding type */
@@ -571,29 +571,29 @@ static struct country_map country_numeric[] = {
 };
 
 static const str_map scenemode[] = {
-    { CameraParameters::SCENE_MODE_AUTO,           CAMERA_BESTSHOT_OFF },
-    { CameraParameters::SCENE_MODE_ACTION,         CAMERA_BESTSHOT_ACTION },
-    { CameraParameters::SCENE_MODE_PORTRAIT,       CAMERA_BESTSHOT_PORTRAIT },
-    { CameraParameters::SCENE_MODE_LANDSCAPE,      CAMERA_BESTSHOT_LANDSCAPE },
-    { CameraParameters::SCENE_MODE_NIGHT,          CAMERA_BESTSHOT_NIGHT },
-    { CameraParameters::SCENE_MODE_NIGHT_PORTRAIT, CAMERA_BESTSHOT_NIGHT_PORTRAIT },
-    { CameraParameters::SCENE_MODE_THEATRE,        CAMERA_BESTSHOT_THEATRE },
-    { CameraParameters::SCENE_MODE_BEACH,          CAMERA_BESTSHOT_BEACH },
-    { CameraParameters::SCENE_MODE_SNOW,           CAMERA_BESTSHOT_SNOW },
-    { CameraParameters::SCENE_MODE_SUNSET,         CAMERA_BESTSHOT_SUNSET },
-    { CameraParameters::SCENE_MODE_STEADYPHOTO,    CAMERA_BESTSHOT_ANTISHAKE },
-    { CameraParameters::SCENE_MODE_FIREWORKS ,     CAMERA_BESTSHOT_FIREWORKS },
-    { CameraParameters::SCENE_MODE_SPORTS ,        CAMERA_BESTSHOT_SPORTS },
-    { CameraParameters::SCENE_MODE_PARTY,          CAMERA_BESTSHOT_PARTY },
-    { CameraParameters::SCENE_MODE_CANDLELIGHT,    CAMERA_BESTSHOT_CANDLELIGHT },
-    { CameraParameters::SCENE_MODE_BACKLIGHT,      CAMERA_BESTSHOT_BACKLIGHT },
-    { CameraParameters::SCENE_MODE_FLOWERS,        CAMERA_BESTSHOT_FLOWERS },
-    { CameraParameters::SCENE_MODE_AR,             CAMERA_BESTSHOT_AR },
+    { QCameraParameters::SCENE_MODE_AUTO,           CAMERA_BESTSHOT_OFF },
+    { QCameraParameters::SCENE_MODE_ACTION,         CAMERA_BESTSHOT_ACTION },
+    { QCameraParameters::SCENE_MODE_PORTRAIT,       CAMERA_BESTSHOT_PORTRAIT },
+    { QCameraParameters::SCENE_MODE_LANDSCAPE,      CAMERA_BESTSHOT_LANDSCAPE },
+    { QCameraParameters::SCENE_MODE_NIGHT,          CAMERA_BESTSHOT_NIGHT },
+    { QCameraParameters::SCENE_MODE_NIGHT_PORTRAIT, CAMERA_BESTSHOT_NIGHT_PORTRAIT },
+    { QCameraParameters::SCENE_MODE_THEATRE,        CAMERA_BESTSHOT_THEATRE },
+    { QCameraParameters::SCENE_MODE_BEACH,          CAMERA_BESTSHOT_BEACH },
+    { QCameraParameters::SCENE_MODE_SNOW,           CAMERA_BESTSHOT_SNOW },
+    { QCameraParameters::SCENE_MODE_SUNSET,         CAMERA_BESTSHOT_SUNSET },
+    { QCameraParameters::SCENE_MODE_STEADYPHOTO,    CAMERA_BESTSHOT_ANTISHAKE },
+    { QCameraParameters::SCENE_MODE_FIREWORKS ,     CAMERA_BESTSHOT_FIREWORKS },
+    { QCameraParameters::SCENE_MODE_SPORTS ,        CAMERA_BESTSHOT_SPORTS },
+    { QCameraParameters::SCENE_MODE_PARTY,          CAMERA_BESTSHOT_PARTY },
+    { QCameraParameters::SCENE_MODE_CANDLELIGHT,    CAMERA_BESTSHOT_CANDLELIGHT },
+    { QCameraParameters::SCENE_MODE_BACKLIGHT,      CAMERA_BESTSHOT_BACKLIGHT },
+    { QCameraParameters::SCENE_MODE_FLOWERS,        CAMERA_BESTSHOT_FLOWERS },
+    { QCameraParameters::SCENE_MODE_AR,             CAMERA_BESTSHOT_AR },
 };
 
 static const str_map scenedetect[] = {
-    { CameraParameters::SCENE_DETECT_OFF, FALSE  },
-    { CameraParameters::SCENE_DETECT_ON, TRUE },
+    { QCameraParameters::SCENE_DETECT_OFF, FALSE  },
+    { QCameraParameters::SCENE_DETECT_ON, TRUE },
 };
 
 
@@ -635,45 +635,45 @@ static camera_antibanding_type camera_get_location(void) {
 
 // from camera.h, led_mode_t
 static const str_map flash[] = {
-    { CameraParameters::FLASH_MODE_OFF,  LED_MODE_OFF },
-    { CameraParameters::FLASH_MODE_AUTO, LED_MODE_AUTO },
-    { CameraParameters::FLASH_MODE_ON, LED_MODE_ON },
-    { CameraParameters::FLASH_MODE_TORCH, LED_MODE_TORCH }
+    { QCameraParameters::FLASH_MODE_OFF,  LED_MODE_OFF },
+    { QCameraParameters::FLASH_MODE_AUTO, LED_MODE_AUTO },
+    { QCameraParameters::FLASH_MODE_ON, LED_MODE_ON },
+    { QCameraParameters::FLASH_MODE_TORCH, LED_MODE_TORCH }
 };
 
 // from mm-camera/common/camera.h.
 static const str_map iso[] = {
-    { CameraParameters::ISO_AUTO,  CAMERA_ISO_AUTO},
-    { CameraParameters::ISO_HJR,   CAMERA_ISO_DEBLUR},
-    { CameraParameters::ISO_100,   CAMERA_ISO_100},
-    { CameraParameters::ISO_200,   CAMERA_ISO_200},
-    { CameraParameters::ISO_400,   CAMERA_ISO_400},
-    { CameraParameters::ISO_800,   CAMERA_ISO_800 },
-    { CameraParameters::ISO_1600,  CAMERA_ISO_1600 }
+    { QCameraParameters::ISO_AUTO,  CAMERA_ISO_AUTO},
+    { QCameraParameters::ISO_HJR,   CAMERA_ISO_DEBLUR},
+    { QCameraParameters::ISO_100,   CAMERA_ISO_100},
+    { QCameraParameters::ISO_200,   CAMERA_ISO_200},
+    { QCameraParameters::ISO_400,   CAMERA_ISO_400},
+    { QCameraParameters::ISO_800,   CAMERA_ISO_800 },
+    { QCameraParameters::ISO_1600,  CAMERA_ISO_1600 }
 };
 
 #define DONT_CARE 0
 static const str_map focus_modes[] = {
-    { CameraParameters::FOCUS_MODE_AUTO,     AF_MODE_AUTO},
-    { CameraParameters::FOCUS_MODE_INFINITY, DONT_CARE },
-    { CameraParameters::FOCUS_MODE_NORMAL,   AF_MODE_NORMAL },
-    { CameraParameters::FOCUS_MODE_MACRO,    AF_MODE_MACRO },
-    { CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO, DONT_CARE }
+    { QCameraParameters::FOCUS_MODE_AUTO,     AF_MODE_AUTO},
+    { QCameraParameters::FOCUS_MODE_INFINITY, DONT_CARE },
+    { QCameraParameters::FOCUS_MODE_NORMAL,   AF_MODE_NORMAL },
+    { QCameraParameters::FOCUS_MODE_MACRO,    AF_MODE_MACRO },
+    { QCameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO, DONT_CARE }
 };
 
 static const str_map lensshade[] = {
-    { CameraParameters::LENSSHADE_ENABLE, TRUE },
-    { CameraParameters::LENSSHADE_DISABLE, FALSE }
+    { QCameraParameters::LENSSHADE_ENABLE, TRUE },
+    { QCameraParameters::LENSSHADE_DISABLE, FALSE }
 };
 
 static const str_map histogram[] = {
-    { CameraParameters::HISTOGRAM_ENABLE, TRUE },
-    { CameraParameters::HISTOGRAM_DISABLE, FALSE }
+    { QCameraParameters::HISTOGRAM_ENABLE, TRUE },
+    { QCameraParameters::HISTOGRAM_DISABLE, FALSE }
 };
 
 static const str_map skinToneEnhancement[] = {
-    { CameraParameters::SKIN_TONE_ENHANCEMENT_ENABLE, TRUE },
-    { CameraParameters::SKIN_TONE_ENHANCEMENT_DISABLE, FALSE }
+    { QCameraParameters::SKIN_TONE_ENHANCEMENT_ENABLE, TRUE },
+    { QCameraParameters::SKIN_TONE_ENHANCEMENT_DISABLE, FALSE }
 };
 
 static const str_map continuous_af[] = {
@@ -682,21 +682,21 @@ static const str_map continuous_af[] = {
 };
 
 static const str_map selectable_zone_af[] = {
-    { CameraParameters::SELECTABLE_ZONE_AF_AUTO,  AUTO },
-    { CameraParameters::SELECTABLE_ZONE_AF_SPOT_METERING, SPOT },
-    { CameraParameters::SELECTABLE_ZONE_AF_CENTER_WEIGHTED, CENTER_WEIGHTED },
-    { CameraParameters::SELECTABLE_ZONE_AF_FRAME_AVERAGE, AVERAGE }
+    { QCameraParameters::SELECTABLE_ZONE_AF_AUTO,  AUTO },
+    { QCameraParameters::SELECTABLE_ZONE_AF_SPOT_METERING, SPOT },
+    { QCameraParameters::SELECTABLE_ZONE_AF_CENTER_WEIGHTED, CENTER_WEIGHTED },
+    { QCameraParameters::SELECTABLE_ZONE_AF_FRAME_AVERAGE, AVERAGE }
 };
 
 static const str_map facedetection[] = {
-    { CameraParameters::FACE_DETECTION_OFF, FALSE },
-    { CameraParameters::FACE_DETECTION_ON, TRUE }
+    { QCameraParameters::FACE_DETECTION_OFF, FALSE },
+    { QCameraParameters::FACE_DETECTION_ON, TRUE }
 };
 
 #define DONT_CARE_COORDINATE -1
 static const str_map touchafaec[] = {
-    { CameraParameters::TOUCH_AF_AEC_OFF, FALSE },
-    { CameraParameters::TOUCH_AF_AEC_ON, TRUE }
+    { QCameraParameters::TOUCH_AF_AEC_OFF, FALSE },
+    { QCameraParameters::TOUCH_AF_AEC_ON, TRUE }
 };
 
 /*
@@ -713,25 +713,25 @@ static const str_map touchafaec[] = {
 #define EXPOSURE_COMPENSATION_STEP ((float (1))/EXPOSURE_COMPENSATION_DENOMINATOR)
 
 static const str_map picture_formats[] = {
-        {CameraParameters::PIXEL_FORMAT_JPEG, PICTURE_FORMAT_JPEG},
-        {CameraParameters::PIXEL_FORMAT_RAW, PICTURE_FORMAT_RAW}
+        {QCameraParameters::PIXEL_FORMAT_JPEG, PICTURE_FORMAT_JPEG},
+        {QCameraParameters::PIXEL_FORMAT_RAW, PICTURE_FORMAT_RAW}
 };
 
 static const str_map frame_rate_modes[] = {
-        {CameraParameters::KEY_PREVIEW_FRAME_RATE_AUTO_MODE, FPS_MODE_AUTO},
-        {CameraParameters::KEY_PREVIEW_FRAME_RATE_FIXED_MODE, FPS_MODE_FIXED}
+        {QCameraParameters::KEY_PREVIEW_FRAME_RATE_AUTO_MODE, FPS_MODE_AUTO},
+        {QCameraParameters::KEY_PREVIEW_FRAME_RATE_FIXED_MODE, FPS_MODE_FIXED}
 };
 
 static int mPreviewFormat;
 static const str_map preview_formats[] = {
-        {CameraParameters::PIXEL_FORMAT_YUV420SP,   CAMERA_YUV_420_NV21},
-        {CameraParameters::PIXEL_FORMAT_YUV420SP_ADRENO, CAMERA_YUV_420_NV21_ADRENO}
+        {QCameraParameters::PIXEL_FORMAT_YUV420SP,   CAMERA_YUV_420_NV21},
+        {QCameraParameters::PIXEL_FORMAT_YUV420SP_ADRENO, CAMERA_YUV_420_NV21_ADRENO}
 };
 
 static const str_map app_preview_formats[] = {
-        {CameraParameters::PIXEL_FORMAT_YUV420SP,   HAL_PIXEL_FORMAT_YCrCb_420_SP}, //nv21
-        {CameraParameters::PIXEL_FORMAT_YUV420SP_ADRENO, HAL_PIXEL_FORMAT_YCrCb_420_SP_ADRENO}, //nv21_adreno
-        {CameraParameters::PIXEL_FORMAT_YUV420P, HAL_PIXEL_FORMAT_YV12}, //YV12
+        {QCameraParameters::PIXEL_FORMAT_YUV420SP,   HAL_PIXEL_FORMAT_YCrCb_420_SP}, //nv21
+        {QCameraParameters::PIXEL_FORMAT_YUV420SP_ADRENO, HAL_PIXEL_FORMAT_YCrCb_420_SP_ADRENO}, //nv21_adreno
+        {QCameraParameters::PIXEL_FORMAT_YUV420P, HAL_PIXEL_FORMAT_YV12}, //YV12
 };
 
 static bool parameter_string_initialized = false;
@@ -1275,7 +1275,7 @@ void QualcommCameraHardware::initDefaultParameters()
         fps_ranges_supported_values = create_fps_str(
             FpsRangesSupported,FPS_RANGES_SUPPORTED_COUNT );
         mParameters.set(
-            CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
+            QCameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE,
             fps_ranges_supported_values);
         mParameters.setPreviewFpsRange(MINIMUM_FPS*1000,MAXIMUM_FPS*1000);
 
@@ -1365,47 +1365,47 @@ void QualcommCameraHardware::initDefaultParameters()
     mParameters.setPreviewFpsRange(MINIMUM_FPS*1000, MAXIMUM_FPS*1000);
     if (mCfgControl.mm_camera_is_supported(CAMERA_PARM_FPS)){
         mParameters.set(
-            CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES,
+            QCameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES,
             preview_frame_rate_values.string());
     } else {
         mParameters.setPreviewFrameRate(DEFAULT_FPS);
         mParameters.set(
-            CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES,
+            QCameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES,
             DEFAULT_FPS);
     }
     mParameters.setPreviewFrameRateMode("frame-rate-auto");
-    mParameters.setPreviewFormat(CameraParameters::PIXEL_FORMAT_YUV420SP); // informative
-    mParameters.set("overlay-format", CameraParameters::PIXEL_FORMAT_YUV420SP);
+    mParameters.setPreviewFormat(QCameraParameters::PIXEL_FORMAT_YUV420SP); // informative
+    mParameters.set("overlay-format", QCameraParameters::PIXEL_FORMAT_YUV420SP);
 
     mParameters.setPictureSize(DEFAULT_PICTURE_WIDTH, DEFAULT_PICTURE_HEIGHT);
     mParameters.setPictureFormat("jpeg"); // informative
-    mParameters.set(CameraParameters::KEY_VIDEO_FRAME_FORMAT, CameraParameters::PIXEL_FORMAT_YUV420SP);
+    mParameters.set(QCameraParameters::KEY_VIDEO_FRAME_FORMAT, QCameraParameters::PIXEL_FORMAT_YUV420SP);
 
     mParameters.set("power-mode-supported", "false");
 
-    mParameters.set(CameraParameters::KEY_JPEG_QUALITY, "85"); // max quality
-    mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH,
+    mParameters.set(QCameraParameters::KEY_JPEG_QUALITY, "85"); // max quality
+    mParameters.set(QCameraParameters::KEY_JPEG_THUMBNAIL_WIDTH,
                     THUMBNAIL_WIDTH_STR); // informative
-    mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT,
+    mParameters.set(QCameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT,
                     THUMBNAIL_HEIGHT_STR); // informative
-    mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_QUALITY, "90");
+    mParameters.set(QCameraParameters::KEY_JPEG_THUMBNAIL_QUALITY, "90");
 
     String8 valuesStr = create_sizes_str(jpeg_thumbnail_sizes, JPEG_THUMBNAIL_SIZE_COUNT);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_JPEG_THUMBNAIL_SIZES,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_JPEG_THUMBNAIL_SIZES,
                 valuesStr.string());
 
     if (zoomSupported) {
-        mParameters.set(CameraParameters::KEY_ZOOM_SUPPORTED, "true");
+        mParameters.set(QCameraParameters::KEY_ZOOM_SUPPORTED, "true");
         ALOGV("max zoom is %d", mMaxZoom-1);
         /* mMaxZoom value that the query interface returns is the size
          * of zoom table. So the actual max zoom value will be one
          * less than that value.
          */
         mParameters.set("max-zoom",mMaxZoom-1);
-        mParameters.set(CameraParameters::KEY_ZOOM_RATIOS,
+        mParameters.set(QCameraParameters::KEY_ZOOM_RATIOS,
                             zoom_ratio_values);
     } else {
-        mParameters.set(CameraParameters::KEY_ZOOM_SUPPORTED, "false");
+        mParameters.set(QCameraParameters::KEY_ZOOM_SUPPORTED, "false");
     }
     /* Enable zoom support for video application if VPE enabled */
     if (zoomSupported && mVpeEnabled) {
@@ -1414,158 +1414,158 @@ void QualcommCameraHardware::initDefaultParameters()
         mParameters.set("video-zoom-support", "false");
     }
 
-    mParameters.set(CameraParameters::KEY_CAMERA_MODE,0);
+    mParameters.set(QCameraParameters::KEY_CAMERA_MODE,0);
 
-    mParameters.set(CameraParameters::KEY_ANTIBANDING,
-                    CameraParameters::ANTIBANDING_OFF);
-    mParameters.set(CameraParameters::KEY_EFFECT,
-                    CameraParameters::EFFECT_NONE);
-    mParameters.set(CameraParameters::KEY_AUTO_EXPOSURE,
-                    CameraParameters::AUTO_EXPOSURE_FRAME_AVG);
-    mParameters.set(CameraParameters::KEY_WHITE_BALANCE,
-                    CameraParameters::WHITE_BALANCE_AUTO);
+    mParameters.set(QCameraParameters::KEY_ANTIBANDING,
+                    QCameraParameters::ANTIBANDING_OFF);
+    mParameters.set(QCameraParameters::KEY_EFFECT,
+                    QCameraParameters::EFFECT_NONE);
+    mParameters.set(QCameraParameters::KEY_AUTO_EXPOSURE,
+                    QCameraParameters::AUTO_EXPOSURE_FRAME_AVG);
+    mParameters.set(QCameraParameters::KEY_WHITE_BALANCE,
+                    QCameraParameters::WHITE_BALANCE_AUTO);
     if ((mCurrentTarget != TARGET_MSM7630) && (mCurrentTarget != TARGET_QSD8250)
         && (mCurrentTarget != TARGET_MSM8660)) {
-        mParameters.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FORMATS,
-                    CameraParameters::PIXEL_FORMAT_YUV420SP);
+        mParameters.set(QCameraParameters::KEY_SUPPORTED_PREVIEW_FORMATS,
+                    QCameraParameters::PIXEL_FORMAT_YUV420SP);
     } else {
         preview_format_values = create_values_str(
             preview_formats, sizeof(preview_formats) / sizeof(str_map));
-        mParameters.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FORMATS,
+        mParameters.set(QCameraParameters::KEY_SUPPORTED_PREVIEW_FORMATS,
                 preview_format_values.string());
     }
 
     frame_rate_mode_values = create_values_str(
             frame_rate_modes, sizeof(frame_rate_modes) / sizeof(str_map));
     if (mCfgControl.mm_camera_is_supported(CAMERA_PARM_FPS_MODE)){
-        mParameters.set(CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATE_MODES,
+        mParameters.set(QCameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATE_MODES,
                     frame_rate_mode_values.string());
     }
 
-    mParameters.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_PREVIEW_SIZES,
                     preview_size_values.string());
 
-    mParameters.set(CameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_VIDEO_SIZES,
                     preview_size_values.string());
 
-    mParameters.set(CameraParameters::KEY_SUPPORTED_PICTURE_SIZES,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_PICTURE_SIZES,
                     picture_size_values.string());
-    mParameters.set(CameraParameters::KEY_SUPPORTED_ANTIBANDING,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_ANTIBANDING,
                     antibanding_values);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_EFFECTS, effect_values);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_AUTO_EXPOSURE, autoexposure_values);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_WHITE_BALANCE,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_EFFECTS, effect_values);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_AUTO_EXPOSURE, autoexposure_values);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_WHITE_BALANCE,
                     whitebalance_values);
     if (mHasAutoFocusSupport) {
-       mParameters.set(CameraParameters::KEY_SUPPORTED_FOCUS_MODES,
+       mParameters.set(QCameraParameters::KEY_SUPPORTED_FOCUS_MODES,
                     focus_mode_values);
-       mParameters.set(CameraParameters::KEY_FOCUS_MODE,
-                    CameraParameters::FOCUS_MODE_AUTO);
+       mParameters.set(QCameraParameters::KEY_FOCUS_MODE,
+                    QCameraParameters::FOCUS_MODE_AUTO);
     } else {
-       mParameters.set(CameraParameters::KEY_SUPPORTED_FOCUS_MODES,
-                   CameraParameters::FOCUS_MODE_INFINITY);
-       mParameters.set(CameraParameters::KEY_FOCUS_MODE,
-                   CameraParameters::FOCUS_MODE_INFINITY);
+       mParameters.set(QCameraParameters::KEY_SUPPORTED_FOCUS_MODES,
+                   QCameraParameters::FOCUS_MODE_INFINITY);
+       mParameters.set(QCameraParameters::KEY_FOCUS_MODE,
+                   QCameraParameters::FOCUS_MODE_INFINITY);
     }
 
-    mParameters.set(CameraParameters::KEY_SUPPORTED_PICTURE_FORMATS,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_PICTURE_FORMATS,
                     picture_format_values);
 
     if (mCfgControl.mm_camera_is_supported(CAMERA_PARM_LED_MODE)) {
-        mParameters.set(CameraParameters::KEY_FLASH_MODE,
-                        CameraParameters::FLASH_MODE_OFF);
-        mParameters.set(CameraParameters::KEY_SUPPORTED_FLASH_MODES,
+        mParameters.set(QCameraParameters::KEY_FLASH_MODE,
+                        QCameraParameters::FLASH_MODE_OFF);
+        mParameters.set(QCameraParameters::KEY_SUPPORTED_FLASH_MODES,
                         flash_values);
     }
 
-    mParameters.set(CameraParameters::KEY_MAX_SHARPNESS,
+    mParameters.set(QCameraParameters::KEY_MAX_SHARPNESS,
             CAMERA_MAX_SHARPNESS);
-    mParameters.set(CameraParameters::KEY_MAX_CONTRAST,
+    mParameters.set(QCameraParameters::KEY_MAX_CONTRAST,
             CAMERA_MAX_CONTRAST);
-    mParameters.set(CameraParameters::KEY_MAX_SATURATION,
+    mParameters.set(QCameraParameters::KEY_MAX_SATURATION,
             CAMERA_MAX_SATURATION);
 
     mParameters.set(
-            CameraParameters::KEY_MAX_EXPOSURE_COMPENSATION,
+            QCameraParameters::KEY_MAX_EXPOSURE_COMPENSATION,
             EXPOSURE_COMPENSATION_MAXIMUM_NUMERATOR);
     mParameters.set(
-            CameraParameters::KEY_MIN_EXPOSURE_COMPENSATION,
+            QCameraParameters::KEY_MIN_EXPOSURE_COMPENSATION,
             EXPOSURE_COMPENSATION_MINIMUM_NUMERATOR);
     mParameters.set(
-            CameraParameters::KEY_EXPOSURE_COMPENSATION,
+            QCameraParameters::KEY_EXPOSURE_COMPENSATION,
             EXPOSURE_COMPENSATION_DEFAULT_NUMERATOR);
     mParameters.setFloat(
-            CameraParameters::KEY_EXPOSURE_COMPENSATION_STEP,
+            QCameraParameters::KEY_EXPOSURE_COMPENSATION_STEP,
             EXPOSURE_COMPENSATION_STEP);
 
     mParameters.set("luma-adaptation", "3");
     mParameters.set("skinToneEnhancement", "0");
     mParameters.set("zoom-supported", "true");
     mParameters.set("zoom", 0);
-    mParameters.set(CameraParameters::KEY_PICTURE_FORMAT,
-                    CameraParameters::PIXEL_FORMAT_JPEG);
+    mParameters.set(QCameraParameters::KEY_PICTURE_FORMAT,
+                    QCameraParameters::PIXEL_FORMAT_JPEG);
 
-    mParameters.set(CameraParameters::KEY_SHARPNESS,
+    mParameters.set(QCameraParameters::KEY_SHARPNESS,
                     CAMERA_DEF_SHARPNESS);
-    mParameters.set(CameraParameters::KEY_CONTRAST,
+    mParameters.set(QCameraParameters::KEY_CONTRAST,
                     CAMERA_DEF_CONTRAST);
-    mParameters.set(CameraParameters::KEY_SATURATION,
+    mParameters.set(QCameraParameters::KEY_SATURATION,
                     CAMERA_DEF_SATURATION);
 
-    mParameters.set(CameraParameters::KEY_ISO_MODE,
-                    CameraParameters::ISO_AUTO);
-    mParameters.set(CameraParameters::KEY_LENSSHADE,
-                    CameraParameters::LENSSHADE_ENABLE);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_ISO_MODES,
+    mParameters.set(QCameraParameters::KEY_ISO_MODE,
+                    QCameraParameters::ISO_AUTO);
+    mParameters.set(QCameraParameters::KEY_LENSSHADE,
+                    QCameraParameters::LENSSHADE_ENABLE);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_ISO_MODES,
                     iso_values);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_LENSSHADE_MODES,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_LENSSHADE_MODES,
                     lensshade_values);
-    mParameters.set(CameraParameters::KEY_HISTOGRAM,
-                    CameraParameters::HISTOGRAM_DISABLE);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_HISTOGRAM_MODES,
+    mParameters.set(QCameraParameters::KEY_HISTOGRAM,
+                    QCameraParameters::HISTOGRAM_DISABLE);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_HISTOGRAM_MODES,
                     histogram_values);
-    mParameters.set(CameraParameters::KEY_SKIN_TONE_ENHANCEMENT,
-                    CameraParameters::SKIN_TONE_ENHANCEMENT_DISABLE);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_SKIN_TONE_ENHANCEMENT_MODES,
+    mParameters.set(QCameraParameters::KEY_SKIN_TONE_ENHANCEMENT,
+                    QCameraParameters::SKIN_TONE_ENHANCEMENT_DISABLE);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_SKIN_TONE_ENHANCEMENT_MODES,
                     skinToneEnhancement_values);
-    mParameters.set(CameraParameters::KEY_SCENE_MODE,
-                    CameraParameters::SCENE_MODE_AUTO);
+    mParameters.set(QCameraParameters::KEY_SCENE_MODE,
+                    QCameraParameters::SCENE_MODE_AUTO);
     mParameters.set("strtextures", "OFF");
 
-    mParameters.set(CameraParameters::KEY_SUPPORTED_SCENE_MODES,
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_SCENE_MODES,
                     scenemode_values);
     mParameters.set("continuous-af", "caf-off");
     mParameters.set("continuous-af-values",
                     continuous_af_values);
-    mParameters.set(CameraParameters::KEY_TOUCH_AF_AEC,
-                    CameraParameters::TOUCH_AF_AEC_OFF);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_TOUCH_AF_AEC,
+    mParameters.set(QCameraParameters::KEY_TOUCH_AF_AEC,
+                    QCameraParameters::TOUCH_AF_AEC_OFF);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_TOUCH_AF_AEC,
                     touchafaec_values);
     mParameters.setTouchIndexAec(-1, -1);
     mParameters.setTouchIndexAf(-1, -1);
     mParameters.set("touchAfAec-dx","100");
     mParameters.set("touchAfAec-dy","100");
-    mParameters.set(CameraParameters::KEY_MAX_NUM_FOCUS_AREAS, "1");
-    mParameters.set(CameraParameters::KEY_MAX_NUM_METERING_AREAS, "1");
-    mParameters.set(CameraParameters::KEY_SCENE_DETECT,
-                    CameraParameters::SCENE_DETECT_OFF);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_SCENE_DETECT,
+    mParameters.set(QCameraParameters::KEY_MAX_NUM_FOCUS_AREAS, "1");
+    mParameters.set(QCameraParameters::KEY_MAX_NUM_METERING_AREAS, "1");
+    mParameters.set(QCameraParameters::KEY_SCENE_DETECT,
+                    QCameraParameters::SCENE_DETECT_OFF);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_SCENE_DETECT,
                     scenedetect_values);
-    mParameters.setFloat(CameraParameters::KEY_FOCAL_LENGTH,
+    mParameters.setFloat(QCameraParameters::KEY_FOCAL_LENGTH,
                     CAMERA_FOCAL_LENGTH_DEFAULT);
-    mParameters.setFloat(CameraParameters::KEY_HORIZONTAL_VIEW_ANGLE,
+    mParameters.setFloat(QCameraParameters::KEY_HORIZONTAL_VIEW_ANGLE,
                     CAMERA_HORIZONTAL_VIEW_ANGLE_DEFAULT);
-    mParameters.setFloat(CameraParameters::KEY_VERTICAL_VIEW_ANGLE,
+    mParameters.setFloat(QCameraParameters::KEY_VERTICAL_VIEW_ANGLE,
                     CAMERA_VERTICAL_VIEW_ANGLE_DEFAULT);
-    mParameters.set(CameraParameters::KEY_SELECTABLE_ZONE_AF,
-                    CameraParameters::SELECTABLE_ZONE_AF_AUTO);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_SELECTABLE_ZONE_AF,
+    mParameters.set(QCameraParameters::KEY_SELECTABLE_ZONE_AF,
+                    QCameraParameters::SELECTABLE_ZONE_AF_AUTO);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_SELECTABLE_ZONE_AF,
                     selectable_zone_af_values);
-    mParameters.set(CameraParameters::KEY_FACE_DETECTION,
-                    CameraParameters::FACE_DETECTION_OFF);
-    mParameters.set(CameraParameters::KEY_SUPPORTED_FACE_DETECTION,
+    mParameters.set(QCameraParameters::KEY_FACE_DETECTION,
+                    QCameraParameters::FACE_DETECTION_OFF);
+    mParameters.set(QCameraParameters::KEY_SUPPORTED_FACE_DETECTION,
                     facedetection_values);
-    mParameters.set(CameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO,
+    mParameters.set(QCameraParameters::KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO,
                     "640x480");
     if (setParameters(mParameters) != NO_ERROR) {
         ALOGE("Failed to set default parameters?!");
@@ -1869,7 +1869,7 @@ void QualcommCameraHardware::setGpsParameters() {
     const char *str = NULL;
     ALOGV("%s E", __FUNCTION__);
 
-    str = mParameters.get(CameraParameters::KEY_GPS_PROCESSING_METHOD);
+    str = mParameters.get(QCameraParameters::KEY_GPS_PROCESSING_METHOD);
     if (str!=NULL) {
        memcpy(gpsProcessingMethod, ExifAsciiPrefix, EXIF_ASCII_PREFIX_SIZE);
        strlcpy(gpsProcessingMethod + EXIF_ASCII_PREFIX_SIZE, str,
@@ -1882,40 +1882,40 @@ void QualcommCameraHardware::setGpsParameters() {
 
     //Set Latitude
     str = NULL;
-    str = mParameters.get(CameraParameters::KEY_GPS_LATITUDE);
+    str = mParameters.get(QCameraParameters::KEY_GPS_LATITUDE);
     if (str != NULL) {
         setLatLon(EXIFTAGID_GPS_LATITUDE, str);
-        float latitudeValue = mParameters.getFloat(CameraParameters::KEY_GPS_LATITUDE);
+        float latitudeValue = mParameters.getFloat(QCameraParameters::KEY_GPS_LATITUDE);
         latref[0] = 'N';
         if (latitudeValue < 0 ){
             latref[0] = 'S';
         }
         latref[1] = '\0';
-        mParameters.set(CameraParameters::KEY_GPS_LATITUDE_REF, latref);
+        mParameters.set(QCameraParameters::KEY_GPS_LATITUDE_REF, latref);
         addExifTag(EXIFTAGID_GPS_LATITUDE_REF, EXIF_ASCII, 2,
                                 1, (void *)latref);
     }
 
     //set Longitude
     str = NULL;
-    str = mParameters.get(CameraParameters::KEY_GPS_LONGITUDE);
+    str = mParameters.get(QCameraParameters::KEY_GPS_LONGITUDE);
     if (str != NULL) {
         setLatLon(EXIFTAGID_GPS_LONGITUDE, str);
         //set Longitude Ref
-        float longitudeValue = mParameters.getFloat(CameraParameters::KEY_GPS_LONGITUDE);
+        float longitudeValue = mParameters.getFloat(QCameraParameters::KEY_GPS_LONGITUDE);
         lonref[0] = 'E';
         if (longitudeValue < 0){
             lonref[0] = 'W';
         }
         lonref[1] = '\0';
-        mParameters.set(CameraParameters::KEY_GPS_LONGITUDE_REF, lonref);
+        mParameters.set(QCameraParameters::KEY_GPS_LONGITUDE_REF, lonref);
         addExifTag(EXIFTAGID_GPS_LONGITUDE_REF, EXIF_ASCII, 2,
                                 1, (void *)lonref);
     }
 
     //set Altitude
     str = NULL;
-    str = mParameters.get(CameraParameters::KEY_GPS_ALTITUDE);
+    str = mParameters.get(QCameraParameters::KEY_GPS_ALTITUDE);
     if (str != NULL) {
         double value = atof(str);
         int ref = 0;
@@ -1929,14 +1929,14 @@ void QualcommCameraHardware::setGpsParameters() {
         addExifTag(EXIFTAGID_GPS_ALTITUDE, EXIF_RATIONAL, 1,
                     1, (void *)&altitude);
         //set AltitudeRef
-        mParameters.set(CameraParameters::KEY_GPS_ALTITUDE_REF, ref);
+        mParameters.set(QCameraParameters::KEY_GPS_ALTITUDE_REF, ref);
         addExifTag(EXIFTAGID_GPS_ALTITUDE_REF, EXIF_BYTE, 1,
                     1, (void *)&ref);
     }
 
     //set Gps TimeStamp
     str = NULL;
-    str = mParameters.get(CameraParameters::KEY_GPS_TIMESTAMP);
+    str = mParameters.get(QCameraParameters::KEY_GPS_TIMESTAMP);
     if (str != NULL) {
       long value = atol(str);
       time_t unixTime;
@@ -2007,7 +2007,7 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
     jpeg_set_location();
 
     //set TimeStamp
-    const char *str = mParameters.get(CameraParameters::KEY_EXIF_DATETIME);
+    const char *str = mParameters.get(QCameraParameters::KEY_EXIF_DATETIME);
     if (str != NULL) {
       strlcpy(dateTime, str, 20);
       addExifTag(EXIFTAGID_EXIF_DATE_TIME_ORIGINAL, EXIF_ASCII,
@@ -2015,7 +2015,7 @@ bool QualcommCameraHardware::native_jpeg_encode(void)
     }
 
     unsigned focalLengthValue = (unsigned) (mParameters.getFloat(
-                CameraParameters::KEY_FOCAL_LENGTH) * FOCAL_LENGTH_DECIMAL_PRECISON);
+                QCameraParameters::KEY_FOCAL_LENGTH) * FOCAL_LENGTH_DECIMAL_PRECISON);
     rat_t focalLengthRational = {focalLengthValue, FOCAL_LENGTH_DECIMAL_PRECISON};
     memcpy(&focalLength, &focalLengthRational, sizeof(focalLengthRational));
     addExifTag(EXIFTAGID_FOCAL_LENGTH, EXIF_RATIONAL, 1,
@@ -2420,7 +2420,7 @@ static int parse_size(const char *str, int &width, int &height)
     return 0;
 }
 
-QualcommCameraHardware* hardware;
+QualcommCameraHardware* current_cam;
 
 int QualcommCameraHardware::allocate_ion_memory(int *main_ion_fd, struct ion_allocation_data* alloc,
      struct ion_fd_data* ion_info_fd, int ion_type, int size, int *memfd)
@@ -3546,10 +3546,10 @@ void QualcommCameraHardware::runAutoFocus()
     mAutoFocusThreadLock.lock();
     // Skip autofocus if focus mode is infinity.
 
-    const char * focusMode = mParameters.get(CameraParameters::KEY_FOCUS_MODE);
-    if ((mParameters.get(CameraParameters::KEY_FOCUS_MODE) == 0)
-           || (strcmp(focusMode, CameraParameters::FOCUS_MODE_INFINITY) == 0)
-           || (strcmp(focusMode, CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO) == 0)) {
+    const char * focusMode = mParameters.get(QCameraParameters::KEY_FOCUS_MODE);
+    if ((mParameters.get(QCameraParameters::KEY_FOCUS_MODE) == 0)
+           || (strcmp(focusMode, QCameraParameters::FOCUS_MODE_INFINITY) == 0)
+           || (strcmp(focusMode, QCameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO) == 0)) {
         goto done;
     }
 
@@ -3563,7 +3563,7 @@ void QualcommCameraHardware::runAutoFocus()
 
     afMode = (isp3a_af_mode_t)attr_lookup(focus_modes,
                                 sizeof(focus_modes) / sizeof(str_map),
-                                mParameters.get(CameraParameters::KEY_FOCUS_MODE));
+                                mParameters.get(QCameraParameters::KEY_FOCUS_MODE));
 
     /* This will block until either AF completes or is cancelled. */
     ALOGV("af start (mode %d)", afMode);
@@ -3835,7 +3835,7 @@ status_t QualcommCameraHardware::takePicture()
     //mSnapshotFormat is protected by mSnapshotThreadWaitLock
     if (mParameters.getPictureFormat() != 0 &&
             !strcmp(mParameters.getPictureFormat(),
-                    CameraParameters::PIXEL_FORMAT_RAW))
+                    QCameraParameters::PIXEL_FORMAT_RAW))
         mSnapshotFormat = PICTURE_FORMAT_RAW;
     else
         mSnapshotFormat = PICTURE_FORMAT_JPEG;
@@ -3899,7 +3899,7 @@ void QualcommCameraHardware::set_liveshot_exifinfo()
 {
     setGpsParameters();
     //set TimeStamp
-    const char *str = mParameters.get(CameraParameters::KEY_EXIF_DATETIME);
+    const char *str = mParameters.get(QCameraParameters::KEY_EXIF_DATETIME);
     if(str != NULL) {
         strlcpy(dateTime, str, 20);
         addExifTag(EXIFTAGID_EXIF_DATE_TIME_ORIGINAL, EXIF_ASCII,
@@ -3981,7 +3981,7 @@ status_t QualcommCameraHardware::cancelPicture()
     return rc;
 }
 
-status_t QualcommCameraHardware::setParameters(const CameraParameters& params)
+status_t QualcommCameraHardware::setParameters(const QCameraParameters& params)
 {
     ALOGV("setParameters: E params = %p", &params);
 
@@ -4027,7 +4027,7 @@ status_t QualcommCameraHardware::setParameters(const CameraParameters& params)
     if ((rc = setAntibanding(params)))  final_rc = rc;
     if ((rc = setPreviewFpsRange(params)))  final_rc = rc;
 
-    const char *str = params.get(CameraParameters::KEY_SCENE_MODE);
+    const char *str = params.get(QCameraParameters::KEY_SCENE_MODE);
     int32_t value = attr_lookup(scenemode, sizeof(scenemode) / sizeof(str_map), str);
 
     if ((value != NOT_FOUND) && (value == CAMERA_BESTSHOT_OFF)) {
@@ -4048,7 +4048,7 @@ status_t QualcommCameraHardware::setParameters(const CameraParameters& params)
     return final_rc;
 }
 
-CameraParameters QualcommCameraHardware::getParameters() const
+QCameraParameters QualcommCameraHardware::getParameters() const
 {
     ALOGV("getParameters: EX");
     return mParameters;
@@ -4124,7 +4124,7 @@ status_t QualcommCameraHardware::runFaceDetection()
 {
     bool ret = true;
 
-    const char *str = mParameters.get(CameraParameters::KEY_FACE_DETECTION);
+    const char *str = mParameters.get(QCameraParameters::KEY_FACE_DETECTION);
     if (str != NULL) {
         int value = attr_lookup(facedetection,
                 sizeof(facedetection) / sizeof(str_map), str);
@@ -4220,9 +4220,9 @@ QualcommCameraHardware* QualcommCameraHardware::createInstance()
     }
 
     QualcommCameraHardware *cam = new QualcommCameraHardware();
-    hardware=cam;
+    current_cam = cam;
 
-    ALOGI("createInstance: created hardware=%p", &(*hardware));
+    ALOGI("createInstance: created hardware=%p", &(*current_cam));
     if (!cam->startCamera()) {
         ALOGE("%s: startCamera failed!", __FUNCTION__);
         delete cam;
@@ -4238,8 +4238,8 @@ QualcommCameraHardware* QualcommCameraHardware::createInstance()
 QualcommCameraHardware* QualcommCameraHardware::getInstance()
 {
     ALOGV("%s E", __FUNCTION__);
-    if (hardware != 0) {
-        return hardware;
+    if (current_cam != 0) {
+        return current_cam;
     } else {
         ALOGV("getInstance: X new instance of hardware");
         return new QualcommCameraHardware();
@@ -5458,12 +5458,12 @@ bool QualcommCameraHardware::previewEnabled()
     return mCameraRunning;
 }
 
-status_t QualcommCameraHardware::setRecordSize(const CameraParameters& params)
+status_t QualcommCameraHardware::setRecordSize(const QCameraParameters& params)
 {
     const char *recordSize = NULL;
-    recordSize = params.get(CameraParameters::KEY_VIDEO_SIZE);
+    recordSize = params.get(QCameraParameters::KEY_VIDEO_SIZE);
     if (!recordSize) {
-        mParameters.set(CameraParameters::KEY_VIDEO_SIZE, "");
+        mParameters.set(QCameraParameters::KEY_VIDEO_SIZE, "");
         //If application didn't set this parameter string, use the values from
         //getPreviewSize() as video dimensions.
         ALOGV("No Record Size requested, use the preview dimensions");
@@ -5473,7 +5473,7 @@ status_t QualcommCameraHardware::setRecordSize(const CameraParameters& params)
         //Extract the record witdh and height that application requested.
         ALOGI("%s: requested record size %s", __FUNCTION__, recordSize);
         if (!parse_size(recordSize, videoWidth, videoHeight)) {
-            mParameters.set(CameraParameters::KEY_VIDEO_SIZE, recordSize);
+            mParameters.set(QCameraParameters::KEY_VIDEO_SIZE, recordSize);
             //VFE output1 shouldn't be greater than VFE output2.
             if ((previewWidth > videoWidth) || (previewHeight > videoHeight)) {
                 //Set preview sizes as record sizes.
@@ -5507,7 +5507,7 @@ status_t QualcommCameraHardware::setRecordSize(const CameraParameters& params)
                 mParameters.setPreviewSize(previewWidth, previewHeight);
             }
         } else {
-            mParameters.set(CameraParameters::KEY_VIDEO_SIZE, "");
+            mParameters.set(QCameraParameters::KEY_VIDEO_SIZE, "");
             ALOGE("initPreview X: failed to parse parameter record-size (%s)", recordSize);
             return BAD_VALUE;
         }
@@ -5520,7 +5520,7 @@ status_t QualcommCameraHardware::setRecordSize(const CameraParameters& params)
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setPreviewSize(const CameraParameters& params)
+status_t QualcommCameraHardware::setPreviewSize(const QCameraParameters& params)
 {
     int width, height;
     ALOGV("%s E", __FUNCTION__);
@@ -5543,7 +5543,7 @@ status_t QualcommCameraHardware::setPreviewSize(const CameraParameters& params)
     mParameters.setPreviewSize(previewWidth, previewHeight);
     return BAD_VALUE;
 }
-status_t QualcommCameraHardware::setPreviewFpsRange(const CameraParameters& params)
+status_t QualcommCameraHardware::setPreviewFpsRange(const QCameraParameters& params)
 {
     int minFps,maxFps;
     params.getPreviewFpsRange(&minFps,&maxFps);
@@ -5558,7 +5558,7 @@ status_t QualcommCameraHardware::setPreviewFpsRange(const CameraParameters& para
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setPreviewFrameRate(const CameraParameters& params)
+status_t QualcommCameraHardware::setPreviewFrameRate(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_FPS)) {
         ALOGI("Set fps is not supported for this sensor");
@@ -5583,7 +5583,7 @@ status_t QualcommCameraHardware::setPreviewFrameRate(const CameraParameters& par
 
 }
 
-status_t QualcommCameraHardware::setPreviewFrameRateMode(const CameraParameters& params) {
+status_t QualcommCameraHardware::setPreviewFrameRateMode(const QCameraParameters& params) {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_FPS_MODE) && !mCfgControl.mm_camera_is_supported(CAMERA_PARM_FPS)) {
         ALOGI("set fps mode is not supported for this sensor");
         return NO_ERROR;
@@ -5615,24 +5615,24 @@ status_t QualcommCameraHardware::setPreviewFrameRateMode(const CameraParameters&
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setJpegThumbnailSize(const CameraParameters& params){
-    int width = params.getInt(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH);
-    int height = params.getInt(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT);
+status_t QualcommCameraHardware::setJpegThumbnailSize(const QCameraParameters& params){
+    int width = params.getInt(QCameraParameters::KEY_JPEG_THUMBNAIL_WIDTH);
+    int height = params.getInt(QCameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT);
     ALOGV("requested jpeg thumbnail size %d x %d", width, height);
 
     // Validate the picture size
     for (unsigned int i = 0; i < JPEG_THUMBNAIL_SIZE_COUNT; ++i) {
         if (width == jpeg_thumbnail_sizes[i].width
             && height == jpeg_thumbnail_sizes[i].height) {
-            mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_WIDTH, width);
-            mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT, height);
+            mParameters.set(QCameraParameters::KEY_JPEG_THUMBNAIL_WIDTH, width);
+            mParameters.set(QCameraParameters::KEY_JPEG_THUMBNAIL_HEIGHT, height);
             return NO_ERROR;
         }
     }
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setPictureSize(const CameraParameters& params)
+status_t QualcommCameraHardware::setPictureSize(const QCameraParameters& params)
 {
     int width, height;
     ALOGV("%s E", __FUNCTION__);
@@ -5663,20 +5663,20 @@ status_t QualcommCameraHardware::setPictureSize(const CameraParameters& params)
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setJpegQuality(const CameraParameters& params) {
+status_t QualcommCameraHardware::setJpegQuality(const QCameraParameters& params) {
     status_t rc = NO_ERROR;
     ALOGV("%s E", __FUNCTION__);
-    int quality = params.getInt(CameraParameters::KEY_JPEG_QUALITY);
+    int quality = params.getInt(QCameraParameters::KEY_JPEG_QUALITY);
     if (quality >= 0 && quality <= 100) {
-        mParameters.set(CameraParameters::KEY_JPEG_QUALITY, quality);
+        mParameters.set(QCameraParameters::KEY_JPEG_QUALITY, quality);
     } else {
         ALOGE("Invalid jpeg quality=%d", quality);
         rc = BAD_VALUE;
     }
 
-    quality = params.getInt(CameraParameters::KEY_JPEG_THUMBNAIL_QUALITY);
+    quality = params.getInt(QCameraParameters::KEY_JPEG_THUMBNAIL_QUALITY);
     if (quality > 0 && quality <= 100) {
-        mParameters.set(CameraParameters::KEY_JPEG_THUMBNAIL_QUALITY, quality);
+        mParameters.set(QCameraParameters::KEY_JPEG_THUMBNAIL_QUALITY, quality);
     } else {
         ALOGE("Invalid jpeg thumbnail quality=%d", quality);
         rc = BAD_VALUE;
@@ -5684,9 +5684,9 @@ status_t QualcommCameraHardware::setJpegQuality(const CameraParameters& params) 
     return rc;
 }
 
-status_t QualcommCameraHardware::setEffect(const CameraParameters& params)
+status_t QualcommCameraHardware::setEffect(const QCameraParameters& params)
 {
-    const char *str = params.get(CameraParameters::KEY_EFFECT);
+    const char *str = params.get(QCameraParameters::KEY_EFFECT);
     int result;
 
     if (str != NULL) {
@@ -5696,7 +5696,7 @@ status_t QualcommCameraHardware::setEffect(const CameraParameters& params)
                ALOGE("Camera Effect - %s mode is not supported for this sensor",str);
                return NO_ERROR;
             } else {
-                mParameters.set(CameraParameters::KEY_EFFECT, str);
+                mParameters.set(QCameraParameters::KEY_EFFECT, str);
                 bool ret = native_set_parms(CAMERA_PARM_EFFECT, sizeof(value),
                                            (void *)&value,(int *)&result);
                 if (result == MM_CAMERA_ERR_INVALID_OPERATION) {
@@ -5711,13 +5711,13 @@ status_t QualcommCameraHardware::setEffect(const CameraParameters& params)
 }
 
 status_t QualcommCameraHardware::setExposureCompensation(
-        const CameraParameters & params){
+        const QCameraParameters & params){
 
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_EXPOSURE_COMPENSATION)) {
         ALOGI("Exposure Compensation is not supported for this sensor");
         return NO_ERROR;
     }
-    int numerator = params.getInt(CameraParameters::KEY_EXPOSURE_COMPENSATION);
+    int numerator = params.getInt(QCameraParameters::KEY_EXPOSURE_COMPENSATION);
     if (EXPOSURE_COMPENSATION_MINIMUM_NUMERATOR <= numerator &&
             numerator <= EXPOSURE_COMPENSATION_MAXIMUM_NUMERATOR) {
         int16_t  numerator16 = (int16_t)(numerator & 0x0000ffff);
@@ -5725,7 +5725,7 @@ status_t QualcommCameraHardware::setExposureCompensation(
         uint32_t  value = 0;
         value = numerator16 << 16 | denominator16;
 
-        mParameters.set(CameraParameters::KEY_EXPOSURE_COMPENSATION,
+        mParameters.set(QCameraParameters::KEY_EXPOSURE_COMPENSATION,
                             numerator);
         bool ret = native_set_parms(CAMERA_PARM_EXPOSURE_COMPENSATION,
                                     sizeof(value), (void *)&value);
@@ -5735,17 +5735,17 @@ status_t QualcommCameraHardware::setExposureCompensation(
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setAutoExposure(const CameraParameters& params)
+status_t QualcommCameraHardware::setAutoExposure(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_EXPOSURE)) {
         ALOGI("Auto Exposure not supported for this sensor");
         return NO_ERROR;
     }
-    const char *str = params.get(CameraParameters::KEY_AUTO_EXPOSURE);
+    const char *str = params.get(QCameraParameters::KEY_AUTO_EXPOSURE);
     if (str != NULL) {
         int32_t value = attr_lookup(autoexposure, sizeof(autoexposure) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            mParameters.set(CameraParameters::KEY_AUTO_EXPOSURE, str);
+            mParameters.set(QCameraParameters::KEY_AUTO_EXPOSURE, str);
             bool ret = native_set_parms(CAMERA_PARM_EXPOSURE, sizeof(value),
                                        (void *)&value);
             return ret ? NO_ERROR : UNKNOWN_ERROR;
@@ -5755,41 +5755,41 @@ status_t QualcommCameraHardware::setAutoExposure(const CameraParameters& params)
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setSharpness(const CameraParameters& params)
+status_t QualcommCameraHardware::setSharpness(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_SHARPNESS)) {
         ALOGI("Sharpness not supported for this sensor");
         return NO_ERROR;
     }
-    int sharpness = params.getInt(CameraParameters::KEY_SHARPNESS);
+    int sharpness = params.getInt(QCameraParameters::KEY_SHARPNESS);
     if ((sharpness < CAMERA_MIN_SHARPNESS
             || sharpness > CAMERA_MAX_SHARPNESS))
         return UNKNOWN_ERROR;
 
     ALOGV("setting sharpness %d", sharpness);
-    mParameters.set(CameraParameters::KEY_SHARPNESS, sharpness);
+    mParameters.set(QCameraParameters::KEY_SHARPNESS, sharpness);
     bool ret = native_set_parms(CAMERA_PARM_SHARPNESS, sizeof(sharpness),
                                (void *)&sharpness);
     return ret ? NO_ERROR : UNKNOWN_ERROR;
 }
 
-status_t QualcommCameraHardware::setContrast(const CameraParameters& params)
+status_t QualcommCameraHardware::setContrast(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_CONTRAST)) {
         ALOGI("Contrast not supported for this sensor");
         return NO_ERROR;
     }
-    const char *str = params.get(CameraParameters::KEY_SCENE_MODE);
+    const char *str = params.get(QCameraParameters::KEY_SCENE_MODE);
     int32_t value = attr_lookup(scenemode, sizeof(scenemode) / sizeof(str_map), str);
 
     if (value == CAMERA_BESTSHOT_OFF) {
-        int contrast = params.getInt(CameraParameters::KEY_CONTRAST);
+        int contrast = params.getInt(QCameraParameters::KEY_CONTRAST);
         if ((contrast < CAMERA_MIN_CONTRAST)
                 || (contrast > CAMERA_MAX_CONTRAST))
             return UNKNOWN_ERROR;
 
         ALOGV("setting contrast %d", contrast);
-        mParameters.set(CameraParameters::KEY_CONTRAST, contrast);
+        mParameters.set(QCameraParameters::KEY_CONTRAST, contrast);
         bool ret = native_set_parms(CAMERA_PARM_CONTRAST, sizeof(contrast),
                                    (void *)&contrast);
         return ret ? NO_ERROR : UNKNOWN_ERROR;
@@ -5800,21 +5800,21 @@ status_t QualcommCameraHardware::setContrast(const CameraParameters& params)
     }
 }
 
-status_t QualcommCameraHardware::setSaturation(const CameraParameters& params)
+status_t QualcommCameraHardware::setSaturation(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_SATURATION)) {
         ALOGI("Saturation not supported for this sensor");
         return NO_ERROR;
     }
     int result;
-    int saturation = params.getInt(CameraParameters::KEY_SATURATION);
+    int saturation = params.getInt(QCameraParameters::KEY_SATURATION);
 
     if ((saturation < CAMERA_MIN_SATURATION)
         || (saturation > CAMERA_MAX_SATURATION))
         return UNKNOWN_ERROR;
 
     ALOGV("Setting saturation %d", saturation);
-    mParameters.set(CameraParameters::KEY_SATURATION, saturation);
+    mParameters.set(QCameraParameters::KEY_SATURATION, saturation);
     bool ret = native_set_parms(CAMERA_PARM_SATURATION, sizeof(saturation),
         (void *)&saturation, (int *)&result);
     if (result == MM_CAMERA_ERR_INVALID_OPERATION)
@@ -5823,11 +5823,11 @@ status_t QualcommCameraHardware::setSaturation(const CameraParameters& params)
     return ret ? NO_ERROR : UNKNOWN_ERROR;
 }
 
-status_t QualcommCameraHardware::setPreviewFormat(const CameraParameters& params) {
+status_t QualcommCameraHardware::setPreviewFormat(const QCameraParameters& params) {
     const char *str = params.getPreviewFormat();
     int32_t previewFormat = attr_lookup(preview_formats, sizeof(preview_formats) / sizeof(str_map), str);
     if (previewFormat != NOT_FOUND) {
-        mParameters.set(CameraParameters::KEY_PREVIEW_FORMAT, str);
+        mParameters.set(QCameraParameters::KEY_PREVIEW_FORMAT, str);
         mPreviewFormat = previewFormat;
         return NO_ERROR;
     }
@@ -5835,7 +5835,7 @@ status_t QualcommCameraHardware::setPreviewFormat(const CameraParameters& params
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setStrTextures(const CameraParameters& params) {
+status_t QualcommCameraHardware::setStrTextures(const QCameraParameters& params) {
     const char *str = params.get("strtextures");
     if (str != NULL) {
         ALOGV("strtextures = %s", str);
@@ -5849,7 +5849,7 @@ status_t QualcommCameraHardware::setStrTextures(const CameraParameters& params) 
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setBrightness(const CameraParameters& params) {
+status_t QualcommCameraHardware::setBrightness(const QCameraParameters& params) {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_BRIGHTNESS)) {
         ALOGI("Set Brightness not supported for this sensor");
         return NO_ERROR;
@@ -5865,7 +5865,7 @@ status_t QualcommCameraHardware::setBrightness(const CameraParameters& params) {
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setSkinToneEnhancement(const CameraParameters& params) {
+status_t QualcommCameraHardware::setSkinToneEnhancement(const QCameraParameters& params) {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_SCE_FACTOR)) {
         ALOGI("SkinToneEnhancement not supported for this sensor");
         return NO_ERROR;
@@ -5882,7 +5882,7 @@ status_t QualcommCameraHardware::setSkinToneEnhancement(const CameraParameters& 
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setWhiteBalance(const CameraParameters& params)
+status_t QualcommCameraHardware::setWhiteBalance(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_WHITE_BALANCE)) {
         ALOGI("WhiteBalance not supported for this sensor");
@@ -5890,11 +5890,11 @@ status_t QualcommCameraHardware::setWhiteBalance(const CameraParameters& params)
     }
 
     int result;
-    const char *str = params.get(CameraParameters::KEY_WHITE_BALANCE);
+    const char *str = params.get(QCameraParameters::KEY_WHITE_BALANCE);
     if (str != NULL) {
         int32_t value = attr_lookup(whitebalance, sizeof(whitebalance) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            mParameters.set(CameraParameters::KEY_WHITE_BALANCE, str);
+            mParameters.set(QCameraParameters::KEY_WHITE_BALANCE, str);
             bool ret = native_set_parms(CAMERA_PARM_WHITE_BALANCE, sizeof(value),
                                        (void *)&value, (int *)&result);
             if(result == MM_CAMERA_ERR_INVALID_OPERATION) {
@@ -5907,17 +5907,17 @@ status_t QualcommCameraHardware::setWhiteBalance(const CameraParameters& params)
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setFlash(const CameraParameters& params)
+status_t QualcommCameraHardware::setFlash(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_LED_MODE)) {
         ALOGI("%s: flash not supported", __FUNCTION__);
         return NO_ERROR;
     }
-    const char *str = params.get(CameraParameters::KEY_FLASH_MODE);
+    const char *str = params.get(QCameraParameters::KEY_FLASH_MODE);
     if (str != NULL) {
         int32_t value = attr_lookup(flash, sizeof(flash) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            mParameters.set(CameraParameters::KEY_FLASH_MODE, str);
+            mParameters.set(QCameraParameters::KEY_FLASH_MODE, str);
             bool ret = native_set_parms(CAMERA_PARM_LED_MODE,
                                        sizeof(value), (void *)&value);
             return ret ? NO_ERROR : UNKNOWN_ERROR;
@@ -5927,19 +5927,19 @@ status_t QualcommCameraHardware::setFlash(const CameraParameters& params)
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setAntibanding(const CameraParameters& params)
+status_t QualcommCameraHardware::setAntibanding(const QCameraParameters& params)
 {   int result;
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_ANTIBANDING)) {
         ALOGI("Parameter AntiBanding is not supported for this sensor");
         return NO_ERROR;
     }
-    const char *str = params.get(CameraParameters::KEY_ANTIBANDING);
+    const char *str = params.get(QCameraParameters::KEY_ANTIBANDING);
     if (str != NULL) {
         int value = (camera_antibanding_type)attr_lookup(
             antibanding, sizeof(antibanding) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
             camera_antibanding_type temp = (camera_antibanding_type) value;
-            mParameters.set(CameraParameters::KEY_ANTIBANDING, str);
+            mParameters.set(QCameraParameters::KEY_ANTIBANDING, str);
             bool ret = native_set_parms(CAMERA_PARM_ANTIBANDING,
                        sizeof(camera_antibanding_type), (void *)&temp ,(int *)&result);
             if (result == MM_CAMERA_ERR_INVALID_OPERATION) {
@@ -5952,20 +5952,20 @@ status_t QualcommCameraHardware::setAntibanding(const CameraParameters& params)
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setLensshadeValue(const CameraParameters& params)
+status_t QualcommCameraHardware::setLensshadeValue(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_ROLLOFF)) {
         ALOGI("Parameter Rolloff is not supported for this sensor");
         return NO_ERROR;
     }
 
-    const char *str = params.get(CameraParameters::KEY_LENSSHADE);
+    const char *str = params.get(QCameraParameters::KEY_LENSSHADE);
     if (str != NULL) {
         int value = attr_lookup(lensshade,
                                     sizeof(lensshade) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
             int8_t temp = (int8_t)value;
-            mParameters.set(CameraParameters::KEY_LENSSHADE, str);
+            mParameters.set(QCameraParameters::KEY_LENSSHADE, str);
 
             native_set_parms(CAMERA_PARM_ROLLOFF, sizeof(int8_t), (void *)&temp);
             return NO_ERROR;
@@ -5975,7 +5975,7 @@ status_t QualcommCameraHardware::setLensshadeValue(const CameraParameters& param
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setContinuousAf(const CameraParameters& params)
+status_t QualcommCameraHardware::setContinuousAf(const QCameraParameters& params)
 {
     if (mHasAutoFocusSupport) {
         const char *str = params.get("continuous-af");
@@ -5996,14 +5996,14 @@ status_t QualcommCameraHardware::setContinuousAf(const CameraParameters& params)
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setSelectableZoneAf(const CameraParameters& params)
+status_t QualcommCameraHardware::setSelectableZoneAf(const QCameraParameters& params)
 {
     if (mHasAutoFocusSupport && supportsSelectableZoneAf()) {
-        const char *str = params.get(CameraParameters::KEY_SELECTABLE_ZONE_AF);
+        const char *str = params.get(QCameraParameters::KEY_SELECTABLE_ZONE_AF);
         if (str != NULL) {
             int32_t value = attr_lookup(selectable_zone_af, sizeof(selectable_zone_af) / sizeof(str_map), str);
             if (value != NOT_FOUND) {
-                mParameters.set(CameraParameters::KEY_SELECTABLE_ZONE_AF, str);
+                mParameters.set(QCameraParameters::KEY_SELECTABLE_ZONE_AF, str);
                 bool ret = native_set_parms(CAMERA_PARM_FOCUS_RECT, sizeof(value),
                         (void *)&value);
                 return ret ? NO_ERROR : UNKNOWN_ERROR;
@@ -6015,7 +6015,7 @@ status_t QualcommCameraHardware::setSelectableZoneAf(const CameraParameters& par
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setTouchAfAec(const CameraParameters& params)
+status_t QualcommCameraHardware::setTouchAfAec(const QCameraParameters& params)
 {
     /* Don't know the AEC_ROI_* values */
     if (mHasAutoFocusSupport) {
@@ -6023,7 +6023,7 @@ status_t QualcommCameraHardware::setTouchAfAec(const CameraParameters& params)
 
         params.getTouchIndexAec(&xAec, &yAec);
         params.getTouchIndexAf(&xAf, &yAf);
-        const char *str = params.get(CameraParameters::KEY_TOUCH_AF_AEC);
+        const char *str = params.get(QCameraParameters::KEY_TOUCH_AF_AEC);
 
         if (str != NULL) {
             int value = attr_lookup(touchafaec,
@@ -6035,7 +6035,7 @@ status_t QualcommCameraHardware::setTouchAfAec(const CameraParameters& params)
 
                 int FOCUS_RECTANGLE_DX = params.getInt("touchAfAec-dx");
                 int FOCUS_RECTANGLE_DY = params.getInt("touchAfAec-dy");
-                mParameters.set(CameraParameters::KEY_TOUCH_AF_AEC, str);
+                mParameters.set(QCameraParameters::KEY_TOUCH_AF_AEC, str);
                 mParameters.setTouchIndexAec(xAec, yAec);
                 mParameters.setTouchIndexAf(xAf, yAf);
 
@@ -6105,7 +6105,7 @@ status_t QualcommCameraHardware::setFaceDetection(const char *str)
             mMetaDataWaitLock.lock();
             mFaceDetectOn = value;
             mMetaDataWaitLock.unlock();
-            mParameters.set(CameraParameters::KEY_FACE_DETECTION, str);
+            mParameters.set(QCameraParameters::KEY_FACE_DETECTION, str);
             return NO_ERROR;
         }
     }
@@ -6113,13 +6113,13 @@ status_t QualcommCameraHardware::setFaceDetection(const char *str)
     return BAD_VALUE;
 }
 
-status_t  QualcommCameraHardware::setISOValue(const CameraParameters& params) {
+status_t  QualcommCameraHardware::setISOValue(const QCameraParameters& params) {
     int8_t temp_hjr;
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_ISO)) {
         ALOGE("Parameter ISO Value is not supported for this sensor");
         return NO_ERROR;
     }
-    const char *str = params.get(CameraParameters::KEY_ISO_MODE);
+    const char *str = params.get(QCameraParameters::KEY_ISO_MODE);
     if (str != NULL) {
         int value = (camera_iso_mode_type)attr_lookup(
             iso, sizeof(iso) / sizeof(str_map), str);
@@ -6138,7 +6138,7 @@ status_t  QualcommCameraHardware::setISOValue(const CameraParameters& params) {
                }
             }
 
-            mParameters.set(CameraParameters::KEY_ISO_MODE, str);
+            mParameters.set(QCameraParameters::KEY_ISO_MODE, str);
             native_set_parms(CAMERA_PARM_ISO, sizeof(camera_iso_mode_type), (void *)&temp);
             return NO_ERROR;
         }
@@ -6147,7 +6147,7 @@ status_t  QualcommCameraHardware::setISOValue(const CameraParameters& params) {
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setSceneDetect(const CameraParameters& params)
+status_t QualcommCameraHardware::setSceneDetect(const QCameraParameters& params)
 {
 
     bool retParm1, retParm2;
@@ -6156,11 +6156,11 @@ status_t QualcommCameraHardware::setSceneDetect(const CameraParameters& params)
             ALOGE("Parameter Auto Scene Detection is not supported for this sensor");
             return NO_ERROR;
         }
-        const char *str = params.get(CameraParameters::KEY_SCENE_DETECT);
+        const char *str = params.get(QCameraParameters::KEY_SCENE_DETECT);
         if (str != NULL) {
             int32_t value = attr_lookup(scenedetect, sizeof(scenedetect) / sizeof(str_map), str);
             if (value != NOT_FOUND) {
-                mParameters.set(CameraParameters::KEY_SCENE_DETECT, str);
+                mParameters.set(QCameraParameters::KEY_SCENE_DETECT, str);
 
                 retParm1 = native_set_parms(CAMERA_PARM_BL_DETECTION, sizeof(value),
                                            (void *)&value);
@@ -6186,18 +6186,18 @@ status_t QualcommCameraHardware::setSceneDetect(const CameraParameters& params)
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setSceneMode(const CameraParameters& params)
+status_t QualcommCameraHardware::setSceneMode(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_BESTSHOT_MODE)) {
         ALOGE("Parameter Scenemode not supported for this sensor");
         return NO_ERROR;
     }
 
-    const char *str = params.get(CameraParameters::KEY_SCENE_MODE);
+    const char *str = params.get(QCameraParameters::KEY_SCENE_MODE);
     if (str != NULL) {
         int32_t value = attr_lookup(scenemode, sizeof(scenemode) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            mParameters.set(CameraParameters::KEY_SCENE_MODE, str);
+            mParameters.set(QCameraParameters::KEY_SCENE_MODE, str);
             bool ret = native_set_parms(CAMERA_PARM_BESTSHOT_MODE, sizeof(value),
                                        (void *)&value);
             return ret ? NO_ERROR : UNKNOWN_ERROR;
@@ -6206,90 +6206,90 @@ status_t QualcommCameraHardware::setSceneMode(const CameraParameters& params)
     ALOGE("Invalid scenemode value: %s", (str == NULL) ? "NULL" : str);
     return BAD_VALUE;
 }
-status_t QualcommCameraHardware::setGpsLocation(const CameraParameters& params)
+status_t QualcommCameraHardware::setGpsLocation(const QCameraParameters& params)
 {
     ALOGV("%s E", __FUNCTION__);
-    const char *method = params.get(CameraParameters::KEY_GPS_PROCESSING_METHOD);
+    const char *method = params.get(QCameraParameters::KEY_GPS_PROCESSING_METHOD);
     if (method) {
-        mParameters.set(CameraParameters::KEY_GPS_PROCESSING_METHOD, method);
+        mParameters.set(QCameraParameters::KEY_GPS_PROCESSING_METHOD, method);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_PROCESSING_METHOD);
+        mParameters.remove(QCameraParameters::KEY_GPS_PROCESSING_METHOD);
     }
 
-    const char *latitude = params.get(CameraParameters::KEY_GPS_LATITUDE);
+    const char *latitude = params.get(QCameraParameters::KEY_GPS_LATITUDE);
     if (latitude) {
         ALOGE("latitude %s",latitude);
-        mParameters.set(CameraParameters::KEY_GPS_LATITUDE, latitude);
+        mParameters.set(QCameraParameters::KEY_GPS_LATITUDE, latitude);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_LATITUDE);
+        mParameters.remove(QCameraParameters::KEY_GPS_LATITUDE);
     }
 
-    const char *latitudeRef = params.get(CameraParameters::KEY_GPS_LATITUDE_REF);
+    const char *latitudeRef = params.get(QCameraParameters::KEY_GPS_LATITUDE_REF);
     if (latitudeRef) {
-        mParameters.set(CameraParameters::KEY_GPS_LATITUDE_REF, latitudeRef);
+        mParameters.set(QCameraParameters::KEY_GPS_LATITUDE_REF, latitudeRef);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_LATITUDE_REF);
+        mParameters.remove(QCameraParameters::KEY_GPS_LATITUDE_REF);
     }
 
-    const char *longitude = params.get(CameraParameters::KEY_GPS_LONGITUDE);
+    const char *longitude = params.get(QCameraParameters::KEY_GPS_LONGITUDE);
     if (longitude) {
-        mParameters.set(CameraParameters::KEY_GPS_LONGITUDE, longitude);
+        mParameters.set(QCameraParameters::KEY_GPS_LONGITUDE, longitude);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_LONGITUDE);
+        mParameters.remove(QCameraParameters::KEY_GPS_LONGITUDE);
     }
 
-    const char *longitudeRef = params.get(CameraParameters::KEY_GPS_LONGITUDE_REF);
+    const char *longitudeRef = params.get(QCameraParameters::KEY_GPS_LONGITUDE_REF);
     if (longitudeRef) {
-        mParameters.set(CameraParameters::KEY_GPS_LONGITUDE_REF, longitudeRef);
+        mParameters.set(QCameraParameters::KEY_GPS_LONGITUDE_REF, longitudeRef);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_LONGITUDE_REF);
+        mParameters.remove(QCameraParameters::KEY_GPS_LONGITUDE_REF);
     }
 
-    const char *altitudeRef = params.get(CameraParameters::KEY_GPS_ALTITUDE_REF);
+    const char *altitudeRef = params.get(QCameraParameters::KEY_GPS_ALTITUDE_REF);
     if (altitudeRef) {
-        mParameters.set(CameraParameters::KEY_GPS_ALTITUDE_REF, altitudeRef);
+        mParameters.set(QCameraParameters::KEY_GPS_ALTITUDE_REF, altitudeRef);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_ALTITUDE_REF);
+        mParameters.remove(QCameraParameters::KEY_GPS_ALTITUDE_REF);
     }
 
-    const char *altitude = params.get(CameraParameters::KEY_GPS_ALTITUDE);
+    const char *altitude = params.get(QCameraParameters::KEY_GPS_ALTITUDE);
     if (altitude) {
-        mParameters.set(CameraParameters::KEY_GPS_ALTITUDE, altitude);
+        mParameters.set(QCameraParameters::KEY_GPS_ALTITUDE, altitude);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_ALTITUDE);
+        mParameters.remove(QCameraParameters::KEY_GPS_ALTITUDE);
     }
 
-    const char *status = params.get(CameraParameters::KEY_GPS_STATUS);
+    const char *status = params.get(QCameraParameters::KEY_GPS_STATUS);
     if (status) {
-        mParameters.set(CameraParameters::KEY_GPS_STATUS, status);
+        mParameters.set(QCameraParameters::KEY_GPS_STATUS, status);
     }
 
-    const char *dateTime = params.get(CameraParameters::KEY_EXIF_DATETIME);
+    const char *dateTime = params.get(QCameraParameters::KEY_EXIF_DATETIME);
     if (dateTime) {
-        mParameters.set(CameraParameters::KEY_EXIF_DATETIME, dateTime);
+        mParameters.set(QCameraParameters::KEY_EXIF_DATETIME, dateTime);
     } else {
-        mParameters.remove(CameraParameters::KEY_EXIF_DATETIME);
+        mParameters.remove(QCameraParameters::KEY_EXIF_DATETIME);
     }
 
-    const char *timestamp = params.get(CameraParameters::KEY_GPS_TIMESTAMP);
+    const char *timestamp = params.get(QCameraParameters::KEY_GPS_TIMESTAMP);
     if (timestamp) {
-        mParameters.set(CameraParameters::KEY_GPS_TIMESTAMP, timestamp);
+        mParameters.set(QCameraParameters::KEY_GPS_TIMESTAMP, timestamp);
     } else {
-        mParameters.remove(CameraParameters::KEY_GPS_TIMESTAMP);
+        mParameters.remove(QCameraParameters::KEY_GPS_TIMESTAMP);
     }
 
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setRotation(const CameraParameters& params)
+status_t QualcommCameraHardware::setRotation(const QCameraParameters& params)
 {
     status_t rc = NO_ERROR;
     ALOGV("%s E", __FUNCTION__);
-    int rotation = params.getInt(CameraParameters::KEY_ROTATION);
+    int rotation = params.getInt(QCameraParameters::KEY_ROTATION);
     if (rotation != NOT_FOUND) {
         if (rotation == 0 || rotation == 90 || rotation == 180
             || rotation == 270) {
-            mParameters.set(CameraParameters::KEY_ROTATION, rotation);
+            mParameters.set(QCameraParameters::KEY_ROTATION, rotation);
             mRotation = rotation;
         } else {
             ALOGE("Invalid rotation value: %d", rotation);
@@ -6299,7 +6299,7 @@ status_t QualcommCameraHardware::setRotation(const CameraParameters& params)
     return rc;
 }
 
-status_t QualcommCameraHardware::setZoom(const CameraParameters& params)
+status_t QualcommCameraHardware::setZoom(const QCameraParameters& params)
 {
     if (!mCfgControl.mm_camera_is_supported(CAMERA_PARM_ZOOM)) {
         ALOGI("Parameter setZoom is not supported for this sensor");
@@ -6330,14 +6330,14 @@ status_t QualcommCameraHardware::setZoom(const CameraParameters& params)
     return rc;
 }
 
-status_t QualcommCameraHardware::setFocusMode(const CameraParameters& params)
+status_t QualcommCameraHardware::setFocusMode(const QCameraParameters& params)
 {
-    const char *str = params.get(CameraParameters::KEY_FOCUS_MODE);
+    const char *str = params.get(QCameraParameters::KEY_FOCUS_MODE);
     if (str != NULL) {
         int32_t value = attr_lookup(focus_modes,
                                     sizeof(focus_modes) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            mParameters.set(CameraParameters::KEY_FOCUS_MODE, str);
+            mParameters.set(QCameraParameters::KEY_FOCUS_MODE, str);
             // Focus step is reset to infinity when preview is started. We do
             // not need to do anything now.
             return NO_ERROR;
@@ -6347,7 +6347,7 @@ status_t QualcommCameraHardware::setFocusMode(const CameraParameters& params)
     return BAD_VALUE;
 }
 
-status_t QualcommCameraHardware::setOrientation(const CameraParameters& params)
+status_t QualcommCameraHardware::setOrientation(const QCameraParameters& params)
 {
     ALOGV("%s E", __FUNCTION__);
     const char *str = params.get("orientation");
@@ -6365,16 +6365,16 @@ status_t QualcommCameraHardware::setOrientation(const CameraParameters& params)
     return NO_ERROR;
 }
 
-status_t QualcommCameraHardware::setPictureFormat(const CameraParameters& params)
+status_t QualcommCameraHardware::setPictureFormat(const QCameraParameters& params)
 {
     ALOGV("%s E", __FUNCTION__);
-    const char * str = params.get(CameraParameters::KEY_PICTURE_FORMAT);
+    const char * str = params.get(QCameraParameters::KEY_PICTURE_FORMAT);
 
     if (str != NULL) {
         int32_t value = attr_lookup(picture_formats,
                                     sizeof(picture_formats) / sizeof(str_map), str);
         if (value != NOT_FOUND) {
-            mParameters.set(CameraParameters::KEY_PICTURE_FORMAT, str);
+            mParameters.set(QCameraParameters::KEY_PICTURE_FORMAT, str);
         } else {
             ALOGE("Invalid Picture Format value: %s", str);
             return BAD_VALUE;

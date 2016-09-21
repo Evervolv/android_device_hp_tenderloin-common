@@ -41,8 +41,8 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
 
 # Camera
-#PRODUCT_PACKAGES += \
-#   camera.msm8660
+PRODUCT_PACKAGES += \
+   camera.msm8660
 
 # Display
 PRODUCT_PACKAGES += \
@@ -121,7 +121,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-flags=m=y \
     dalvik.vm.image-dex2oat-filter=speed \
     dalvik.vm.lockprof.threshold=500 \
-    ro.com.google.networklocation=1
+    ro.com.google.networklocation=1 \
+    media.stagefright.legacyencoder=true \
+    media.stagefright.less-secure=true \
+    camera2.portability.force_api=1
 
 # Tools
 PRODUCT_PACKAGES += \

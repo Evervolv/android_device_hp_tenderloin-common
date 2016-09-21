@@ -7,7 +7,7 @@ LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS := optional
 LOCAL_PRELINK_MODULE := false
 
-LOCAL_SRC_FILES := QualcommCameraHardware.cpp
+LOCAL_SRC_FILES := QualcommCameraHardware.cpp QCameraParameters.cpp
 LOCAL_SRC_FILES += cameraHAL.cpp
 
 LOCAL_CFLAGS := -DDLOPEN_LIBMMCAMERA=1 -DHW_ENCODE

@@ -26,7 +26,7 @@
 //#include <ui/egl/android_natives.h>
 #include <hardware/camera.h>
 #include <camera/Camera.h>
-#include <camera/CameraParameters.h>
+#include "QCameraParameters.h"
 #include <system/window.h>
 #include <system/camera.h>
 #include <hardware/camera.h>
@@ -220,19 +220,6 @@ struct board_property{
 
 namespace android {
 
-struct FPSRange{
-int minFPS;
-int maxFPS;
-FPSRange(){
-minFPS=0;
-maxFPS=0;
-};
-FPSRange(int min,int max){
-minFPS=min;
-maxFPS=max;
-};
-};
-
 class QualcommCameraHardware : public RefBase{
 public:
 
@@ -262,8 +249,8 @@ public:
     virtual status_t takeLiveSnapshot();
     void set_liveshot_exifinfo();
     virtual status_t cancelPicture();
-    virtual status_t setParameters(const CameraParameters& params);
-    virtual CameraParameters getParameters() const;
+    virtual status_t setParameters(const QCameraParameters& params);
+    virtual QCameraParameters getParameters() const;
     virtual status_t sendCommand(int32_t command, int32_t arg1, int32_t arg2);
     virtual int32_t getNumberOfVideoBuffers();
     virtual sp<IMemory> getVideoBuffer(int32_t index);
@@ -328,7 +315,7 @@ private:
 
     int jpegPadding;
 
-    CameraParameters mParameters;
+    QCameraParameters mParameters;
     unsigned int frame_size;
     bool mCameraRunning;
     Mutex mCameraRunningLock;
@@ -479,40 +466,40 @@ private:
 
     void initDefaultParameters();
 
-    status_t setPreviewSize(const CameraParameters& params);
-    status_t setJpegThumbnailSize(const CameraParameters& params);
-    status_t setPreviewFpsRange(const CameraParameters& params);
-    status_t setPreviewFrameRate(const CameraParameters& params);
-    status_t setPreviewFrameRateMode(const CameraParameters& params);
-    status_t setRecordSize(const CameraParameters& params);
-    status_t setPictureSize(const CameraParameters& params);
-    status_t setJpegQuality(const CameraParameters& params);
-    status_t setAntibanding(const CameraParameters& params);
-    status_t setEffect(const CameraParameters& params);
-    status_t setExposureCompensation(const CameraParameters &params);
-    status_t setAutoExposure(const CameraParameters& params);
-    status_t setWhiteBalance(const CameraParameters& params);
-    status_t setFlash(const CameraParameters& params);
-    status_t setGpsLocation(const CameraParameters& params);
-    status_t setRotation(const CameraParameters& params);
-    status_t setZoom(const CameraParameters& params);
-    status_t setFocusMode(const CameraParameters& params);
-    status_t setBrightness(const CameraParameters& params);
-    status_t setSkinToneEnhancement(const CameraParameters& params);
-    status_t setOrientation(const CameraParameters& params);
-    status_t setLensshadeValue(const CameraParameters& params);
-    status_t setISOValue(const CameraParameters& params);
-    status_t setPictureFormat(const CameraParameters& params);
-    status_t setSharpness(const CameraParameters& params);
-    status_t setContrast(const CameraParameters& params);
-    status_t setSaturation(const CameraParameters& params);
-    status_t setSceneMode(const CameraParameters& params);
-    status_t setContinuousAf(const CameraParameters& params);
-    status_t setTouchAfAec(const CameraParameters& params);
-    status_t setSceneDetect(const CameraParameters& params);
-    status_t setStrTextures(const CameraParameters& params);
-    status_t setPreviewFormat(const CameraParameters& params);
-    status_t setSelectableZoneAf(const CameraParameters& params);
+    status_t setPreviewSize(const QCameraParameters& params);
+    status_t setJpegThumbnailSize(const QCameraParameters& params);
+    status_t setPreviewFpsRange(const QCameraParameters& params);
+    status_t setPreviewFrameRate(const QCameraParameters& params);
+    status_t setPreviewFrameRateMode(const QCameraParameters& params);
+    status_t setRecordSize(const QCameraParameters& params);
+    status_t setPictureSize(const QCameraParameters& params);
+    status_t setJpegQuality(const QCameraParameters& params);
+    status_t setAntibanding(const QCameraParameters& params);
+    status_t setEffect(const QCameraParameters& params);
+    status_t setExposureCompensation(const QCameraParameters &params);
+    status_t setAutoExposure(const QCameraParameters& params);
+    status_t setWhiteBalance(const QCameraParameters& params);
+    status_t setFlash(const QCameraParameters& params);
+    status_t setGpsLocation(const QCameraParameters& params);
+    status_t setRotation(const QCameraParameters& params);
+    status_t setZoom(const QCameraParameters& params);
+    status_t setFocusMode(const QCameraParameters& params);
+    status_t setBrightness(const QCameraParameters& params);
+    status_t setSkinToneEnhancement(const QCameraParameters& params);
+    status_t setOrientation(const QCameraParameters& params);
+    status_t setLensshadeValue(const QCameraParameters& params);
+    status_t setISOValue(const QCameraParameters& params);
+    status_t setPictureFormat(const QCameraParameters& params);
+    status_t setSharpness(const QCameraParameters& params);
+    status_t setContrast(const QCameraParameters& params);
+    status_t setSaturation(const QCameraParameters& params);
+    status_t setSceneMode(const QCameraParameters& params);
+    status_t setContinuousAf(const QCameraParameters& params);
+    status_t setTouchAfAec(const QCameraParameters& params);
+    status_t setSceneDetect(const QCameraParameters& params);
+    status_t setStrTextures(const QCameraParameters& params);
+    status_t setPreviewFormat(const QCameraParameters& params);
+    status_t setSelectableZoneAf(const QCameraParameters& params);
     void setGpsParameters();
     bool storePreviewFrameForPostview();
     bool isValidDimension(int w, int h);
