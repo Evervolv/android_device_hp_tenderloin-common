@@ -124,6 +124,7 @@ TARGET_RECOVERY_PRE_COMMAND := "/system/bin/rebootcmd"
 TARGET_PROVIDES_RELEASETOOLS := true
 TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := device/hp/tenderloin-common/releasetools/tenderloin_img_from_target_files
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/hp/tenderloin-common/releasetools/tenderloin_ota_from_target_files
+BLOCK_BASED_OTA := false
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
