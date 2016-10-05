@@ -223,4 +223,5 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     libwifi-hal-ath6kl \
     wificond \
+    wifilogd \
     wpa_supplicant.conf
