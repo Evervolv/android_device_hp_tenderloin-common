@@ -93,7 +93,8 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    lights.tenderloin
+    lights.tenderloin \
+    android.hardware.light@2.0-impl
 
 # Low-RAM optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
