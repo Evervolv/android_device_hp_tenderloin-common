@@ -18,18 +18,18 @@
     "repository": "android_hardware_qcom_audio-caf",
     "target_path": "hardware/qcom/audio-caf/msm8960",
     "dep_type": "hardware",
-    "branch": "ng-7.0-8960"
+    "branch": "ng-7.1-8960"
  },
  {
     "repository": "android_hardware_qcom_display-caf",
     "target_path": "hardware/qcom/display-caf/msm8960",
     "dep_type": "hardware",
-    "branch": "ng-7.0-8960"
+    "branch": "ng-7.1-8960"
  },
  {
     "repository": "android_hardware_qcom_media-caf",
     "target_path": "hardware/qcom/media-caf/msm8960",
     "dep_type": "hardware",
-    "branch": "ng-7.0-8960"
+    "branch": "ng-7.1-8960"
  }
 ]
