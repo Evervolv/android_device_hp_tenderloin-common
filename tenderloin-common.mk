@@ -77,6 +77,10 @@ PRODUCT_PACKAGES += \
     fsck.f2fs \
     resize2fs_static
 
+#GNSS HAL
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.0-impl
+
 # Init.d
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/prebuilt/etc/init.d/10check_media_minor:system/etc/init.d/10check_media_minor
