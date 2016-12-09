@@ -166,7 +166,7 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
+    android.hardware.wifi@1.0-service \
     hostapd \
     hostapd_default.conf \
     libnetcmdiface \
