@@ -80,6 +80,9 @@ on boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     chmod 0660 /sys/class/rfkill/rfkill0/state
 
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
+
     # fmtx
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
