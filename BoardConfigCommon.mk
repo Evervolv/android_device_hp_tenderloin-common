@@ -1,5 +1,6 @@
 # inherit from the proprietary version
 -include vendor/hp/tenderloin/BoardConfigVendor.mk
+-include hardware/atheros/ath6kl/firmware/device-ath6kl.mk
 
 TARGET_SPECIFIC_HEADER_PATH := device/hp/tenderloin-common/include 
 
