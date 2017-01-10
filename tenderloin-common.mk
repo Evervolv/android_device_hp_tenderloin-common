@@ -18,6 +18,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     fstab.tenderloin \
     init.tenderloin.rc \
+    init.tenderloin.power.rc \
     init.tenderloin.usb.rc \
     ueventd.tenderloin.rc
 
@@ -60,6 +61,10 @@ PRODUCT_PACKAGES += \
 # Init.d
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/prebuilt/etc/init.d/10check_media_minor:system/etc/init.d/10check_media_minor
+
+# IO Scheduler
+PRODUCT_PROPERTY_OVERRIDES += \
+    sys.io.scheduler=bfq
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
