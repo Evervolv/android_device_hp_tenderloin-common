@@ -31,6 +31,10 @@ PRODUCT_PACKAGES += \
    libavextensions \
    libavmediaextentions
 
+PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl
+
 # Audio config
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/configs/mixer_paths.xml:system/etc/mixer_paths.xml \
