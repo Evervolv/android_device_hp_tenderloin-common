@@ -41,6 +41,9 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/bluetooth/bt_vendor.conf:/system/etc/bluetooth/bt_vendor.conf \
     device/hp/tenderloin-common/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
 
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl
+
 # Camera
 #PRODUCT_PACKAGES += \
 #   camera.msm8660
