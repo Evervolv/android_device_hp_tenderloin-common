@@ -18,7 +18,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := audio.primary.tenderloin
 LOCAL_MODULE_RELATIVE_PATH := hw
-LOCAL_PROPRIETARY_MODULE := true
 LOCAL_SRC_FILES := \
 	audio_hw.c \
 	audio_route.c
@@ -28,6 +27,7 @@ LOCAL_C_INCLUDES += \
 	$(call include-path-for, audio-utils)
 LOCAL_SHARED_LIBRARIES := liblog libcutils libtinyalsa libaudioutils libexpat
 LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_OWNER := qcom
+LOCAL_PROPRIETARY_MODULE := true
 
 include $(BUILD_SHARED_LIBRARY)
-
