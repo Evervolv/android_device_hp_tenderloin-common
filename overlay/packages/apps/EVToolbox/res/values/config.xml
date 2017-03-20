@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Whether or not to display the home button settings -->
-    <bool name="has_physical_buttons">true</bool>
-
-    <!-- Notification toolbox widges -->
-    <string name="config_recommendedTabletDpi" translatable="false">160</string>
+    <bool name="has_home_button">true</bool>
 </resources>
