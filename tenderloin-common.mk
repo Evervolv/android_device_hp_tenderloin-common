@@ -76,6 +76,23 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     lights.tenderloin
 
+# Low-RAM optimizations
+ADDITIONAL_BUILD_PROPERTIES += \
+    ro.config.low_ram=true \
+    persist.sys.force_highendgfx=true \
+    dalvik.vm.jit.codecachesize=0 \
+    config.disable_atlas=true \
+    ro.config.max_starting_bg=8 \
+    ro.sys.fw.bg_apps_limit=16 \
+    ro.sys.fw.use_trim_settings=true \
+    ro.sys.fw.empty_app_percent=50 \
+    ro.sys.fw.trim_empty_percent=100 \
+    ro.sys.fw.trim_cache_percent=100 \
+    ro.sys.fw.trim_enable_memory=874512384 \
+    ro.sys.fw.bservice_enable=true \
+    ro.sys.fw.bservice_limit=5 \
+    ro.sys.fw.bservice_age=5000
+
 # Media
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/configs/media_profiles.xml:system/etc/media_profiles.xml \
@@ -123,9 +140,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
     dalvik.vm.dex2oat-flags=--no-watch-dog \
     dalvik.vm.dex2oat-swap=false \
-    dalvik.vm.dexopt-flags=m=y \
     dalvik.vm.image-dex2oat-filter=speed \
-    dalvik.vm.lockprof.threshold=500 \
     ro.com.google.networklocation=1 \
     media.stagefright.legacyencoder=true \
     media.stagefright.less-secure=true \
