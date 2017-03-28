@@ -878,7 +878,7 @@ static int out_get_next_write_timestamp(const struct audio_stream_out *stream,
 static int out_get_presentation_position(const struct audio_stream_out *stream __unused,
                         uint64_t *frames __unused, struct timespec *timestamp __unused)
 {
-    return -1;
+    return -EINVAL;
 }
 
 /** audio_stream_in implementation **/
