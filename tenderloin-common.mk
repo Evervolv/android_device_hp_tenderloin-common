@@ -115,6 +115,10 @@ PRODUCT_PACKAGES += \
     libOmxQcelp13Enc \
     libstagefrighthw
 
+# OMX properties
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.media.treble_omx=false
+
 # Prebuilts
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/prebuilt/tptoolbox.cfg:tptoolbox.cfg \
