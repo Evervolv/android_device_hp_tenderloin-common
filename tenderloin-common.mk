@@ -57,6 +57,10 @@ PRODUCT_PACKAGES += \
     libgenlock \
     memtrack.msm8660
 
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.mapper@2.0-impl
+
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     fsck.f2fs \
@@ -167,6 +171,10 @@ PRODUCT_PACKAGES += \
     ts_srv_set \
     rebootcmd \
     mkbootimg
+
+# Vendor Interface Manifest
+PRODUCT_COPY_FILES += \
+    device/hp/tenderloin-common/manifest.xml:system/vendor/manifest.xml
 
 # Wifi
 PRODUCT_PACKAGES += \
