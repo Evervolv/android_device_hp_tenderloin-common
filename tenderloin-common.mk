@@ -42,7 +42,8 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
 
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-impl
+    android.hardware.bluetooth@1.0-impl \
+    libbt-vendor
 
 # Camera
 #PRODUCT_PACKAGES += \
