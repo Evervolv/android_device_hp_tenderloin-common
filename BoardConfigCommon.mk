@@ -59,6 +59,9 @@ TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_HAS_NO_CAMERA_FLASH := true
 
+# Device manifest
+DEVICE_MATRIX_FILE := device/hp/tenderloin-common/compatibility_matrix.xml
+
 # Display
 USE_OPENGL_RENDERER := true
 BOARD_USES_LEGACY_MMAP := true
@@ -157,3 +160,4 @@ BOARD_WLAN_DEVICE                := ath6kl
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_ath6kl
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
+
