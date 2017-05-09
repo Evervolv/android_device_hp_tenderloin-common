@@ -9,6 +9,9 @@ on init
     export ANDROID_DATA /data
     export EXTERNAL_STORAGE /sdcard
 
+    # no systemless SuperSU
+    export SYSTEMLESS false
+
     symlink /system/etc /etc
 
     mkdir /boot
