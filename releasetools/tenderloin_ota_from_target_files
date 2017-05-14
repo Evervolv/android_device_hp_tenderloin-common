@@ -262,7 +262,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # Delete other uImage traces.
   um = ["/boot/uImage.CyanogenMod", "/boot/moboot.splash.CyanogenMod.tga", "/boot/uImage.ICS",
   "/boot/moboot.splash.ICS.tga", "/boot/uImage.AOKP", "/boot/moboot.splash.AOKP.tga",
-  "/boot/uImage.Classicnerd", "/boot/moboot.splash.Classicnerd", /boot/uImage.LineageOS",
+  "/boot/uImage.Classicnerd", "/boot/moboot.splash.Classicnerd", "/boot/uImage.LineageOS",
   "/boot/moboot.splash.LineageOS.tga"]
   script.DeleteFiles(um)
 
