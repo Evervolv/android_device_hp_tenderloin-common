@@ -2,7 +2,6 @@
     <hal format="hidl">
         <name>android.hardware.graphics.allocator</name>
         <transport>hwbinder</transport>
-        <impl level="generic"></impl>
         <version>2.0</version>
         <interface>
             <name>IAllocator</name>
@@ -10,21 +9,11 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.graphics.composer</name>
-        <transport arch="32+64">passthrough</transport>
-        <version>2.1</version>
+        <name>android.hardware.wifi.supplicant</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
         <interface>
-            <name>IComposer</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>android.hardware.graphics.mapper</name>
-        <transport arch="32+64">passthrough</transport>
-        <impl level="generic"></impl>
-        <version>2.0</version>
-        <interface>
-            <name>IMapper</name>
+            <name>ISupplicant</name>
             <instance>default</instance>
         </interface>
     </hal>
