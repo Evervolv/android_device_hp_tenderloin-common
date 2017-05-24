@@ -154,6 +154,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/releasetools/install-recovery.sh:$(PRODUCT_OUT)/ota_temp/SYSTEM/bin/install-recovery.sh
 
+# RenderScript HAL
+PRODUCT_PACKAGES += \
+    android.hardware.renderscript@1.0-impl
+
 # Stlport
 PRODUCT_PACKAGES += \
     libstlport
