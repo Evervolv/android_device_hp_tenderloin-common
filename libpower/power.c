@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2012 The Android Open Source Project
- * Copyright (c) 2012 The CyanogenMod Project
+ * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,101 +17,60 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <fcntl.h>
+#include <dlfcn.h>
+#include <errno.h>
+#include <sys/poll.h>
+#include <pthread.h>
+#include <linux/netlink.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-#define LOG_TAG "Tenderloin PowerHAL"
+#define LOG_TAG "PowerHAL"
 #include <utils/Log.h>
 
 #include <hardware/hardware.h>
 #include <hardware/power.h>
 
-#include <sys/socket.h>
-#include <sys/un.h>
+#define STATE_ON "state=1"
+#define STATE_OFF "state=0"
 
-#define SCALING_GOVERNOR_PATH "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
-#define BOOSTPULSE_ONDEMAND "/sys/devices/system/cpu/cpufreq/ondemand/boostpulse"
-#define BOOSTPULSE_INTERACTIVE "/sys/devices/system/cpu/cpufreq/interactive/boostpulse"
-#define NOTIFY_ON_MIGRATE "/dev/cpuctl/cpu.notify_on_migrate"
+#define MAX_LENGTH         50
+#define BOOST_SOCKET       "/dev/socket/pb"
 
 #define TS_SOCKET_LOCATION "/dev/socket/tsdriver"
 #define TS_SOCKET_DEBUG 0
 
+#define LOW_POWER_MAX_FREQ "1026000"
+#define LOW_POWER_MIN_FREQ "384000"
+#define NORMAL_MAX_FREQ "1512000"
+
+#define MAX_FREQ_LIMIT_PATH "/sys/kernel/cpufreq_limit/limited_max_freq"
+#define MIN_FREQ_LIMIT_PATH "/sys/kernel/cpufreq_limit/limited_min_freq"
+
+static int client_sockfd;
+static struct sockaddr_un client_addr;
+static int last_state = -1;
+
 static int ts_state;
-static char governor[20];
 
-struct tenderloin_power_module {
-    struct power_module base;
-    pthread_mutex_t lock;
-    int boostpulse_fd;
-    int boostpulse_warned;
-};
+static bool low_power_mode = false;
+static pthread_mutex_t low_power_mode_lock = PTHREAD_MUTEX_INITIALIZER;
 
-static char governor[20];
-
-static int sysfs_read(char *path, char *s, int num_bytes)
+static void socket_init()
 {
-    char buf[80];
-    int count;
-    int ret = 0;
-    int fd = open(path, O_RDONLY);
-
-    if (fd < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error opening %s: %s\n", path, buf);
-
-        return -1;
+    if (!client_sockfd) {
+        client_sockfd = socket(PF_UNIX, SOCK_DGRAM, 0);
+        if (client_sockfd < 0) {
+            ALOGE("%s: failed to open: %s", __func__, strerror(errno));
+            return;
+        }
+        memset(&client_addr, 0, sizeof(struct sockaddr_un));
+        client_addr.sun_family = AF_UNIX;
+        snprintf(client_addr.sun_path, UNIX_PATH_MAX, BOOST_SOCKET);
     }
-
-    if ((count = read(fd, s, num_bytes - 1)) < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error writing to %s: %s\n", path, buf);
-
-        ret = -1;
-    } else {
-        s[count] = '\0';
-    }
-
-    close(fd);
-
-    return ret;
-}
-
-static void sysfs_write(char *path, char *s)
-{
-    char buf[80];
-    int len;
-    int fd = open(path, O_WRONLY);
-
-    if (fd < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error opening %s: %s\n", path, buf);
-        return;
-    }
-
-    len = write(fd, s, strlen(s));
-    if (len < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error writing to %s: %s\n", path, buf);
-    }
-
-    close(fd);
-}
-
-static int get_scaling_governor() {
-    if (sysfs_read(SCALING_GOVERNOR_PATH, governor,
-                sizeof(governor)) == -1) {
-        return -1;
-    } else {
-        // Strip newline at the end.
-        int len = strlen(governor);
-
-        len--;
-
-        while (len >= 0 && (governor[len] == '\n' || governor[len] == '\r'))
-            governor[len--] = '\0';
-    }
-
-    return 0;
 }
 
 /* connects to the touchscreen socket */
@@ -136,147 +94,185 @@ static void send_ts_socket(char *send_data) {
     }
 }
 
-static void tenderloin_power_set_interactive(struct power_module *module, int on)
+static int sysfs_write(const char *path, char *s)
 {
-    if (strncmp(governor, "ondemand", 8) == 0)
-        sysfs_write(NOTIFY_ON_MIGRATE, on ? "1" : "0");
-
-    /* tell touchscreen to turn on or off */
-    if (on && ts_state == 0) {
-        ALOGI("Enabling touch screen");
-        ts_state = 1;
-        send_ts_socket("O");
-    } else if (!on && ts_state == 1) {
-        ALOGI("Disabling touch screen");
-        ts_state = 0;
-        send_ts_socket("C");
-    }
-}
-
-static void configure_governor()
-{
-    tenderloin_power_set_interactive(NULL, 1);
-
-    if (strncmp(governor, "ondemand", 8) == 0) {
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/up_threshold", "90");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/sampling_rate", "50000");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/io_is_busy", "1");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor", "4");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/down_differential", "10");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core", "70");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core", "3");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/optimal_freq", "960000");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/sync_freq", "1026000");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load", "80");
-    } else if (strncmp(governor, "interactive", 11) == 0) {
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay", "20000 1400000:40000 1700000:20000");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load", "90");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/hispeed_freq", "1190400");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/io_is_busy", "1");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/target_loads", "85 1500000:90 1800000:70");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/min_sample_time", "40000");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/timer_rate", "30000");
-        sysfs_write("/sys/devices/system/cpu/cpufreq/interactive/timer_slack", "30000");
-    }
-}
-
-static int boostpulse_open(struct tenderloin_power_module *tenderloin)
-{
-    char buf[80];
-
-    pthread_mutex_lock(&tenderloin->lock);
-
-    if (tenderloin->boostpulse_fd < 0) {
-        if (get_scaling_governor() < 0) {
-            ALOGE("Can't read scaling governor.");
-            tenderloin->boostpulse_warned = 1;
-        } else {
-            if (strncmp(governor, "ondemand", 8) == 0)
-                tenderloin->boostpulse_fd = open(BOOSTPULSE_ONDEMAND, O_WRONLY);
-            else if (strncmp(governor, "interactive", 11) == 0)
-                tenderloin->boostpulse_fd = open(BOOSTPULSE_INTERACTIVE, O_WRONLY);
-
-            if (tenderloin->boostpulse_fd < 0 && !tenderloin->boostpulse_warned) {
-                strerror_r(errno, buf, sizeof(buf));
-                ALOGV("Error opening boostpulse: %s\n", buf);
-                tenderloin->boostpulse_warned = 1;
-            } else if (tenderloin->boostpulse_fd > 0) {
-                configure_governor();
-                ALOGD("Opened %s boostpulse interface", governor);
-            }
-        }
-    }
-
-    pthread_mutex_unlock(&tenderloin->lock);
-    return tenderloin->boostpulse_fd;
-}
-
-static void tenderloin_power_hint(struct power_module *module, power_hint_t hint,
-                            void *data)
-{
-    struct tenderloin_power_module *tenderloin = (struct tenderloin_power_module *) module;
     char buf[80];
     int len;
-    int duration = 1;
+    int fd = open(path, O_WRONLY);
 
-    switch (hint) {
-    case POWER_HINT_INTERACTION:
-    case POWER_HINT_CPU_BOOST:
-        if (boostpulse_open(tenderloin) >= 0) {
-            if (data != NULL)
-                duration = (int) data;
+    if (fd < 0) {
+        strerror_r(errno, buf, sizeof(buf));
+        ALOGE("Error opening %s: %s\n", path, buf);
+        return -1;
+    }
 
-            snprintf(buf, sizeof(buf), "%d", duration);
-            len = write(tenderloin->boostpulse_fd, buf, strlen(buf));
+    len = write(fd, s, strlen(s));
+    if (len < 0) {
+        strerror_r(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", path, buf);
+        return -1;
+    }
 
-            if (len < 0) {
-                strerror_r(errno, buf, sizeof(buf));
-                ALOGE("Error writing to boostpulse: %s\n", buf);
+    close(fd);
+    return 0;
+}
 
-                pthread_mutex_lock(&tenderloin->lock);
-                close(tenderloin->boostpulse_fd);
-                tenderloin->boostpulse_fd = -1;
-                tenderloin->boostpulse_warned = 0;
-                pthread_mutex_unlock(&tenderloin->lock);
-            }
-        }
-        break;
+static void power_init(__attribute__((unused)) struct power_module *module)
+{
+    ALOGI("%s", __func__);
+    socket_init();
+}
 
-    case POWER_HINT_VSYNC:
-        break;
+static void sync_thread(int off)
+{
+    int rc;
+    pid_t client;
+    char data[MAX_LENGTH];
 
-    default:
-        break;
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    client = getpid();
+
+    if (!off) {
+        snprintf(data, MAX_LENGTH, "2:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0,
+            (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    } else {
+        snprintf(data, MAX_LENGTH, "3:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0,
+            (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    }
+
+    if (rc < 0) {
+        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
     }
 }
 
-static void tenderloin_power_init(struct power_module *module)
+static void enc_boost(int off)
 {
-    get_scaling_governor();
-    configure_governor();
+    int rc;
+    pid_t client;
+    char data[MAX_LENGTH];
+
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    client = getpid();
+
+    if (!off) {
+        snprintf(data, MAX_LENGTH, "5:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0,
+            (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    } else {
+        snprintf(data, MAX_LENGTH, "6:%d", client);
+        rc = sendto(client_sockfd, data, strlen(data), 0,
+            (const struct sockaddr *)&client_addr, sizeof(struct sockaddr_un));
+    }
+
+    if (rc < 0) {
+        ALOGE("%s: failed to send: %s", __func__, strerror(errno));
+    }
+}
+
+static void process_video_encode_hint(void *metadata)
+{
+
+    socket_init();
+
+    if (client_sockfd < 0) {
+        ALOGE("%s: boost socket not created", __func__);
+        return;
+    }
+
+    if (!metadata)
+        return;
+
+    if (!strncmp(metadata, STATE_ON, sizeof(STATE_ON))) {
+        /* Video encode started */
+        sync_thread(1);
+        enc_boost(1);
+    } else if (!strncmp(metadata, STATE_OFF, sizeof(STATE_OFF))) {
+        /* Video encode stopped */
+        sync_thread(0);
+        enc_boost(0);
+    }
+}
+
+static void power_set_interactive(__attribute__((unused)) struct power_module *module, int on)
+{
+    if (last_state == on)
+        return;
+
+    last_state = on;
+
+    ALOGV("%s %s", __func__, (on ? "ON" : "OFF"));
+    if (on) {
+        sync_thread(0);
+        if (ts_state == 0) {
+            ts_state = 1;
+            send_ts_socket("O");
+        } 
+    } else {
+        sync_thread(1);
+        if (ts_state == 1) {
+            ts_state = 0;
+            send_ts_socket("C");
+         }
+    }
+}
+
+static void power_hint( __attribute__((unused)) struct power_module *module,
+                      power_hint_t hint, void *data)
+{
+    int cpu, ret;
+
+    switch (hint) {
+        case POWER_HINT_INTERACTION:
+        case POWER_HINT_LAUNCH:
+            ALOGV("POWER_HINT_INTERACTION");
+            break;
+        case POWER_HINT_VIDEO_ENCODE:
+            process_video_encode_hint(data);
+            break;
+
+        case POWER_HINT_LOW_POWER:
+             pthread_mutex_lock(&low_power_mode_lock);
+             if (*(int32_t *)data) {
+                 low_power_mode = true;
+                 sysfs_write(MIN_FREQ_LIMIT_PATH, LOW_POWER_MIN_FREQ);
+                 sysfs_write(MAX_FREQ_LIMIT_PATH, LOW_POWER_MAX_FREQ);
+             } else {
+                 low_power_mode = false;
+                 sysfs_write(MAX_FREQ_LIMIT_PATH, NORMAL_MAX_FREQ);
+             }
+             pthread_mutex_unlock(&low_power_mode_lock);
+             break;
+        default:
+            break;
+    }
 }
 
 static struct hw_module_methods_t power_module_methods = {
     .open = NULL,
 };
 
-
-struct tenderloin_power_module HAL_MODULE_INFO_SYM = {
-    .base = {
-        .common = {
-            .tag = HARDWARE_MODULE_TAG,
-            .module_api_version = POWER_MODULE_API_VERSION_0_2,
-            .hal_api_version = HARDWARE_HAL_API_VERSION,
-            .id = POWER_HARDWARE_MODULE_ID,
-            .name = "TouchPad Power HAL",
-            .author = "The CyanogenMod Project",
-            .methods = &power_module_methods,
-        },
-       .init = tenderloin_power_init,
-       .setInteractive = tenderloin_power_set_interactive,
-       .powerHint = tenderloin_power_hint,
+struct power_module HAL_MODULE_INFO_SYM = {
+    .common = {
+        .tag = HARDWARE_MODULE_TAG,
+        .module_api_version = POWER_MODULE_API_VERSION_0_2,
+        .hal_api_version = HARDWARE_HAL_API_VERSION,
+        .id = POWER_HARDWARE_MODULE_ID,
+        .name = "Flo/Deb Power HAL",
+        .author = "The Android Open Source Project",
+        .methods = &power_module_methods,
     },
-    .lock = PTHREAD_MUTEX_INITIALIZER,
-    .boostpulse_fd = -1,
-    .boostpulse_warned = 0,
+
+    .init = power_init,
+    .setInteractive = power_set_interactive,
+    .powerHint = power_hint,
 };
