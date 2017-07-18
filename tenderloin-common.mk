@@ -77,11 +77,8 @@ PRODUCT_PACKAGES += \
     lights.tenderloin
 
 # Low-RAM optimizations
-ADDITIONAL_BUILD_PROPERTIES += \
+PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true \
-    persist.sys.force_highendgfx=true \
-    dalvik.vm.jit.codecachesize=0 \
-    config.disable_atlas=true \
     ro.config.max_starting_bg=8 \
     ro.sys.fw.bg_apps_limit=16 \
     ro.sys.fw.use_trim_settings=true \
@@ -144,7 +141,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.networklocation=1 \
     media.stagefright.legacyencoder=true \
     media.stagefright.less-secure=true \
-    camera2.portability.force_api=1
+    camera2.portability.force_api=1 \
+    qcom.hw.aac.encoder=true \
+    debug.composition.type=dyn \
+    persist.hwc.mdpcomp.enable=false \
+    ro.opengles.version=131072
 
 # Tools
 PRODUCT_PACKAGES += \
