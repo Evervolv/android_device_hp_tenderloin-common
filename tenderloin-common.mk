@@ -152,7 +152,6 @@ PRODUCT_PACKAGES += \
     librs_jni \
     libmllite \
     libmlplatform \
-    serial \
     ts_srv \
     ts_srv_set \
     rebootcmd \
