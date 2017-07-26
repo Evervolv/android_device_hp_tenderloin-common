@@ -79,8 +79,9 @@ PRODUCT_PACKAGES += \
 # Low-RAM optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true \
-    ro.config.max_starting_bg=8 \
-    ro.sys.fw.bg_apps_limit=16 \
+    dalvik.vm.jit.codecachesize=0 \
+    ro.config.max_starting_bg=4 \
+    ro.sys.fw.bg_apps_limit=8 \
     ro.sys.fw.use_trim_settings=true \
     ro.sys.fw.empty_app_percent=50 \
     ro.sys.fw.trim_empty_percent=100 \
