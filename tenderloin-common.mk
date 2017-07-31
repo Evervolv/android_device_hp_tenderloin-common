@@ -74,6 +74,8 @@ PRODUCT_PACKAGES += \
     libgenlock \
     memtrack.msm8660
 
+PRODUCT_PROPERTY_OVERRIDES += debug.hwui.use_buffer_age=false
+
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \
     android.hardware.graphics.allocator@2.0-service \
