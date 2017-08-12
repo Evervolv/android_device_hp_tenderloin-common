@@ -79,6 +79,7 @@ PRODUCT_PACKAGES += \
 # Low-RAM optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true \
+    persist.sys.force_highendgfx=true \
     dalvik.vm.jit.codecachesize=0 \
     ro.config.max_starting_bg=4 \
     ro.sys.fw.bg_apps_limit=8 \
