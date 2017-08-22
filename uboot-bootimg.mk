@@ -87,7 +87,6 @@ $(recovery_uboot_ramdisk): $(MKIMAGE) $(recovery_ramdisk)
 	@echo ----- Made recovery uboot ramdisk -------- $@
 
 ifeq ($(BOARD_USES_UBOOT_MULTIIMAGE),true)
-    $(warning We are here.)
     INTERNAL_RECOVERYIMAGE_IMAGENAME := CWM $(TARGET_DEVICE) Multiboot
     INTERNAL_RECOVERYIMAGE_ARGS := -A arm -T multi -C none -n "$(INTERNAL_RECOVERYIMAGE_IMAGENAME)"
 
