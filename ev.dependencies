@@ -8,28 +8,5 @@
     "repository": "android_hardware_atheros",
     "target_path": "hardware/atheros",
     "dep_type": "hardware"
- },
- {
-    "repository": "android_external_stlport",
-    "target_path": "external/stlport",
-    "dep_type": "hardware"
- },
- {
-    "repository": "android_hardware_qcom_audio-caf",
-    "target_path": "hardware/qcom/audio-caf/msm8960",
-    "dep_type": "hardware",
-    "branch": "ng-7.1-8960"
- },
- {
-    "repository": "android_hardware_qcom_display-caf",
-    "target_path": "hardware/qcom/display-caf/msm8960",
-    "dep_type": "hardware",
-    "branch": "ng-7.1-8960"
- },
- {
-    "repository": "android_hardware_qcom_media-caf",
-    "target_path": "hardware/qcom/media-caf/msm8960",
-    "dep_type": "hardware",
-    "branch": "ng-7.1-8960"
  }
 ]
