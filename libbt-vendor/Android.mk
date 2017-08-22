@@ -37,7 +37,8 @@ LOCAL_C_INCLUDES += \
 	$(kernel_includes)
 
 LOCAL_SHARED_LIBRARIES := \
-        libcutils
+        libcutils \
+        liblog
 
 ifeq ($(TARGET_BOOTLOADER_BOARD_NAME), tenderloin)
 	LOCAL_CFLAGS := -DHW_TENDERLOIN
