@@ -134,10 +134,6 @@ TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := device/hp/tenderloin-common/release
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/hp/tenderloin-common/releasetools/tenderloin_ota_from_target_files
 BLOCK_BASED_OTA := false
 
-# SELinux
-BOARD_SEPOLICY_DIRS += \
-        device/hp/tenderloin-common/sepolicy
-
 # Twrp
 DEVICE_RESOLUTION = 1024x768
 TW_INTERNAL_STORAGE_PATH := "/data/media/0"
