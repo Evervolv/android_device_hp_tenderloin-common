@@ -68,6 +68,10 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.mapper@2.0-impl
 
+# Drm
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl
+
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     fsck.f2fs \
