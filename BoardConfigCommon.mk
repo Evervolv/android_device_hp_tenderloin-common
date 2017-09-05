@@ -89,7 +89,7 @@ BOARD_CUSTOM_BOOTIMG_MK := device/hp/tenderloin-common/uboot-bootimg.mk
 BOARD_USES_UBOOT := true
 BOARD_USES_UBOOT_MULTIIMAGE := true
 BOARD_KERNEL_BASE := 0x40200000
-BOARD_KERNEL_CMDLINE := console=none androidboot.hardware=qcom
+BOARD_KERNEL_CMDLINE := console=none
 BOARD_KERNEL_IMAGE_NAME := uImage
 BOARD_PAGE_SIZE := 2048
 TARGET_KERNEL_SOURCE := kernel/htc/msm8960
