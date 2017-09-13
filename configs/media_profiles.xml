@@ -92,19 +92,6 @@
                    channels="1" />
         </EncoderProfile>
 
-        <EncoderProfile quality="vga" fileFormat="mp4" duration="60">
-            <Video codec="h264"
-                   bitRate="3000000"
-                   width="640"
-                   height="480"
-                   frameRate="31" />
-
-            <Audio codec="amrnb"
-                   bitRate="96000"
-                   sampleRate="16000"
-                   channels="1" />
-        </EncoderProfile>
-
         <EncoderProfile quality="high" fileFormat="mp4" duration="60">
             <Video codec="h264"
                    bitRate="3000000"

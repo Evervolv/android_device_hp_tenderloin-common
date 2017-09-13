@@ -168,8 +168,8 @@ PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
 # Stlport
-PRODUCT_PACKAGES += \
-    libstlport
+#PRODUCT_PACKAGES += \
+#   libstlport
 
 # Sensors
 PRODUCT_PACKAGES += \
