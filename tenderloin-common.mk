@@ -221,7 +221,6 @@ PRODUCT_PACKAGES += \
     libnetcmdiface \
     libwpa_client \
     wpa_supplicant \
-    libwifi-hal-ath6kl \
     wificond \
     wifilogd \
     wpa_supplicant.conf
