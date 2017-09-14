@@ -63,6 +63,14 @@ static int sensors__get_sensors_list(struct sensors_module_t* module,
     return ARRAY_SIZE(sSensorList);
 }
 
+#if defined(SENSORS_DEVICE_API_VERSION_1_4)
+static int sensors__set_operation_mode(unsigned int mode)
+{
+    (void)mode;
+    return 0;
+}
+#endif
+
 static struct hw_module_methods_t sensors_module_methods = {
     .open = open_sensors
 };
@@ -80,7 +88,9 @@ struct sensors_module_t HAL_MODULE_INFO_SYM = {
                 reserved: {0}
          },
          get_sensors_list: sensors__get_sensors_list,
-         set_operation_mode: NULL
+#if defined(SENSORS_DEVICE_API_VERSION_1_4)
+         set_operation_mode: sensors__set_operation_mode,
+#endif
 };
 
 /*****************************************************************************/

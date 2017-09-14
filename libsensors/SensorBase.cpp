@@ -74,9 +74,27 @@ int SensorBase::getFd() const {
     return data_fd;
 }
 
-int SensorBase::setDelay(int32_t handle, int64_t ns) {
+int SensorBase::batch(int handle, int flags, int64_t sampling_period_ns, int64_t max_report_latency_ns)
+{
     return 0;
 }
+
+int SensorBase::setDelay(int32_t handle, int64_t ns) {
+    return batch(handle, 0, ns, 0);
+}
+
+int SensorBase::flush(int handle)
+{
+    return 0;
+}
+
+#if defined(SENSORS_DEVICE_API_VERSION_1_4)
+int SensorBase::inject_sensor_data(const sensors_event_t *data)
+{
+    (void)data;
+    return 0;
+}
+#endif
 
 bool SensorBase::hasPendingEvents() const {
     return false;

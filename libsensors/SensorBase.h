@@ -58,6 +58,11 @@ public:
     virtual int getFd() const;
     virtual int setDelay(int32_t handle, int64_t ns);
     virtual int enable(int32_t handle, int enabled) = 0;
+    int batch(int handle, int flags, int64_t sampling_period_ns, int64_t max_report_latency_ns);
+    int flush(int handle);
+#if defined(SENSORS_DEVICE_API_VERSION_1_4)
+    int inject_sensor_data(const sensors_event_t *data);
+#endif
 };
 
 /*****************************************************************************/
