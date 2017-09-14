@@ -8,8 +8,6 @@ on early-init
 
     symlink /data/tombstones /tombstones
 
-    start serial
-
 on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
@@ -233,11 +231,6 @@ service tsdriver /system/bin/ts_srv
     class core
     user root
     critical
-
-service serial /sbin/serial
-    class core
-    disabled
-    oneshot
 
 service reboot_recovery /system/bin/moboot_control.sh recovery
      class core
