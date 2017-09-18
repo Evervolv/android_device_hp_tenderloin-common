@@ -51,8 +51,10 @@ PRODUCT_PACKAGES += \
     libbt-vendor
 
 # Camera
-#PRODUCT_PACKAGES += \
-#   camera.msm8660
+PRODUCT_PACKAGES += \
+    android.hardware.camera.device@3.2-impl \
+    android.hardware.camera.provider@2.4-impl \
+    camera.msm8660
 
 # Display
 PRODUCT_PACKAGES += \
