@@ -88,7 +88,7 @@
 ******************************************************************************/
 
 #ifndef BTHW_DBG
-#define BTHW_DBG FALSE
+#define BTHW_DBG TRUE
 #endif
 
 #if (BTHW_DBG == TRUE)
@@ -193,7 +193,8 @@ void *
 __memcpy_chk (void *__restrict__ dest, const void *__restrict__ src,
               size_t len, size_t slen)
 {
-  return memcpy (dest, src, len);
+  memcpy (dest, src, len);
+  return 0;
 }
 
 
@@ -202,7 +203,8 @@ __strcpy_chk (char *__restrict__ dest, const char *__restrict__ src,
               size_t slen)
 {
   size_t len = strlen (src);
-  return memcpy (dest, src, len + 1);
+  memcpy (dest, src, len + 1);
+  return 0;
 }
 #endif
 
@@ -2829,6 +2831,7 @@ static const struct uart_t * get_by_type(char *type)
 
 void hw_init(void)
 {
+	ALOGE("Enter hw_init");
 	strcpy(cfg.dev,"/dev/ttyHS2");
 	strcpy(cfg.type,"hci");
 	strcpy(cfg.psrfile,"bluecore6.psr");
@@ -2846,6 +2849,7 @@ void hw_init(void)
 	/* RFKILL support */  
 	cfg.rfkill_id = -1;
 	cfg.rfkill_state_path = NULL;
+	ALOGE("Leaving HW_init and type = '%s'", cfg.type);
 
 }
 
@@ -3044,10 +3048,10 @@ static int init_uart(const struct uart_t* u)
 		flags |= 1 << HCI_UART_RAW_DEVICE;
 
     /* reset device to known state */   
-    ALOGD("Resetting...");   
+    ALOGD("Resetting...");
     bt_reset();   
-   
-	ALOGD("Opening %s @ %d,%c,%sflow", cfg.dev, cfg.init_speed, (cfg.flags & EVEN_PARITY) ? 'E': 'N', (cfg.flags & FLOW_CTL) ? "" : "no" );   
+
+	ALOGD("Opening %s @ %d,%c,%sflow", cfg.dev, cfg.init_speed, (cfg.flags & EVEN_PARITY) ? 'E': 'N', (cfg.flags & FLOW_CTL) ? "" : "no" );
 
 	if (hci_open(cfg.init_speed, u->proto == HCI_UART_H4 ? omH4 : omBCSP) < 0) {
 	
@@ -3109,7 +3113,7 @@ int hw_config(void)
 	// If no need to do init, don't do it
 	if (uart->proto == HCI_UART_NONE)
 		return 0;
-	
+
 	// Override values not specifically set by user
 	if (cfg.init_speed == -1)
 		cfg.init_speed = uart->init_speed;

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  Copyright (C) 2009-2012 Broadcom Corporation
- *  Copyright (C) 2012-2013 Eduardo José Tagle <ejtagle@hotmail.com>
+ *  Copyright (C) 2012-2013 Eduardo Josï¿½ Tagle <ejtagle@hotmail.com>
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
