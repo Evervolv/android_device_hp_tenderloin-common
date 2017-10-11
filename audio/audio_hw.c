@@ -40,8 +40,7 @@
 #include "audio_route.h"
 
 #define PCM_CARD 0
-#define PCM_DEVICE_OUT 0
-#define PCM_DEVICE_IN 0
+#define PCM_DEVICE 0
 #define PCM_DEVICE_SCO 2
 
 #define OUT_PERIOD_SIZE 1200
@@ -388,7 +387,7 @@ static int start_output_stream(struct stream_out *out)
         device = PCM_DEVICE_SCO;
         out->pcm_config = &pcm_config_sco;
     } else {
-        device = PCM_DEVICE_OUT;
+        device = PCM_DEVICE;
         out->pcm_config = &pcm_config_out;
         out->buffer_type = OUT_BUFFER_TYPE_UNKNOWN;
     }
@@ -463,7 +462,7 @@ static int start_input_stream(struct stream_in *in)
         device = PCM_DEVICE_SCO;
         in->pcm_config = &pcm_config_sco;
     } else {
-        device = PCM_DEVICE_IN;
+        device = PCM_DEVICE;
         in->pcm_config = in->pcm_config_non_sco;
     }
 
