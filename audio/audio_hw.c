@@ -119,6 +119,8 @@ struct audio_device {
     bool mic_mute;
     struct audio_route *ar;
     bool screen_off;
+    bool out_standby_pend;
+    bool reset_spkr_for_mic;
 
     struct stream_out *active_out;
     struct stream_in *active_in;
@@ -162,11 +164,6 @@ struct stream_in {
 
     struct audio_device *dev;
 };
-
-static bool out_standby_pend;
-
-static bool reset_spkr_for_mic;
-static bool reset_mic_for_det;
 
 static uint32_t out_get_sample_rate(const struct audio_stream *stream);
 static size_t out_get_buffer_size(const struct audio_stream *stream);
@@ -266,7 +263,7 @@ static void select_devices(struct audio_device *adev, unsigned action)
                 audio_route_apply_path(adev->ar, "speaker-disable");
             }
             if (out_on) {
-                reset_spkr_for_mic = false;
+                adev->reset_spkr_for_mic = false;
                 audio_route_apply_path(adev->ar, "out-enable");
             } else {
                 audio_route_apply_path(adev->ar, "out-disable");
@@ -289,8 +286,8 @@ static void select_devices(struct audio_device *adev, unsigned action)
                 audio_route_apply_path(adev->ar, "wmic-disable");
             }
             if (in_on) {
-                if (reset_spkr_for_mic) {
-                    reset_spkr_for_mic = false;
+                if (adev->reset_spkr_for_mic) {
+                    adev->reset_spkr_for_mic = false;
                     audio_route_apply_path(adev->ar, "out-reset");
                 }
                 audio_route_apply_path(adev->ar, "in-enable");
@@ -320,7 +317,7 @@ static void do_out_standby(struct stream_out *out)
 
     if (adev->active_in && !adev->active_in->standby) {
         ALOGV("%s (ignored active_in)\n", __func__);
-        out_standby_pend = true;
+        adev->out_standby_pend = true;
     } else {
         ALOGV("%s\n", __func__);
         pcm_close(out->pcm);
@@ -336,7 +333,7 @@ static void do_out_standby(struct stream_out *out)
             out->buffer = NULL;
         }
         out->standby = true;
-        out_standby_pend = false;
+        adev->out_standby_pend = false;
     }
 }
 
@@ -876,7 +873,7 @@ static int in_standby(struct audio_stream *stream)
     pthread_mutex_lock(&in->lock);
     do_in_standby(in);
     pthread_mutex_unlock(&in->lock);
-    if (out_standby_pend) {
+    if (adev->out_standby_pend) {
         struct stream_out *aout = adev->active_out;
         pthread_mutex_lock(&aout->lock);
         do_out_standby(aout);
@@ -1099,17 +1096,17 @@ static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
     char value[32];
     int ret;
 
-    ALOGV("%s kvpairs='%s'\n", __func__, kvpairs ? kvpairs : "");
     parms = str_parms_create_str(kvpairs);
-    ret = str_parms_get_str(parms, "orientation", value, sizeof(value));
     ret = str_parms_get_str(parms, "screen_state", value, sizeof(value));
-
-    if (strncmp(kvpairs, "screen_state=off", 16) == 0) {
-        reset_spkr_for_mic = true;
-    }
-    if (strncmp(kvpairs, "screen_state=on", 15) == 0) {
-        select_devices(adev, SELECT_DEVICE_OUT_RESET);
-        reset_spkr_for_mic = true;
+    if (ret >= 0) {
+        if (strcmp(value, AUDIO_PARAMETER_VALUE_ON) == 0) {
+            adev->screen_off = false;
+            ALOGV("%s: reset device out config\n", __func__);
+            select_devices(adev, SELECT_DEVICE_OUT_RESET);
+        } else {
+            adev->screen_off = true;
+        }
+        adev->reset_spkr_for_mic = true;
     }
 
     str_parms_destroy(parms);
@@ -1291,15 +1288,10 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->hw_device.dump = adev_dump;
 
     adev->ar = audio_route_init();
-    // adev->out_device = AUDIO_DEVICE_OUT_SPEAKER;
     adev->out_device = 0;
-    // adev->in_device = AUDIO_DEVICE_IN_BUILTIN_MIC & ~AUDIO_DEVICE_BIT_IN;
-    // adev->in_device = AUDIO_DEVICE_IN_BUILTIN_MIC;
     adev->in_device = 0;
-
-    out_standby_pend = false;
-
-    reset_spkr_for_mic = true;
+    adev->out_standby_pend = false;
+    adev->reset_spkr_for_mic = true;
 
     *device = &adev->hw_device.common;
 
