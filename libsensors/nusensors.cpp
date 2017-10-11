@@ -180,7 +180,7 @@ int sensors_poll_context_t::pollEvents(sensors_event_t* data, int count)
             n = poll(mPollFds, numFds, nbEvents ? 0 : -1);
             if (n<0) {
                 ALOGE("poll() failed (%s)", strerror(errno));
-                return -errno;
+                return 1;
             }
             if (mPollFds[wake].revents & POLLIN) {
                 char msg;
