@@ -204,7 +204,6 @@ PRODUCT_PACKAGES += \
     libmlplatform \
     ts_srv \
     ts_srv_set \
-    rebootcmd \
     mkbootimg
 
 # Vendor Interface Manifest

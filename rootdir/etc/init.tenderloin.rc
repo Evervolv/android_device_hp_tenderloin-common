@@ -239,6 +239,9 @@ service reboot_recovery /system/bin/moboot_control.sh recovery
      disabled
      oneshot
 
+on property:sys.shutdown.requested=1recovery
+    start reboot_recovery
+
 # Limit to SoC reset (1) and independent SSR (3)
 on property:persist.sys.ssr.restart_level=1
     write /sys/module/subsystem_restart/parameters/restart_level 1
