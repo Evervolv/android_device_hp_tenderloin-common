@@ -31,3 +31,19 @@ LOCAL_MODULE_OWNER := qcom
 LOCAL_PROPRIETARY_MODULE := true
 
 include $(BUILD_SHARED_LIBRARY)
+
+# The default sound_trigger HAL module, which is a stub, that is loaded if no other
+# device specific modules are present. The exact load order can be seen in
+# libhardware/hardware.c
+#
+# The format of the name is sound_trigger.<type>.<hardware/etc>.so where the only
+# required type is 'primary'.
+include $(CLEAR_VARS)
+LOCAL_MODULE := sound_trigger.primary.tenderloin
+LOCAL_MODULE_RELATIVE_PATH := hw
+LOCAL_SRC_FILES := sound_trigger_hw.c
+LOCAL_C_INCLUDES += external/tinyalsa/include
+LOCAL_SHARED_LIBRARIES := liblog libcutils libtinyalsa
+LOCAL_MODULE_TAGS := optional
+# LOCAL_32_BIT_ONLY := true
+include $(BUILD_SHARED_LIBRARY)
