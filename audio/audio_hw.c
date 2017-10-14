@@ -1193,7 +1193,7 @@ static int adev_open_input_stream(struct audio_hw_device *dev,
     /* Respond with a request for mono if a different format is given. */
     if (config->channel_mask != AUDIO_CHANNEL_IN_MONO) {
         config->channel_mask = AUDIO_CHANNEL_IN_MONO;
-        return -EINVAL;
+       // return -EINVAL;
     }
 
     in = (struct stream_in *)calloc(1, sizeof(struct stream_in));
