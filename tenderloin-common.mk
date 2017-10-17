@@ -204,7 +204,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     qcom.hw.aac.encoder=true \
     debug.composition.type=dyn \
     persist.hwc.mdpcomp.enable=false \
-    ro.opengles.version=131072
+    ro.opengles.version=131072 \
+    debug.sf.disable_backpressure=1
 
 # Tools
 PRODUCT_PACKAGES += \
