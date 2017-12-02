@@ -28,8 +28,9 @@
 #include <tinyalsa/asoundlib.h>
 
 #define BUF_SIZE 1024
-#define MIXER_XML_PATH "/system/etc/mixer_paths.xml"
 #define INITIAL_MIXER_PATH_SIZE 8
+#define MIXER_XML_PATH "mixer_paths.xml"
+#define MIXER_PATH_MAX_LENGTH 100
 
 #define MIXER_CARD 0
 #define MAX_CTL_VALS 3
@@ -552,6 +553,28 @@ void audio_route_apply_path(struct audio_route *ar, const char *name)
     path_apply(ar, path);
 }
 
+// Treblized config files will be located in /odm/etc or /vendor/etc.
+static const char *kConfigLocationList[] =
+        {"/odm/etc", "/vendor/etc", "/system/etc"};
+static const int kConfigLocationListSize =
+        (sizeof(kConfigLocationList) / sizeof(kConfigLocationList[0]));
+
+bool resolveMixerConfigFile(char file_name[MIXER_PATH_MAX_LENGTH]) {
+    char full_config_path[MIXER_PATH_MAX_LENGTH];
+    for (int i = 0; i < kConfigLocationListSize; i++) {
+        snprintf(full_config_path,
+                 MIXER_PATH_MAX_LENGTH,
+                 "%s/%s",
+                 kConfigLocationList[i],
+                 file_name);
+        if (F_OK == access(full_config_path, 0)) {
+            strcpy(file_name, full_config_path);
+            return true;
+        }
+    }
+    return false;
+}
+
 struct audio_route *audio_route_init(void)
 {
     struct config_parse_state state;
@@ -562,6 +585,7 @@ struct audio_route *audio_route_init(void)
     int i;
     struct mixer_path *path;
     struct audio_route *ar;
+    char mixer_xml_file[MIXER_PATH_MAX_LENGTH] = MIXER_XML_PATH;
 
     ar = calloc(1, sizeof(struct audio_route));
     if (!ar)
@@ -581,9 +605,10 @@ struct audio_route *audio_route_init(void)
     if (alloc_mixer_state(ar) < 0)
         goto err_mixer_state;
 
-    file = fopen(MIXER_XML_PATH, "r");
+    resolveMixerConfigFile(mixer_xml_file);
+    file = fopen(mixer_xml_file, "r");
     if (!file) {
-        ALOGE("Failed to open %s", MIXER_XML_PATH);
+        ALOGE("Failed to open %s", mixer_xml_file);
         goto err_fopen;
     }
 
@@ -609,7 +634,7 @@ struct audio_route *audio_route_init(void)
 
         if (XML_ParseBuffer(parser, bytes_read,
                             bytes_read == 0) == XML_STATUS_ERROR) {
-            ALOGE("Error in mixer xml (%s)", MIXER_XML_PATH);
+            ALOGE("Error in mixer xml (%s)", mixer_xml_file);
             goto err_parse;
         }
 
