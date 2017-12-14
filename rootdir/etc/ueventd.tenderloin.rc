@@ -81,10 +81,10 @@
 /dev/ppp                  0660   radio      vpn
 
 # permissions for video
-/dev/msm_vidc_reg         0660  system      audio
-/dev/msm_vidc_dec         0660  system      audio
-/dev/msm_vidc_dec_sec     0660  system      audio
-/dev/msm_vidc_enc         0660  system      audio
+/dev/msm_vidc_reg         0660  system      camera
+/dev/msm_vidc_dec         0660  system      camera
+/dev/msm_vidc_dec_sec     0660  system      camera
+/dev/msm_vidc_enc         0660  system      camera
 
 # permissions for audio
 /dev/msm_amrnb            0660  system      audio
