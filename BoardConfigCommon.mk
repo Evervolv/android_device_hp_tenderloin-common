@@ -60,6 +60,7 @@ TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_HAS_NO_CAMERA_FLASH := true
 
 # Device manifest
+DEVICE_MANIFEST_FILE := device/hp/tenderloin-common/manifest.xml
 DEVICE_MATRIX_FILE := device/hp/tenderloin-common/compatibility_matrix.xml
 
 # Display
