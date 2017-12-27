@@ -219,10 +219,6 @@ PRODUCT_PACKAGES += \
     ts_srv_set \
     mkbootimg
 
-# Vendor Interface Manifest
-PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/manifest.xml:system/vendor/manifest.xml
-
 # Vibrator
 PRODUCT_PACKAGES += \
     android.hardware.vibrator@1.0-impl
