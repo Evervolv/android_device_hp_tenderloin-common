@@ -619,7 +619,6 @@ struct audio_route *audio_route_init(void)
 
     ALOGI("applying init path controls\n");
     audio_route_apply_path(ar, "init");
-    ALOGI("init path controls applied\n");
 
     /* apply the initial mixer values, and save them so we can reset the
        mixer to the original values */
