@@ -1,3 +1,6 @@
+# AndroidGO
+$(call inherit-product, build/target/product/go_defaults_512.mk)
+
 DEVICE_PACKAGE_OVERLAYS += device/hp/tenderloin-common/overlay
 
 # Permissions
@@ -13,8 +16,6 @@ PRODUCT_AAPT_PREF_CONFIG := mdpi
 #Art
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapstartsize=8m \
-    dalvik.vm.heapgrowthlimit=192m \
-    dalvik.vm.heapsize=256m \
     dalvik.vm.heaptargetutilization=0.75 \
     dalvik.vm.heapminfree=512k \
     dalvik.vm.heapmaxfree=8m
@@ -120,7 +121,6 @@ PRODUCT_PACKAGES += \
 
 # Low-RAM optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.config.low_ram=true \
     persist.sys.force_highendgfx=true \
     dalvik.vm.jit.codecachesize=0 \
     ro.config.max_starting_bg=4 \
