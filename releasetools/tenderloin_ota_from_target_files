@@ -542,11 +542,10 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.UnpackPackageFile("moboot.splash.Evervolv.tga", "/boot/moboot.splash.Evervolv.tga")
   script.UnpackPackageFile("moboot.default", "/boot/moboot.default")
 
-  # Delete other uImage traces. ##TODO NEED TO FIGURE OUT THIS
- # um = ["/boot/uImage.CyanogenMod", "/boot/moboot.splash.CyanogenMod.tga", "/boot/uImage.ICS",
-  #"/boot/moboot.splash.ICS.tga", "/boot/uImage.AOKP", "/boot/moboot.splash.AOKP.tga",
- # "/boot/uImage.Classicnerd", "/boot/moboot.splash.Classicnerd"]
- # script.DeleteFiles(um)
+  # Delete other uImage traces.
+  um = "/boot/uImage.CyanogenMod /boot/moboot.splash.CyanogenMod.tga /boot/uImage.ICS /boot/moboot.splash.ICS.tga /boot/uImage.AOKP \
+  /boot/moboot.splash.AOKP.tga /boot/uImage.Classicnerd /boot/moboot.splash.Classicnerd"
+  script.DeleteFiles(um)
 
 ######## tenderloin build change done ########
 

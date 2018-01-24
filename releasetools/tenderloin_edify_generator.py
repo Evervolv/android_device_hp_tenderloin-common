@@ -25,3 +25,9 @@ class EdifyGenerator(edify_generator.EdifyGenerator):
       """Unpack a given file from the OTA package into the given
       destination file."""
       self.script.append('package_extract_file("%s", "%s");' % (src, dst))
+
+    def DeleteFiles(self, file_list):
+      """Delete all files in file_list."""
+      if not file_list:
+        return
+      self.script.append(('run_program("/sbin/sh", "%s");' % file_list))
