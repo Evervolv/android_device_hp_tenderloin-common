@@ -25,3 +25,4 @@ class EdifyGenerator(edify_generator.EdifyGenerator):
       """Unpack a given file from the OTA package into the given
       destination file."""
       self.script.append('package_extract_file("%s", "%s");' % (src, dst))
+
