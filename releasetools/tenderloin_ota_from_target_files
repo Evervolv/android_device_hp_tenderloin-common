@@ -535,9 +535,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.UnpackPackageFile("moboot.default", "/boot/moboot.default")
 
   # Delete other uImage traces.
-  script.AppendExtra(('run_program("/sbin/rm -rf", "/boot/uImage.CyanogenMod");'))
-  script.AppendExtra(('run_program("/sbin/rm -rf", "/boot/moboot.splash.CyanogenMod.tga");'))
-  script.AppendExtra(('run_program("/sbin/rm -rf", "/boot/uImage.Evervolv");'))
+  script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/uImage.CyanogenMod");'))
+  script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/moboot.splash.CyanogenMod.tga");'))
+  script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/uImage.Evervolv");'))
 
 ######## tenderloin build change done ########
 
