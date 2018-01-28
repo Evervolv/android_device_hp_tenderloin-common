@@ -460,27 +460,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   device_specific.FullOTA_InstallBegin()
 
-# MOTD during flash added for Evervolv by cocide
-  if (OPTIONS.motd != None):
-    eachRawMotd = OPTIONS.motd.split("\\n")
-    for eachMotd in eachRawMotd:
-      rawMotd = eachMotd.split()
-      sizedMotd = []
-      for word in rawMotd:
-        sizedMotd += [word[i:i+OPTIONS.motdLim] for i in range(0, len(word), OPTIONS.motdLim)]
-      sizedMotd.reverse()
-      if len(sizedMotd):
-        motdLine = [sizedMotd.pop()]
-      else:
-        motdLine = [""]
-      sizedMotd.reverse()
-      for word in sizedMotd:
-        if ( (motdLine[len(motdLine)-1].__len__() + word.__len__()) < 48):
-          motdLine[len(motdLine)-1] = motdLine[len(motdLine)-1] + " " + word
-        else:
-          motdLine.append(word)
-      for line in motdLine:
-        script.Print(line)
   if OPTIONS.backuptool:
     script.Mount("/system")
     script.RunBackup("backup")
@@ -506,7 +485,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # has the effect of writing new data from the package to the entire
   # partition, but lets us reuse the updater code that writes incrementals to
   # do it.
-  script.Print("Installing Evervolv")
+  script.Print("Installing Dirty-Unicorn")
   system_tgt = GetImage("system", OPTIONS.input_tmp)
   system_tgt.ResetFileMap()
   system_diff = common.BlockDifference("system", system_tgt, src=None)
@@ -538,7 +517,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   boot_img.close()
 
   script.Mount("/boot")
-  script.UnpackPackageFile("boot.img", "/boot/uImage.Evervolv")
+  script.UnpackPackageFile("boot.img", "/boot/uImage.Dirty-Unicorn")
 
   tptoolbox_cfg = open(OPTIONS.device_out + "/tptoolbox.cfg")
   common.ZipWriteStr(output_zip, "tptoolbox.cfg", tptoolbox_cfg.read())
@@ -559,7 +538,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra(('run_program("/sbin/rm -rf", "/boot/uImage.CyanogenMod");'))
   script.AppendExtra(('run_program("/sbin/rm -rf", "/boot/moboot.splash.CyanogenMod.tga");'))
   script.AppendExtra(('run_program("/sbin/rm -rf", "/boot/uImage.Evervolv");'))
-
 
 ######## tenderloin build change done ########
 
