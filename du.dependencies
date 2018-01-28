@@ -1,12 +1,12 @@
 [
  {
-    "repository": "android_kernel_htc_msm8960",
+    "repository": "DirtyUnicorns/android_kernel_htc_msm8960",
     "target_path": "kernel/htc/msm8960",
-    "dep_type": "kernel"
+    "branch":      "o8x-caf"
  },
  {
-    "repository": "android_hardware_atheros",
+    "repository": "DirtyUnicorns/android_hardware_atheros",
     "target_path": "hardware/atheros",
-    "dep_type": "hardware"
+    "branch":      "o8x-caf"
  }
 ]
