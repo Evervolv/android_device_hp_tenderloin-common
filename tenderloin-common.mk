@@ -167,6 +167,7 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/prebuilt/boot/moboot.splash.Evervolv.tga:moboot.splash.Evervolv.tga \
     device/hp/tenderloin-common/prebuilt/boot/moboot.default:moboot.default \
     device/hp/tenderloin-common/prebuilt/lvm/lvm.conf:root/lvm/lvm.conf \
+    device/hp/tenderloin-common/prebuilt/gapps-config.txt:install/.gapps-config-tenderloin.txt \
 
 # Power
 PRODUCT_PACKAGES += \
