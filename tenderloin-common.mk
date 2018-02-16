@@ -167,7 +167,9 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin-common/prebuilt/boot/moboot.splash.Android.tga:moboot.splash.Android.tga \
     device/hp/tenderloin-common/prebuilt/boot/moboot.default:moboot.default \
     device/hp/tenderloin-common/prebuilt/lvm/lvm.conf:root/lvm/lvm.conf \
-    device/hp/tenderloin-common/prebuilt/gapps-config.txt:install/.gapps-config-tenderloin.txt \
+    device/hp/tenderloin-common/prebuilt/install/gapps-config.txt:install/.gapps-config-tenderloin.txt \
+    device/hp/tenderloin-common/prebuilt/install/bin/e2fsck_static:install/bin/e2fsck_static \
+    device/hp/tenderloin-common/prebuilt/install/bin/resize2fs_static:install/bin/resize2fs_static \
 
 # Power
 PRODUCT_PACKAGES += \

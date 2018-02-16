@@ -573,6 +573,10 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" ")
   script.Print("Flashing boot image..")
 
+  script.AppendExtra('run_program("/tmp/install/bin/e2fsck_static", "-fy", "/dev/store/cm-system");');
+  script.AppendExtra('run_program("/tmp/install/bin/resize2fs_static", "/dev/store/cm-system");');
+  script.AppendExtra('run_program("/tmp/install/bin/e2fsck_static", "-fy", "/dev/store/cm-system");');
+
   if OPTIONS.backuptool:
     script.ShowProgress(0.02, 10)
     if OPTIONS.block_based:
