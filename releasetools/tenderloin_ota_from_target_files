@@ -590,27 +590,30 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   boot_img.close()
 
   script.Mount("/boot")
-  script.UnpackPackageFile("boot.img", "/boot/uImage.Dirty-Unicorn")
+  # use a generic name, since we can only fit one rom at a time
+  script.UnpackPackageFile("boot.img", "/boot/uImage.Android")
 
   tptoolbox_cfg = open(OPTIONS.device_out + "/tptoolbox.cfg")
   common.ZipWriteStr(output_zip, "tptoolbox.cfg", tptoolbox_cfg.read())
   tptoolbox_cfg.close()
 
-  moboot_tga = open(OPTIONS.device_out + "/moboot.splash.Evervolv.tga")
-  common.ZipWriteStr(output_zip, "moboot.splash.Evervolv.tga", moboot_tga.read())
+  moboot_tga = open(OPTIONS.device_out + "/moboot.splash.Android.tga")
+  common.ZipWriteStr(output_zip, "moboot.splash.Android.tga", moboot_tga.read())
   moboot_tga.close()
 
   moboot_default = open(OPTIONS.device_out + "/moboot.default")
   common.ZipWriteStr(output_zip, "moboot.default", moboot_default.read())
   moboot_default.close()
 
-  script.UnpackPackageFile("moboot.splash.Evervolv.tga", "/boot/moboot.splash.Evervolv.tga")
+  script.UnpackPackageFile("moboot.splash.Android.tga", "/boot/moboot.splash.Android.tga")
   script.UnpackPackageFile("moboot.default", "/boot/moboot.default")
 
   # Delete other uImage traces.
   script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/uImage.CyanogenMod");'))
   script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/moboot.splash.CyanogenMod.tga");'))
+  script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/uImage.Dirty-Unicorn");'))
   script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/uImage.Evervolv");'))
+  script.AppendExtra(('run_program("/sbin/busybox", "rm", "/boot/moboot.splash.Evervolv.tga");'))
 
 ######## tenderloin build change done ########
 
