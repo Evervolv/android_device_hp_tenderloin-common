@@ -30,7 +30,8 @@ LOCAL_C_INCLUDES :=  \
     $(TARGET_OUT_HEADERS)/mm-camera \
     $(TARGET_OUT_HEADERS)/mm-still/jpeg \
     $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
-    system/media/camera/include
+    system/media/camera/include \
+    $(LOCAL_PATH)/../libshims/include
 
 LOCAL_ADDITIONAL_DEPENDENCIES := \
     $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
