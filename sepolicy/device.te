@@ -1,0 +1,4 @@
+type init_shell, domain;
+type lvm_device, dev_type;
+type log_device, dev_type, mlstrustedobject;
+type mmc_block_device, dev_type;

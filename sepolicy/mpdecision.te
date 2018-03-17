@@ -1,3 +1,0 @@
-allow mpdecision socket_device:dir add_name;
-allow mpdecision socket_device:sock_file create_file_perms;
-allow mpdecision system_data_file:dir write;

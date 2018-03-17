@@ -15,7 +15,6 @@ on init
     mkdir /lvm
     restorecon_recursive /lvm
     start lvm
-    restorecon_recursive /dev/mapper/
  
     # remove moboot next boot indicator and remount /boot read-only
     mkdir /boot
@@ -143,6 +142,7 @@ on fs
     swapon_all /fstab.tenderloin
 
     restorecon /data/.layout_version
+    restorecon_recursive /dev/mapper/
 
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw

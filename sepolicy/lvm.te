@@ -1,18 +1,3 @@
-allow lvm self:capability { dac_override dac_read_search mknod sys_admin ipc_lock sys_nice };
-
-allow lvm block_device:dir r_dir_perms;
-allow lvm device:blk_file create_file_perms;
-allow lvm device:chr_file create_file_perms;
-allow lvm device:dir create_dir_perms;
-allow lvm device:lnk_file create_file_perms;
-allow lvm init:dir search;
-allow lvm init:file r_file_perms;
-allow lvm log_device:dir write;
-allow lvm loop_device:blk_file r_file_perms;
-allow lvm lvm_file:dir create_dir_perms;
-allow lvm lvm_file:file create_file_perms;
-allow lvm mmc_block_device:blk_file r_file_perms;
-allow lvm ram_device:blk_file r_file_perms;
-allow lvm rootfs:file { entrypoint create_file_perms };
-allow lvm rootfs:dir create_dir_perms;
-allow lvm sysfs:file write;
+type lvm, domain;
+domain_trans(init,rootfs,lvm)
+typeattribute lvm lvm_placeholder;
