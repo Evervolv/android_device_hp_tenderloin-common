@@ -221,6 +221,7 @@ PRODUCT_PACKAGES += \
     ts_srv \
     ts_srv_set \
     mkbootimg \
+    mkimage \
     lvm.static
 
 # Vibrator
