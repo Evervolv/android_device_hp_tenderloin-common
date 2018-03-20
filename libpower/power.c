@@ -231,6 +231,10 @@ static void power_hint( __attribute__((unused)) struct power_module *module,
 {
     int cpu, ret;
 
+    //Give it a quick null check
+    if ((!hint) || (!data))
+        return;
+
     switch (hint) {
         case POWER_HINT_INTERACTION:
         case POWER_HINT_LAUNCH:
