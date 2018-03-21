@@ -2,7 +2,9 @@
 -include vendor/hp/tenderloin/BoardConfigVendor.mk
 -include hardware/atheros/ath6kl/firmware/device-ath6kl.mk
 
-TARGET_SPECIFIC_HEADER_PATH := device/hp/tenderloin-common/include 
+PLATFORM_PATH := device/hp/tenderloin-common
+
+TARGET_SPECIFIC_HEADER_PATH := $(PLATFORM_PATH)/include 
 
 # Platform
 TARGET_BOARD_PLATFORM := msm8660
@@ -33,7 +35,7 @@ TARGET_BOOTLOADER_BOARD_NAME := tenderloin
 TARGET_USES_2G_VM_SPLIT := true
 
 # Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/hp/tenderloin-common/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(PLATFORM_PATH)/bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_HCI := true
 BLUETOOTH_HCIATTACH_USING_PROPERTY := true
@@ -61,8 +63,8 @@ TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_HAS_NO_CAMERA_FLASH := true
 
 # Device manifest
-DEVICE_MANIFEST_FILE := device/hp/tenderloin-common/manifest.xml
-DEVICE_MATRIX_FILE := device/hp/tenderloin-common/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(PLATFORM_PATH)/compatibility_matrix.xml
 
 # Display
 USE_OPENGL_RENDERER := true
@@ -86,7 +88,7 @@ BOARD_USES_QCOM_GPS := true
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 
 # Kernel
-BOARD_CUSTOM_BOOTIMG_MK := device/hp/tenderloin-common/uboot-bootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := $(PLATFORM_PATH)/uboot-bootimg.mk
 BOARD_USES_UBOOT := true
 BOARD_USES_UBOOT_MULTIIMAGE := true
 BOARD_KERNEL_BASE := 0x40200000
@@ -131,17 +133,17 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_FSTAB_VERSION := 2
 RECOVERY_SDCARD_ON_DATA := true
-TARGET_RECOVERY_FSTAB := device/hp/tenderloin-common/rootdir/etc/fstab.tenderloin
-TARGET_RECOVERY_DEVICE_DIRS := device/hp/tenderloin-common
+TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.tenderloin
+TARGET_RECOVERY_DEVICE_DIRS := $(PLATFORM_PATH)
 TARGET_RECOVERY_PRE_COMMAND := "/system/bin/rebootcmd"
 
 # Releasetools
 TARGET_PROVIDES_RELEASETOOLS := true
-TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := device/hp/tenderloin-common/releasetools/tenderloin_img_from_target_files
-TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/hp/tenderloin-common/releasetools/tenderloin_ota_from_target_files
+TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := $(PLATFORM_PATH)/releasetools/tenderloin_img_from_target_files
+TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := $(PLATFORM_PATH)/releasetools/tenderloin_ota_from_target_files
 
 # SELinux
-BOARD_SEPOLICY_DIRS += device/hp/tenderloin-common/sepolicy
+BOARD_SEPOLICY_DIRS += $(PLATFORM_PATH)/sepolicy
 
 # Twrp
 DEVICE_RESOLUTION = 1024x768

@@ -1,7 +1,7 @@
 # AndroidGO
 $(call inherit-product, build/target/product/go_defaults_512.mk)
 
-DEVICE_PACKAGE_OVERLAYS += device/hp/tenderloin-common/overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -22,7 +22,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bootloader
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/moboot_control.sh:system/bin/moboot_control.sh
+    $(LOCAL_PATH)/moboot_control.sh:system/bin/moboot_control.sh
 
 # Ramdisk
 PRODUCT_PACKAGES += \
@@ -49,13 +49,13 @@ PRODUCT_PACKAGES += \
 
 # Audio config
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/configs/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/hp/tenderloin-common/configs/audio_policy.conf:system/etc/audio_policy.conf
+    $(LOCAL_PATH)/configs/mixer_paths.xml:system/etc/mixer_paths.xml \
+    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/bluetooth/bt_vendor.conf:/system/etc/bluetooth/bt_vendor.conf \
-    device/hp/tenderloin-common/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
+    $(LOCAL_PATH)/bluetooth/bt_vendor.conf:/system/etc/bluetooth/bt_vendor.conf \
+    $(LOCAL_PATH)/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
 
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-impl \
@@ -98,7 +98,7 @@ PRODUCT_PACKAGES += \
 
 # Init.d
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/prebuilt/etc/init.d/10check_media_minor:system/etc/init.d/10check_media_minor
+    $(LOCAL_PATH)/prebuilt/etc/init.d/10check_media_minor:system/etc/init.d/10check_media_minor
 
 # IO Scheduler
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -106,9 +106,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/prebuilt/usr/idc/HPTouchpad.idc:system/usr/idc/HPTouchpad.idc \
-    device/hp/tenderloin-common/prebuilt/usr/keylayout/Generic.kl:system/usr/keylayout/Generic.kl \
-    device/hp/tenderloin-common/prebuilt/usr/keylayout/pmic8058_pwrkey.kl:system/usr/keylayout/pmic8058_pwrkey.kl
+    $(LOCAL_PATH)/prebuilt/usr/idc/HPTouchpad.idc:system/usr/idc/HPTouchpad.idc \
+    $(LOCAL_PATH)/prebuilt/usr/keylayout/Generic.kl:system/usr/keylayout/Generic.kl \
+    $(LOCAL_PATH)/prebuilt/usr/keylayout/pmic8058_pwrkey.kl:system/usr/keylayout/pmic8058_pwrkey.kl
 
 # Keymaster HAL
 PRODUCT_PACKAGES += \
@@ -136,10 +136,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Media
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    device/hp/tenderloin-common/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    device/hp/tenderloin-common/configs/media_codecs_google_performance.xml:system/etc/media_codecs_google_performance.xml \
-    device/hp/tenderloin-common/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
+    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/configs/media_codecs_google_performance.xml:system/etc/media_codecs_google_performance.xml \
+    $(LOCAL_PATH)/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
@@ -167,13 +167,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Prebuilts
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/prebuilt/tptoolbox.cfg:tptoolbox.cfg \
-    device/hp/tenderloin-common/prebuilt/boot/moboot.splash.Android.tga:moboot.splash.Android.tga \
-    device/hp/tenderloin-common/prebuilt/boot/moboot.default:moboot.default \
-    device/hp/tenderloin-common/prebuilt/lvm/lvm.conf:root/lvm/lvm.conf \
-    device/hp/tenderloin-common/prebuilt/install/gapps-config.txt:install/.gapps-config-tenderloin.txt \
-    device/hp/tenderloin-common/prebuilt/install/bin/e2fsck_static:install/bin/e2fsck_static \
-    device/hp/tenderloin-common/prebuilt/install/bin/resize2fs_static:install/bin/resize2fs_static \
+    $(LOCAL_PATH)/prebuilt/tptoolbox.cfg:tptoolbox.cfg \
+    $(LOCAL_PATH)/prebuilt/boot/moboot.splash.Android.tga:moboot.splash.Android.tga \
+    $(LOCAL_PATH)/prebuilt/boot/moboot.default:moboot.default \
+    $(LOCAL_PATH)/prebuilt/lvm/lvm.conf:root/lvm/lvm.conf \
+    $(LOCAL_PATH)/prebuilt/install/gapps-config.txt:install/.gapps-config-tenderloin.txt \
+    $(LOCAL_PATH)/prebuilt/install/bin/e2fsck_static:install/bin/e2fsck_static \
+    $(LOCAL_PATH)/prebuilt/install/bin/resize2fs_static:install/bin/resize2fs_static \
 
 # Power
 PRODUCT_PACKAGES += \
@@ -182,7 +182,7 @@ PRODUCT_PACKAGES += \
 
 # Recovery
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin-common/releasetools/install-recovery.sh:$(PRODUCT_OUT)/ota_temp/SYSTEM/bin/install-recovery.sh
+    $(LOCAL_PATH)/releasetools/install-recovery.sh:$(PRODUCT_OUT)/ota_temp/SYSTEM/bin/install-recovery.sh
 
 # RenderScript HAL
 PRODUCT_PACKAGES += \
