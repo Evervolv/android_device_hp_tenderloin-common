@@ -22,48 +22,13 @@
  *
  */
 
+#ifndef ANDROID_TOUCHSCREEN_DIGITIZER_H
+#define ANDROID_TOUCHSCREEN_DIGITIZER_H
+
 // Maximum number of times to retry powering on the digitizer
 #define MAX_DIGITIZER_RETRY 3
 
-void touchscreen_power(int enable);
+void digitizer_power(int enable);
+void digitizer_init(void);
 
-void init_digitizer_fd(void);
-#ifndef __FD_SET
-#define __FD_SET(fd, fdsetp)   (((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] |= (1<<((fd) & 31)))
-#endif
-
-#ifndef __FD_CLR
-#define __FD_CLR(fd, fdsetp)   (((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] &= ~(1<<((fd) & 31)))
-#endif
-
-#ifndef __FD_ISSET
-#define __FD_ISSET(fd, fdsetp)   ((((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] & (1<<((fd) & 31))) != 0)
-#endif
-
-#ifndef __FD_ZERO
-#define __FD_ZERO(fdsetp)   (memset (fdsetp, 0, sizeof (*(fd_set *)(fdsetp))))
-#endif
-
-#ifndef NFDBITS
-#define NFDBITS __NFDBITS
-#endif
-
-#ifndef FD_SETSIZE
-#define FD_SETSIZE __FD_SETSIZE
-#endif
-
-#ifndef FD_SET
-#define FD_SET(fd,fdsetp) __FD_SET(fd,fdsetp)
-#endif
-
-#ifndef FD_CLR
-#define FD_CLR(fd,fdsetp) __FD_CLR(fd,fdsetp)
-#endif
-
-#ifndef FD_ISSET
-#define FD_ISSET(fd,fdsetp) __FD_ISSET(fd,fdsetp)
-#endif
-
-#ifndef FD_ZERO
-#define FD_ZERO(fdsetp) __FD_ZERO(fdsetp)
-#endif
+#endif // ANDROID_TOUCHSCREEN_DIGITIZER_H

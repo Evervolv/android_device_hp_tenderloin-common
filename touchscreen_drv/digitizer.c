@@ -35,14 +35,14 @@
 
 static int vdd_fd, xres_fd, wake_fd, i2c_fd, ts_state;
 
-void touchscreen_power(int enable)
+void digitizer_power(int enable)
 {
     struct i2c_rdwr_ioctl_data i2c_ioctl_data;
     struct i2c_msg i2c_msg;
     __u8 i2c_buf[16];
     int rc;
 
-    ALOGI("touchscreen_power: enable=%d, ts_state=%d", enable, ts_state);
+    ALOGI("digitizer_power: enable=%d, ts_state=%d", enable, ts_state);
 
     if (enable && !ts_state) {
         int retry_count = 0;
@@ -162,7 +162,7 @@ try_again:
     }
 }
 
-void init_digitizer_fd(void) {
+void digitizer_init(void) {
     /* TS file descriptors. Ignore errors. */
     vdd_fd = open("/sys/devices/platform/cy8ctma395/vdd", O_WRONLY);
     if (vdd_fd < 0)

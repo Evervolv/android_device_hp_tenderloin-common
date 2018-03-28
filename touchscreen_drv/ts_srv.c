@@ -1272,14 +1272,14 @@ static void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
         if (buf == 67 /* 'C' */ && *uart_fd >= 0) {
             close(*uart_fd);
             *uart_fd = -1;
-            touchscreen_power(0);
+            digitizer_power(0);
 #if DEBUG_SOCKET
             ALOGD("uart closed\n");
 #endif
         }
         if (buf == 79 /* 'O' */ && *uart_fd < 0) {
             open_uart(uart_fd);
-            touchscreen_power(1);
+            digitizer_power(1);
 #if DEBUG_SOCKET
             ALOGD("uart opened at %i\n", *uart_fd);
 #endif
@@ -1333,19 +1333,14 @@ int main(void)
         perror("Cannot set RT priority, ignoring: ");
 
     open_uart(&uart_fd);
-    init_digitizer_fd();
-    touchscreen_power(1);
-
-
+    digitizer_init();
+    digitizer_power(1);
     open_uinput();
-
     read_settings_file();
-
     // Lift off in case of driver crash or in case the driver was shut off to
     // save power by closing the uart.
     liftoff();
     clear_arrays();
-
     create_ts_socket(&socket_fd);
 
     while(1) {
