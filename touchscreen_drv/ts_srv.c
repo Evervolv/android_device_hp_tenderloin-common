@@ -50,8 +50,38 @@
 #include <sys/un.h>
 
 #include "digitizer.h"
+#include "config.h"
 
-#if 1
+// Set to 1 to print coordinates to stdout.
+#define DEBUG 0
+// Set to 1 to enable socket debug information
+#define SOCKET_DEBUG 0
+// Set to 1 to enable settings file debug information
+#define TS_SETTINGS_DEBUG 0
+// Set to 1 to see raw data from the driver
+#define RAW_DATA_DEBUG 0
+// Set to 1 to see event logging
+#define EVENT_DEBUG 0
+// Set to 1 to enable tracking ID logging
+#define TRACK_ID_DEBUG 0
+// Set to 1 to see debug logging for max delta
+#define MAX_DELTA_DEBUG 0
+
+// Removes values below threshold for easy reading, set to 0 to see everything.
+// A value of 2 should remove most unwanted output
+#if DEBUG
+#define RAW_DATA_THRESHOLD 0
+#else
+#define RAW_DATA_THRESHOLD 2
+#endif
+
+#define RECV_BUF_SIZE			1540
+#define LIFTOFF_TIMEOUT			25000
+#define SOCKET_BUFFER_SIZE		10
+
+#define MAX_TOUCH			10 // Max touches that will be reported
+
+#if __ANDROID__
 // This is for Android
 #define UINPUT_LOCATION "/dev/uinput"
 #else
@@ -60,110 +90,13 @@
 #endif
 
 #define TS_SOCKET_LOCATION "/dev/socket/tsdriver"
-// Set to 1 to enable socket debug information
-#define DEBUG_SOCKET 0
-
 #define TS_SETTINGS_FILE "/data/tssettings"
-// Set to 1 to enable settings file debug information
-#define TS_SETTINGS_DEBUG 0
 
-/* Set to 1 to print coordinates to stdout. */
-#define DEBUG 0
-
-/* Set to 1 to see raw data from the driver */
-#define RAW_DATA_DEBUG 0
-// Removes values below threshold for easy reading, set to 0 to see everything.
-// A value of 2 should remove most unwanted output
-#define RAW_DATA_THRESHOLD 0
-
-// Set to 1 to see event logging
-#define EVENT_DEBUG 0
-// Set to 1 to enable tracking ID logging
-#define TRACK_ID_DEBUG 0
-
-#define AVG_FILTER 1
-
-#define USERSPACE_270_ROTATE 0
-
-#define RECV_BUF_SIZE 1540
-#define LIFTOFF_TIMEOUT 25000
-#define SOCKET_BUFFER_SIZE 10
-
-#define MAX_TOUCH 10 // Max touches that will be reported
-
-#define MAX_DELTA_FILTER 1 // Set to 1 to use max delta filtering
-// This value determines when a large distance change between one touch
-// and another will be reported as 2 separate touches instead of a swipe.
-// This distance is in pixels.
-#define MAX_DELTA 130
-// If we exceed MAX_DELTA, we'll check the previous touch point to see if
-// it was moving fairly far.  If the previous touch moved far enough and is
-// within the same direction / angle, we'll allow it to be a swipe.
-// This is the distance theshold that the previous touch must have traveled.
-// This value is in pixels.
-#define MIN_PREV_DELTA 40
-// This is the angle, plus or minus that the previous direction must have
-// been traveling.  This angle is an arctangent. (atan2)
-#define MAX_DELTA_ANGLE 0.25
-#define MAX_DELTA_DEBUG 0 // Set to 1 to see debug logging for max delta
-
-// Any touch above this threshold is immediately reported to the system
-#define TOUCH_INITIAL_THRESHOLD 32
 int touch_initial_thresh = TOUCH_INITIAL_THRESHOLD;
-// Previous touches that have already been reported will continue to be
-// reported so long as they stay above this threshold
-#define TOUCH_CONTINUE_THRESHOLD 26
 int touch_continue_thresh = TOUCH_CONTINUE_THRESHOLD;
-// New touches above this threshold but below TOUCH_INITIAL_THRESHOLD will not
-// be reported unless the touch continues to appear.  This is designed to
-// filter out brief, low threshold touches that may not be valid.
-#define TOUCH_DELAY_THRESHOLD 28
 int touch_delay_thresh = TOUCH_DELAY_THRESHOLD;
-// Delay before a touch above TOUCH_DELAY_THRESHOLD but below
-// TOUCH_INITIAL_THRESHOLD will be reported.  We will wait and see if this
-// touch continues to show up in future buffers before reporting the event.
-#define TOUCH_DELAY 5
 int touch_delay_count = TOUCH_DELAY;
-// Threshold for end of a large area. This value needs to be set low enough
-// to filter out large touch areas and tends to be related to other touch
-// thresholds.
-#define LARGE_AREA_UNPRESS 22 //TOUCH_CONTINUE_THRESHOLD
-#define LARGE_AREA_FRINGE 5 // Threshold for large area fringe
 
-// These are stylus thresholds:
-#define TOUCH_INITIAL_THRESHOLD_S  32
-#define TOUCH_CONTINUE_THRESHOLD_S 16
-#define TOUCH_DELAY_THRESHOLD_S    24
-#define TOUCH_DELAY_S               2
-
-// Enables filtering of a single touch to make it easier to long press.
-// Keeps the initial touch point the same so long as it stays within
-// the radius (note it's not really a radius and is actually a square)
-#define DEBOUNCE_FILTER 1 // Set to 1 to enable the debouce filter
-#define DEBOUNCE_RADIUS 10 // Radius for debounce in pixels
-#define DEBOUNCE_DEBUG 0 // Set to 1 to enable debounce logging
-
-// Enables filtering after swiping to prevent the slight jitter that
-// sometimes happens while holding your finger still.  The radius is
-// really a square. We don't start debouncing a hover unless the touch point
-// stays within the radius for the number of cycles defined by
-// HOVER_DEBOUNCE_DELAY
-#define HOVER_DEBOUNCE_FILTER 1 // Set to 1 to enable hover debounce
-#define HOVER_DEBOUNCE_RADIUS 2 // Radius for hover debounce in pixels
-#define HOVER_DEBOUNCE_DELAY 30 // Count of delay before we start debouncing
-#define HOVER_DEBOUNCE_DEBUG 0 // Set to 1 to enable hover debounce logging
-
-// This is used to help calculate ABS_TOUCH_MAJOR
-// This is roughly the value of 1024 / 40 or 768 / 30
-#define PIXELS_PER_POINT 25
-
-// This enables slots for the type B multi-touch protocol.
-// The kernel must support slots (ABS_MT_SLOT). The TouchPad 2.6.35 kernel
-// doesn't seem to handle liftoffs with protocol B properly so leave it off
-// for now.
-#define USE_B_PROTOCOL 0
-
-/** ------- end of user modifiable parameters ---- */
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define isBetween(A, B, C) ( ((A-B) > 0) && ((A-C) < 0) )
@@ -176,17 +109,10 @@ int touch_delay_count = TOUCH_DELAY;
 #define X_AXIS_MINUS1 X_AXIS_POINTS - 1 // 29
 #define Y_AXIS_MINUS1 Y_AXIS_POINTS - 1 // 39
 
-#if USERSPACE_270_ROTATE
-#define X_RESOLUTION  768
-#define Y_RESOLUTION 1024
-#define X_LOCATION_VALUE ((float)X_RESOLUTION) / ((float)X_AXIS_MINUS1)
-#define Y_LOCATION_VALUE ((float)Y_RESOLUTION) / ((float)Y_AXIS_MINUS1)
-#else
 #define X_RESOLUTION 1024
 #define Y_RESOLUTION  768
 #define X_LOCATION_VALUE ((float)X_RESOLUTION) / ((float)Y_AXIS_MINUS1)
 #define Y_LOCATION_VALUE ((float)Y_RESOLUTION) / ((float)X_AXIS_MINUS1)
-#endif // USERSPACE_270_ROTATE
 
 #define X_RESOLUTION_MINUS1 X_RESOLUTION - 1
 #define Y_RESOLUTION_MINUS1 Y_RESOLUTION - 1
@@ -206,11 +132,9 @@ struct touchpoint {
     int tracking_id;
     // Index location of this touch in the previous set of touches.
     int prev_loc;
-#if MAX_DELTA_FILTER
     // Direction and distance between this touch and the previous touch.
     float direction;
     int distance;
-#endif
     // Size of the touch area.
     int touch_major;
     // X and Y locations of the touch.  These values may have been changed by a
@@ -224,12 +148,10 @@ struct touchpoint {
     int highest_val;
     // Delay count for touches that do not have a very high highest_val.
     int touch_delay;
-#if HOVER_DEBOUNCE_FILTER
     // Location that we are tracking for hover debounce
     int hover_x;
     int hover_y;
     int hover_delay;
-#endif
 };
 
 // This array contains the current touches (tpoint), previous touches
@@ -315,7 +237,6 @@ static int send_uevent(int fd, __u16 type, __u16 code, __s32 value)
     return 0;
 }
 
-#if AVG_FILTER
 static void avg_filter(struct touchpoint *t) {
 #if DEBUG
     ALOGD("before: x=%d, y=%d", t->x, t->y);
@@ -339,9 +260,7 @@ static void avg_filter(struct touchpoint *t) {
     ALOGD("|||| after: x=%d, y=%d\n", t->x, t->y);
 #endif
 }
-#endif // AVG_FILTER
 
-#if HOVER_DEBOUNCE_FILTER
 static void hover_debounce(int i) {
     int prev_loc = tp[tpoint][i].prev_loc;
 
@@ -381,7 +300,6 @@ static void hover_debounce(int i) {
         tp[tpoint][i].hover_delay = HOVER_DEBOUNCE_DELAY;
     }
 }
-#endif // HOVER_DEBOUNCE_FILTER
 
 #if USE_B_PROTOCOL
 static void liftoff_slot(int slot) {
@@ -629,17 +547,13 @@ static int calc_point(void)
     float isum = 0, jsum = 0;
     float avgi, avgj;
     static int previoustpc, tracking_id = 0;
-#if DEBOUNCE_FILTER
     int new_debounce_touch = 0;
     static int initialx, initialy;
-#endif
 
     if (tp[tpoint][0].x < -20) {
         // We had a total liftoff
         previoustpc = 0;
-#if DEBOUNCE_FILTER
         new_debounce_touch = 1;
-#endif
     } else {
         // Re-assign array indexes
         prev2tpoint = prevtpoint;
@@ -685,16 +599,10 @@ static int calc_point(void)
                 tp[tpoint][tpc].slot = -1;
 #endif
                 tp[tpoint][tpc].prev_loc = -1;
-#if USERSPACE_270_ROTATE
-                tp[tpoint][tpc].x = tp[tpoint][tpc].i * X_LOCATION_VALUE;
-                tp[tpoint][tpc].y = Y_RESOLUTION_MINUS1 - tp[tpoint][tpc].j *
-                    Y_LOCATION_VALUE;
-#else
                 tp[tpoint][tpc].x = X_RESOLUTION_MINUS1 - tp[tpoint][tpc].j *
                     X_LOCATION_VALUE;
                 tp[tpoint][tpc].y = Y_RESOLUTION_MINUS1 - tp[tpoint][tpc].i *
                     Y_LOCATION_VALUE;
-#endif // USERSPACE_270_ROTATE
                 // It is possible for x and y to be negative with the math
                 // above so we force them to 0 if they are negative.
                 if (tp[tpoint][tpc].x < 0)
@@ -705,11 +613,9 @@ static int calc_point(void)
                 tp[tpoint][tpc].unfiltered_y = tp[tpoint][tpc].y;
                 tp[tpoint][tpc].highest_val = highest_val;
                 tp[tpoint][tpc].touch_delay = 0;
-#if HOVER_DEBOUNCE_FILTER
                 tp[tpoint][tpc].hover_x = tp[tpoint][tpc].x;
                 tp[tpoint][tpc].hover_y = tp[tpoint][tpc].y;
                 tp[tpoint][tpc].hover_delay = HOVER_DEBOUNCE_DELAY;
-#endif
                 tpc++;
             }
         }
@@ -769,7 +675,6 @@ static int calc_point(void)
         // Assign ids to closest touches
         for (i=0; i<tpc; i++) {
             if (smallest_distance_loc[i] > -1) {
-#if MAX_DELTA_FILTER
                 // Filter for impossibly large changes in touches
                 if (smallest_distance[i] > MAX_DELTA_SQ) {
                     int need_lift = 1;
@@ -822,9 +727,7 @@ static int calc_point(void)
 #endif // USE_B_PROTOCOL
                         process_new_tpoint(&tp[tpoint][i], &tracking_id);
                     }
-                } else
-#endif // MAX_DELTA_FILTER
-                {
+                } else {
 #if TRACK_ID_DEBUG
                     ALOGD("Continue Map %d - %d,%d - %lf,%lf -> %lf,%lf\n",
                         tp[prevtpoint][smallest_distance_loc[i]].tracking_id,
@@ -838,7 +741,6 @@ static int calc_point(void)
                     tp[tpoint][i].prev_loc = smallest_distance_loc[i];
                     tp[tpoint][i].touch_delay =
                         tp[prevtpoint][smallest_distance_loc[i]].touch_delay;
-#if MAX_DELTA_FILTER
                     // Track distance and angle
                     tp[tpoint][i].distance = smallest_distance[i];
                     tp[tpoint][i].direction = atan2(
@@ -846,13 +748,9 @@ static int calc_point(void)
                         tp[prevtpoint][smallest_distance_loc[i]].x,
                         tp[tpoint][i].y -
                         tp[prevtpoint][smallest_distance_loc[i]].y);
-#endif // MAX_DELTA_FILTER
-#if AVG_FILTER
+
                     avg_filter(&tp[tpoint][i]);
-#endif // AVG_FILTER
-#if HOVER_DEBOUNCE_FILTER
                     hover_debounce(i);
-#endif // HOVER_DEBOUNCE_FILTER
                 }
 #if USE_B_PROTOCOL
                 tp[tpoint][i].slot =
@@ -908,7 +806,6 @@ static int calc_point(void)
     }
 #endif // USE_B_PROTOCOL
 
-#if DEBOUNCE_FILTER
     // The debounce filter only works on a single touch.
     // We record the initial touchdown point, calculate a radius in
     // pixels and re-center the point if we're still within the
@@ -941,7 +838,6 @@ static int calc_point(void)
             }
         }
     }
-#endif
 
     // Report touches
     for (k = 0; k < tpc; k++) {
@@ -1121,10 +1017,8 @@ static void clear_arrays(void)
 #endif
             tp[i][j].tracking_id = -1;
             tp[i][j].prev_loc = -1;
-#if MAX_DELTA_FILTER
             tp[i][j].direction = 0;
             tp[i][j].distance = 0;
-#endif
             tp[i][j].touch_major = 0;
             tp[i][j].x = -1000;
             tp[i][j].y = -1000;
@@ -1132,11 +1026,9 @@ static void clear_arrays(void)
             tp[i][j].unfiltered_y = -1000;
             tp[i][j].highest_val = -1000;
             tp[i][j].touch_delay = -1000;
-#if HOVER_DEBOUNCE_FILTER
             tp[i][j].hover_x = -1000;
             tp[i][j].hover_y = -1000;
             tp[i][j].hover_delay = HOVER_DEBOUNCE_DELAY;
-#endif
         }
     }
 }
@@ -1273,28 +1165,28 @@ static void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
             close(*uart_fd);
             *uart_fd = -1;
             digitizer_power(0);
-#if DEBUG_SOCKET
+#if SOCKET_DEBUG
             ALOGD("uart closed\n");
 #endif
         }
         if (buf == 79 /* 'O' */ && *uart_fd < 0) {
             open_uart(uart_fd);
             digitizer_power(1);
-#if DEBUG_SOCKET
+#if SOCKET_DEBUG
             ALOGD("uart opened at %i\n", *uart_fd);
 #endif
         }
         if (buf == 70 /* 'F' */) {
             set_ts_mode(0);
             write_settings_file(0);
-#if DEBUG_SOCKET
+#if SOCKET_DEBUG
             ALOGD("finger mode set\n");
 #endif
         }
         if (buf == 83 /* 'S' */) {
             set_ts_mode(1);
             write_settings_file(1);
-#if DEBUG_SOCKET
+#if SOCKET_DEBUG
             ALOGD("stylus mode set\n");
 #endif
         }
@@ -1307,7 +1199,7 @@ static void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
                 sizeof(*current_mode), 0);
             if (send_ret <= 0)
                 ALOGE("Unable to send data to socket\n");
-#if DEBUG_SOCKET
+#if SOCKET_DEBUG
             else
                 ALOGD("Sent current mode of %i to socket\n",
                     (int)current_mode[0]);
@@ -1419,10 +1311,10 @@ int main(void)
 
                 recv_ret = recv(accept_fd, recv_str, SOCKET_BUFFER_SIZE, 0);
 
-                                recv_str[recv_ret]=0; // add string terminator
+                recv_str[recv_ret]=0; // add string terminator
 
                 if (recv_ret > 0) {
-#if DEBUG_SOCKET
+#if SOCKET_DEBUG
                     ALOGD("Socket received %i byte(s): '%s'\n", recv_ret,
                         recv_str);
 #endif
