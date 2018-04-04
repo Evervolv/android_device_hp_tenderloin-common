@@ -30,6 +30,7 @@
  */
 
 #define LOG_TAG "ts_srv"
+
 #include <cutils/log.h>
 #include <linux/input.h>
 #include <linux/uinput.h>
@@ -252,7 +253,7 @@ int uinput_fd;
 int slot_in_use[MAX_TOUCH];
 #endif
 
-int send_uevent(int fd, __u16 type, __u16 code, __s32 value)
+static int send_uevent(int fd, __u16 type, __u16 code, __s32 value)
 {
     struct input_event event;
 
@@ -315,7 +316,7 @@ int send_uevent(int fd, __u16 type, __u16 code, __s32 value)
 }
 
 #if AVG_FILTER
-void avg_filter(struct touchpoint *t) {
+static void avg_filter(struct touchpoint *t) {
 #if DEBUG
     ALOGD("before: x=%d, y=%d", t->x, t->y);
 #endif
@@ -341,7 +342,7 @@ void avg_filter(struct touchpoint *t) {
 #endif // AVG_FILTER
 
 #if HOVER_DEBOUNCE_FILTER
-void hover_debounce(int i) {
+static void hover_debounce(int i) {
     int prev_loc = tp[tpoint][i].prev_loc;
 
     tp[tpoint][i].hover_delay = tp[prevtpoint][prev_loc].hover_delay;
@@ -383,7 +384,7 @@ void hover_debounce(int i) {
 #endif // HOVER_DEBOUNCE_FILTER
 
 #if USE_B_PROTOCOL
-void liftoff_slot(int slot) {
+static void liftoff_slot(int slot) {
     // Sends a liftoff indicator for a specific slot
 #if EVENT_DEBUG
     ALOGD("liftoff slot function, lifting off slot: %i\n", slot);
@@ -396,7 +397,7 @@ void liftoff_slot(int slot) {
 }
 #endif // USE_B_PROTOCOL
 
-void liftoff(void)
+static void liftoff(void)
 {
 #if USE_B_PROTOCOL
     // Send liftoffs for any slots that haven't been lifted off
@@ -418,7 +419,7 @@ void liftoff(void)
     send_uevent(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
-void determine_area_loc_fringe(float *isum, float *jsum, int *tweight, int i,
+static void determine_area_loc_fringe(float *isum, float *jsum, int *tweight, int i,
     int j, int cur_touch_id){
     float powered;
 
@@ -492,7 +493,7 @@ void determine_area_loc_fringe(float *isum, float *jsum, int *tweight, int i,
     }
 }
 
-void determine_area_loc(float *isum, float *jsum, int *tweight, int i, int j,
+static void determine_area_loc(float *isum, float *jsum, int *tweight, int i, int j,
     int *mini, int *maxi, int *minj, int *maxj, int cur_touch_id,
     int *highest_val){
     float powered;
@@ -608,7 +609,7 @@ void determine_area_loc(float *isum, float *jsum, int *tweight, int i, int j,
     }
 }
 
-void process_new_tpoint(struct touchpoint *t, int *tracking_id) {
+static void process_new_tpoint(struct touchpoint *t, int *tracking_id) {
     // Handles setting up a brand new touch point
     if (t->highest_val > touch_delay_thresh) {
         t->tracking_id = *tracking_id;
@@ -620,7 +621,7 @@ void process_new_tpoint(struct touchpoint *t, int *tracking_id) {
     }
 }
 
-int calc_point(void)
+static int calc_point(void)
 {
     int i, j, k;
     int tweight = 0;
@@ -977,7 +978,7 @@ int calc_point(void)
 }
 
 
-int cline_valid(unsigned int extras)
+static int cline_valid(unsigned int extras)
 {
     if (cline[0] == 0xff && cline[1] == 0x43 && cidx == 44-extras) {
         return 1;
@@ -989,7 +990,7 @@ int cline_valid(unsigned int extras)
     return 0;
 }
 
-void put_byte(unsigned char byte)
+static void put_byte(unsigned char byte)
 {
     if(cidx==0 && byte != 0xFF)
         return;
@@ -1002,7 +1003,7 @@ void put_byte(unsigned char byte)
     cline[cidx++] = byte;
 }
 
-int consume_line(void)
+static int consume_line(void)
 {
     int i,j,ret=0;
 
@@ -1029,7 +1030,7 @@ int consume_line(void)
     return ret;
 }
 
-int snarf2(unsigned char* bytes, int size)
+static int snarf2(unsigned char* bytes, int size)
 {
     int i,ret=0;
 
@@ -1042,7 +1043,7 @@ int snarf2(unsigned char* bytes, int size)
     return ret;
 }
 
-void open_uinput(void)
+static void open_uinput(void)
 {
     struct uinput_user_dev device;
 
@@ -1106,7 +1107,7 @@ void open_uinput(void)
         ALOGE("error create\n");
 }
 
-void clear_arrays(void)
+static void clear_arrays(void)
 {
     // Clears array (for after a total liftoff occurs)
     int i, j;
@@ -1140,7 +1141,7 @@ void clear_arrays(void)
     }
 }
 
-void open_uart(int *uart_fd) {
+static void open_uart(int *uart_fd) {
     struct hsuart_mode uart_mode;
     *uart_fd = open("/dev/ctp_uart", O_RDONLY|O_NONBLOCK);
     if(*uart_fd <= 0) {
@@ -1155,7 +1156,7 @@ void open_uart(int *uart_fd) {
     ioctl(*uart_fd, HSUART_IOCTL_FLUSH, 0x9);
 }
 
-void create_ts_socket(int *socket_fd) {
+static void create_ts_socket(int *socket_fd) {
     // Create / open socket for input
     *socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (*socket_fd >= 0) {
@@ -1181,7 +1182,7 @@ void create_ts_socket(int *socket_fd) {
     chmod(TS_SOCKET_LOCATION, 438);
 }
 
-void set_ts_mode(int mode){
+static void set_ts_mode(int mode){
     if (mode == 0) {
         // Finger mode
         touch_initial_thresh = TOUCH_INITIAL_THRESHOLD;
@@ -1197,7 +1198,7 @@ void set_ts_mode(int mode){
     }
 }
 
-int read_settings_file(void) {
+static int read_settings_file(void) {
     // Check for and read the settings file.
     // If the file isn't found, finger mode will be the default mode
     FILE *fp;
@@ -1235,7 +1236,7 @@ int read_settings_file(void) {
     return ret_val;
 }
 
-void write_settings_file(int setting) {
+static void write_settings_file(int setting) {
     // Write to the settings file.
     FILE *fp;
     fp = fopen(TS_SETTINGS_FILE, "w");
@@ -1255,7 +1256,7 @@ void write_settings_file(int setting) {
     fclose(fp);
 }
 
-void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
+static void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
     int accept_fd) {
     // Processes data that is received from the socket
     // O = open uart
@@ -1316,7 +1317,7 @@ void process_socket_buffer(char buffer[], int buffer_len, int *uart_fd,
     }
 }
 
-int main(int argc, char** argv)
+int main(void)
 {
     int uart_fd, nbytes, need_liftoff = 0, sel_ret, socket_fd;
     unsigned char recv_buf[RECV_BUF_SIZE];

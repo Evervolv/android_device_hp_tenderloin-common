@@ -32,6 +32,7 @@
  */
 
 #define LOG_TAG "ts_srv_set"
+
 #include <cutils/log.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -44,7 +45,7 @@
 #define TS_SOCKET_TIMEOUT 500000
 #define SOCKET_BUFFER_SIZE 1
 
-int receive_ts_mode(int ts_fd) {
+static int receive_ts_mode(int ts_fd) {
     // Receives the mode from touchscreen socket
     struct timeval seltmout;
     fd_set fdset;
@@ -78,7 +79,7 @@ int receive_ts_mode(int ts_fd) {
     }
 }
 
-int send_ts_socket(char *send_data) {
+static int send_ts_socket(char *send_data) {
     // Connects to the touchscreen socket
     struct sockaddr_un unaddr;
     int ts_fd, len;
@@ -130,6 +131,7 @@ int main(int argc, char** argv)
         printf("This is used to set the mode of operation for the\n");
         printf("touchscreen driver on the TouchPad\n");
         return -1;
-    } else
-        return send_ts_socket(argv[1]);
+    }
+
+    return send_ts_socket(argv[1]);
 }
