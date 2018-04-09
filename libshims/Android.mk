@@ -16,8 +16,13 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := libshim_pmem
-LOCAL_SHARED_LIBRARIES := libbinder liblog libcutils libutils
+LOCAL_MODULE := libbinder_shim
+
+LOCAL_SHARED_LIBRARIES := \
+    libbinder \
+    liblog \
+    libcutils \
+    libutils
 
 LOCAL_CLANG := true
 LOCAL_SANITIZE := integer
@@ -33,19 +38,3 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
 LOCAL_CFLAGS += -Werror
 
 include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := libshim_pmem
-LOCAL_STATIC_LIBRARIES += libbinder libutils
-LOCAL_SRC_FILES := MemoryHeapPmem.cpp
-
-LOCAL_C_INCLUDES += \
-    $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
-
-LOCAL_ADDITIONAL_DEPENDENCIES := \
-    $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
-
-LOCAL_CFLAGS += -Werror
-
-include $(BUILD_STATIC_LIBRARY)
