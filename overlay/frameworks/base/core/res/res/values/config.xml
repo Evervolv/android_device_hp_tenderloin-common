@@ -194,5 +194,5 @@
     <integer name="config_deviceHardwareWakeKeys">65</integer>
 
     <!-- Whether the device supports Smart Pixels -->
-    <bool name="config_enableSmartPixels">true</bool>
+    <bool name="config_enableSmartPixels">false</bool>
 </resources>
