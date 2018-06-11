@@ -30,8 +30,7 @@ LOCAL_C_INCLUDES :=  \
     $(TARGET_OUT_HEADERS)/mm-camera \
     $(TARGET_OUT_HEADERS)/mm-still/jpeg \
     $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
-    system/media/camera/include \
-    $(LOCAL_PATH)/../libshims/include
+    system/media/camera/include
 
 LOCAL_ADDITIONAL_DEPENDENCIES := \
     $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
@@ -51,8 +50,7 @@ LOCAL_SHARED_LIBRARIES := \
     libbinder \
     libdl \
     libhardware \
-    libstagefrighthw \
-    libshim_pmem
+    libstagefrighthw
 
 ifeq ($(BOARD_DEBUG_MEMLEAKS),true)
     LOCAL_SHARED_LIBRARIES += libheaptracker

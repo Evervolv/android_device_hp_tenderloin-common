@@ -223,10 +223,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl
 
-# Shims
-PRODUCT_PACKAGES += \
-    libbinder_shim
-
 # System properties
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=160 \
