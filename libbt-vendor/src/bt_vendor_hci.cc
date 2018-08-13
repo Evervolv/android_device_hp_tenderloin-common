@@ -32,6 +32,7 @@
 #include "upio.h"
 #include "userial_vendor.h"
 #include "hardware.h"
+#include <string.h>
 
 #ifndef BTVND_DBG
 #define BTVND_DBG FALSE
