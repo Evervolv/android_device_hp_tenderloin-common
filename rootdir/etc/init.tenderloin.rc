@@ -226,13 +226,11 @@ service tsdriver /system/bin/ts_srv
     class core
     user root
     critical
-    seclabel u:r:ts_srv:s0
 
 service lvm /sbin/lvm.static vgchange -ay
     class core
     disabled
     oneshot
-    seclabel u:r:lvm:s0
 
 service reboot_recovery /system/bin/moboot_control.sh recovery
      class core
