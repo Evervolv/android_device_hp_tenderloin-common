@@ -144,6 +144,10 @@ on fs
     restorecon /data/.layout_version
     restorecon_recursive /dev/mapper/
 
+on post-fs
+    # Allow writing to the kernel trace log.
+    chmod 0222 /sys/kernel/debug/tracing/trace_marker
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
