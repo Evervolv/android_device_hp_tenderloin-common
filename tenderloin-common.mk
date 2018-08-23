@@ -75,7 +75,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bluetooth/bluecore6.psr:/system/etc/bluetooth/bluecore6.psr
 
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-impl \
+    android.hardware.bluetooth@1.0-impl-legacy \
     android.hardware.bluetooth@1.0-service \
     libbt-vendor
 
