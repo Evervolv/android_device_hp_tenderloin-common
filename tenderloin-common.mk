@@ -185,9 +185,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Prebuilts
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/prebuilt/tptoolbox.cfg:tptoolbox.cfg \
     $(LOCAL_PATH)/prebuilt/boot/moboot.splash.Android.tga:moboot.splash.Android.tga \
-    $(LOCAL_PATH)/prebuilt/boot/moboot.default:moboot.default \
     $(LOCAL_PATH)/prebuilt/lvm/lvm.conf:root/lvm/lvm.conf \
     $(LOCAL_PATH)/prebuilt/install/gapps-config.txt:install/.gapps-config-tenderloin.txt \
     $(LOCAL_PATH)/prebuilt/install/bin/e2fsck_static:install/bin/e2fsck_static \
