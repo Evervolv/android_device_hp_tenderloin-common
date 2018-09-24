@@ -205,7 +205,7 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
-service tsdriver /system/bin/ts_srv
+service tsdriver /vendor/bin/ts_srv
     class core
     user root
     critical
@@ -215,7 +215,7 @@ service lvm /sbin/lvm.static vgchange -ay
     disabled
     oneshot
 
-service reboot_recovery /system/bin/moboot_control.sh recovery
+service reboot_recovery /vendor/bin/moboot_control.sh recovery
      class core
      user root
      group root
