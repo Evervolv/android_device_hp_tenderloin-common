@@ -36,8 +36,8 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
 LOCAL_C_INCLUDES +=  \
-    $(TOP)/hardware/qcom/display-caf/msm8960/libgralloc \
-    $(TOP)/hardware/qcom/display-caf/msm8960/libgenlock
+    $(call project-path-for,qcom-display)/libgralloc \
+    $(call project-path-for,qcom-display)/libgenlock
 
 LOCAL_SHARED_LIBRARIES := \
     libutils \
@@ -56,4 +56,5 @@ ifeq ($(BOARD_DEBUG_MEMLEAKS),true)
     LOCAL_SHARED_LIBRARIES += libheaptracker
 endif
 
+LOCAL_32_BIT_ONLY := true
 include $(BUILD_SHARED_LIBRARY)
