@@ -1,7 +1,43 @@
-on enable-low-power
-    # LMK
-    write /sys/module/lowmemorykiller/parameters/minfree 8192,10240,12288,14336,16384,20480
+on boot
+    # CPUFreq limit
+    chown system system /sys/kernel/cpufreq_limit/limited_max_freq
+    chown system system /sys/kernel/cpufreq_limit/limited_min_freq
 
+    # set permission for scaling_governor
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chown system system /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+
+    # allow system to modify kgsl trustzone governor
+    chown system system /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor
+    chmod 0664 /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor
+
+    # allow system to modify cpu input boost
+    chown system system /sys/kernel/cpu_input_boost/enabled
+    chmod 0664 /sys/kernel/cpu_input_boost/enabled
+    chown system system /sys/kernel/cpu_input_boost/ib_freqs
+    chmod 0664 /sys/kernel/cpu_input_boost/ib_freqs
+    chown system system /sys/kernel/cpu_input_boost/ib_duration_ms
+    chmod 0664 /sys/kernel/cpu_input_boost/ib_duration_ms
+
+    # allow system to modify ondemand governor
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/down_differential
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/sync_freq
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/up_threshold
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load
+    chown system system /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core
+    chmod 666 /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+    chmod 666 /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
+
+    setprop sys.usb.ffs.aio_compat 1
+    setprop sys.io.scheduler "noop"
+
+on enable-low-power
     # Power collapse
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled 1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
@@ -29,19 +65,41 @@ on enable-low-power
     write /sys/module/cpu_boost/parameters/sync_threshold 1512000
     write /sys/module/cpu_boost/parameters/input_boost_freq 1134000
 
+    # CPU input boost
+    write /sys/kernel/cpu_input_boost/ib_freqs "1134000 1242000"
+    write /sys/kernel/cpu_input_boost/ib_duration_ms 1400
+
+    # Configure OnDemand
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "ondemand"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "ondemand"
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
+    write /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy 1
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor 4
+    write /sys/devices/system/cpu/cpufreq/ondemand/down_differential 10
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core 70
+    write /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq 918000
+    write /sys/devices/system/cpu/cpufreq/ondemand/sync_freq 1026000
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load 80
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 50000
+
     # KGSL trustzone governor
     write /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor ondemand
 
-on property:sys.boot_completed=1
-    # Configure Interactive
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
-    # Set up KSM
+    # MSM Thermal
+    write /sys/kernel/msm_thermal/enabled 0
+    write /sys/kernel/msm_thermal/low_thresh "1188000 64 60"
+    write /sys/kernel/msm_thermal/mid_thresh "972000 69 65"
+    write /sys/kernel/msm_thermal/high_thresh "384000 80 75"
+    write /sys/kernel/msm_thermal/sampling_ms 3000
+
+    # KSM
     write /sys/kernel/mm/ksm/run 0
 
-on boot
+on property:sys.boot_completed=1
     trigger enable-low-power
-    setprop sys.usb.ffs.aio_compat 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
+    setprop sys.io.scheduler "cfq"
 
 on property:init.svc.recovery=running
     trigger enable-low-power
