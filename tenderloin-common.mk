@@ -41,6 +41,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/moboot_control.sh:system/bin/moboot_control.sh
 
+# LVM
+PRODUCT_PACKAGES += \
+    lvm.static \
+    lvm.conf
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.tenderloin \
@@ -186,7 +191,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Prebuilts
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/boot/moboot.splash.Android.tga:moboot.splash.Android.tga \
-    $(LOCAL_PATH)/prebuilt/lvm/lvm.conf:root/lvm/lvm.conf \
     $(LOCAL_PATH)/prebuilt/install/gapps-config.txt:install/.gapps-config-tenderloin.txt \
     $(LOCAL_PATH)/prebuilt/install/bin/e2fsck_static:install/bin/e2fsck_static \
     $(LOCAL_PATH)/prebuilt/install/bin/resize2fs_static:install/bin/resize2fs_static \
@@ -246,8 +250,7 @@ PRODUCT_PACKAGES += \
     ts_srv \
     ts_srv_set \
     mkbootimg \
-    mkimage \
-    lvm.static
+    mkimage
 
 # USB
 PRODUCT_PACKAGES += \
