@@ -21,7 +21,6 @@ TARGET_HAVE_TSLIB := false
 
 # Art
 LIBART_IMG_BASE := 0x57000000
-WITH_DEXPREOPT := true
 
 # Binder API version
 TARGET_USES_64_BIT_BINDER := true
@@ -65,8 +64,6 @@ TARGET_HAS_NO_CAMERA_FLASH := true
 # Device manifest
 DEVICE_MANIFEST_FILE := $(PLATFORM_PATH)/manifest.xml
 DEVICE_MATRIX_FILE := $(PLATFORM_PATH)/compatibility_matrix.xml
-
-WITH_DEXPREOPT := false
 
 # Display
 USE_OPENGL_RENDERER := true
