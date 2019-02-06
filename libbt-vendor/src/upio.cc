@@ -140,16 +140,16 @@ int upio_set_bluetooth_power(int on)
     int sz;
     int fd = -1;
     int ret = -1;
-    char buffer = '0';
+    bool buffer = false;
 
     switch(on)
     {
         case UPIO_BT_POWER_OFF:
-            buffer = '0';
+            buffer = false;
             break;
 
         case UPIO_BT_POWER_ON:
-            buffer = '1';
+            buffer = true;
             break;
     }
 
@@ -168,18 +168,19 @@ int upio_set_bluetooth_power(int on)
             rfkill_state_path, strerror(errno), errno);
         return ret;
     }
+    if (buffer)
+        sz  = property_set("sys.bt.rfkill", "1");
+    else
+        sz  = property_set("sys.bt.rfkill", "0");
 
-    sz = write(fd, &buffer, 1);
-
-    if (sz < 0) {
+    if (sz < 0)
         ALOGE("set_bluetooth_power : write(%s) failed: %s (%d)",
             rfkill_state_path, strerror(errno),errno);
-    }
-    else
-        ret = 0;
+
+
 
     if (fd >= 0)
         close(fd);
 
-    return ret;
+    return 0;
 }

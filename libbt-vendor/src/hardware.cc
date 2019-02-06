@@ -871,7 +871,10 @@ static int set_bluetooth_power(int on)
         return ret;
     }
 
-    sz = write(rfd, &buffer, 1);
+    if (on)
+        sz  = property_set("sys.bt.rfkill", "1");
+    else
+        sz  = property_set("sys.bt.rfkill", "0");
 
     if (sz < 0) {
         ALOGE("set_bluetooth_power : write(%s) failed: %s (%d)",
