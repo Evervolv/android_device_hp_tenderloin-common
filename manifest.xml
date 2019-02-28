@@ -1,7 +1,7 @@
 <manifest version="1.0" type="device" target-level="1">
     <hal format="hidl">
         <name>android.hardware.audio</name>
-        <transport arch="32">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
             <name>IDevicesFactory</name>
@@ -10,7 +10,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.audio.effect</name>
-        <transport arch="32">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>2.0</version>
         <interface>
             <name>IEffectsFactory</name>
@@ -19,11 +19,21 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.bluetooth</name>
-        <transport arch="32">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
             <name>IBluetoothHci</name>
             <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.camera.provider</name>
+        <transport arch="32">passthrough</transport>
+        <version>2.4</version>
+        <interface>
+            <name>ICameraProvider</name>
+            <instance>external/0</instance>
+            <instance>legacy/0</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -106,10 +116,19 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.keymaster</name>
-        <transport arch="32">passthrough</transport>
+        <transport>hwbinder</transport>
         <version>3.0</version>
         <interface>
             <name>IKeymasterDevice</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.light</name>
+        <transport arch="32">passthrough</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ILight</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -145,6 +164,24 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>android.hardware.renderscript</name>
+        <transport arch="32">passthrough</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IDevice</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.soundtrigger</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ISoundTriggerHw</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.sensors</name>
         <transport arch="32">passthrough</transport>
         <version>1.0</version>
@@ -163,9 +200,18 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>android.hardware.vibrator</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IVibrator</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.wifi</name>
-        <transport arch="32">passthrough</transport>
-        <version>1.1</version>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
         <interface>
             <name>IWifi</name>
             <instance>default</instance>
@@ -174,7 +220,7 @@
     <hal format="hidl">
         <name>android.hardware.wifi.supplicant</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
+        <version>1.1</version>
         <interface>
             <name>ISupplicant</name>
             <instance>default</instance>
