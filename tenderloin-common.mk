@@ -154,13 +154,14 @@ PRODUCT_PACKAGES += \
 # System properties
 $(call inherit-product, $(LOCAL_PATH)/system_prop.mk)
 
+# Touchscreen
+PRODUCT_PACKAGES += \
+    ts_srv \
+    ts_srv_set
+
 # Tools
 PRODUCT_PACKAGES += \
     librs_jni \
-    libmllite \
-    libmlplatform \
-    ts_srv \
-    ts_srv_set \
     mkbootimg \
     mkimage
 

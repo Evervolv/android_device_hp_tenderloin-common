@@ -27,24 +27,25 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS := -DLOG_TAG=\"Sensors\"
 LOCAL_SRC_FILES := \
-	sensors.c \
-	nusensors.cpp \
-	InputEventReader.cpp \
-	SensorBase.cpp \
-	lsm303dlh_acc.cpp \
-	lsm303dlh_mag.cpp \
-	LightSensor.cpp \
-	MPLSensor.cpp
+    sensors.c \
+    nusensors.cpp \
+    InputEventReader.cpp \
+    SensorBase.cpp \
+    lsm303dlh_acc.cpp \
+    lsm303dlh_mag.cpp \
+    LightSensor.cpp \
+    MPLSensor.cpp
 
 LOCAL_CFLAGS += -DCONFIG_MPU_SENSORS_MPU3050=1
 
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/platform/include
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/platform/include/linux
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/platform/linux
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/mllite
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/mldmp
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/external/aichi
-LOCAL_C_INCLUDES += device/hp/tenderloin-common/mlsdk/external/akmd
+LOCAL_C_INCLUDES += \
+    $(LOCAL_PATH)/../mlsdk/platform/include \
+    $(LOCAL_PATH)/../mlsdk/platform/include/linux \
+    $(LOCAL_PATH)/../mlsdk/platform/linux \
+    $(LOCAL_PATH)/../mlsdk/mllite \
+    $(LOCAL_PATH)/../mlsdk/mldmp \
+    $(LOCAL_PATH)/../mlsdk/external/aichi \
+    $(LOCAL_PATH)/../mlsdk/external/akmd
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils libutils libdl libmllite libmlplatform
 LOCAL_CPPFLAGS+=-DLINUX=1
