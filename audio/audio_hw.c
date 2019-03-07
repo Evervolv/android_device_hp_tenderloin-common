@@ -15,16 +15,20 @@
  */
 
 #define LOG_TAG "audio_hw_primary"
-#define LOG_NDEBUG 0
+//#define LOG_NDEBUG 0
 
 #include <errno.h>
+#include <fcntl.h>
+#include <malloc.h>
 #include <pthread.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <fcntl.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 #include <sys/time.h>
 
-#include <cutils/log.h>
+#include <log/log.h>
 #include <cutils/properties.h>
 #include <cutils/str_parms.h>
 
@@ -32,10 +36,8 @@
 #include <hardware/hardware.h>
 
 #include <system/audio.h>
-
-#include <tinyalsa/asoundlib.h>
-
 #include <audio_utils/resampler.h>
+#include <tinyalsa/asoundlib.h>
 
 #include "audio_route.h"
 
@@ -617,7 +619,7 @@ static uint32_t out_get_sample_rate(const struct audio_stream *stream)
 static int out_set_sample_rate(struct audio_stream *stream, uint32_t rate)
 {
     ALOGV("%s\n", __func__);
-    return -ENOSYS;
+    return 0;
 }
 
 static size_t out_get_buffer_size(const struct audio_stream *stream)
@@ -626,7 +628,7 @@ static size_t out_get_buffer_size(const struct audio_stream *stream)
                audio_stream_out_frame_size((const struct audio_stream_out *)stream);
 }
 
-static uint32_t out_get_channels(const struct audio_stream *stream)
+static audio_channel_mask_t out_get_channels(const struct audio_stream *stream)
 {
     return AUDIO_CHANNEL_OUT_STEREO;
 }
@@ -639,7 +641,7 @@ static audio_format_t out_get_format(const struct audio_stream *stream)
 static int out_set_format(struct audio_stream *stream, audio_format_t format)
 {
     ALOGV("%s\n", __func__);
-    return -ENOSYS;
+    return 0;
 }
 
 static int out_standby(struct audio_stream *stream)
@@ -727,7 +729,7 @@ static uint32_t out_get_latency(const struct audio_stream_out *stream)
 static int out_set_volume(struct audio_stream_out *stream, float left,
                           float right)
 {
-    return -ENOSYS;
+    return 0;
 }
 
 static ssize_t out_write(struct audio_stream_out *stream, const void* buffer,
@@ -772,7 +774,7 @@ exit:
 static int out_get_render_position(const struct audio_stream_out *stream,
                                    uint32_t *dsp_frames)
 {
-    return -ENODATA;
+    return -EINVAL;
 }
 
 static int out_add_audio_effect(const struct audio_stream *stream, effect_handle_t effect)
@@ -788,7 +790,7 @@ static int out_remove_audio_effect(const struct audio_stream *stream, effect_han
 static int out_get_next_write_timestamp(const struct audio_stream_out *stream,
                                         int64_t *timestamp)
 {
-    return -ENOSYS;
+    return -EINVAL;
 }
 
 static int out_get_presentation_position(const struct audio_stream_out *stream,
@@ -821,7 +823,7 @@ static int out_get_presentation_position(const struct audio_stream_out *stream,
 /** audio_stream_in implementation **/
 static uint32_t in_get_sample_rate(const struct audio_stream *stream)
 {
-    struct stream_in *in = (struct stream_in *)stream;
+    const struct stream_in *in = (const struct stream_in *)stream;
 
     return in->requested_rate;
 }
@@ -848,7 +850,7 @@ static size_t in_get_buffer_size(const struct audio_stream *stream)
     return size * audio_stream_in_frame_size(&in->stream);
 }
 
-static uint32_t in_get_channels(const struct audio_stream *stream)
+static audio_channel_mask_t in_get_channels(const struct audio_stream *stream)
 {
     return AUDIO_CHANNEL_IN_MONO;
 }
@@ -860,7 +862,7 @@ static audio_format_t in_get_format(const struct audio_stream *stream)
 
 static int in_set_format(struct audio_stream *stream, audio_format_t format)
 {
-    return -ENOSYS;
+    return 0;
 }
 
 static int in_standby(struct audio_stream *stream)
@@ -938,7 +940,7 @@ static char * in_get_parameters(const struct audio_stream *stream,
 
 static int in_set_gain(struct audio_stream_in *stream, float gain)
 {
-    return -ENOSYS;
+    return 0;
 }
 
 static ssize_t in_read(struct audio_stream_in *stream, void* buffer,
@@ -1135,6 +1137,21 @@ static int adev_set_master_volume(struct audio_hw_device *dev, float volume)
     return -ENOSYS;
 }
 
+static int adev_get_master_volume(struct audio_hw_device *dev, float *volume)
+{
+    return -ENOSYS;
+}
+
+static int adev_set_master_mute(struct audio_hw_device *dev, bool muted)
+{
+    return -ENOSYS;
+}
+
+static int adev_get_master_mute(struct audio_hw_device *dev, bool *muted)
+{
+    return -ENOSYS;
+}
+
 static int adev_set_mode(struct audio_hw_device *dev, audio_mode_t mode)
 {
     return 0;
@@ -1229,12 +1246,10 @@ static int adev_open_input_stream(struct audio_hw_device *dev,
 }
 
 static void adev_close_input_stream(struct audio_hw_device *dev,
-                                   struct audio_stream_in *stream)
+                                   struct audio_stream_in *in)
 {
-    struct stream_in *in = (struct stream_in *)stream;
-
-    in_standby(&stream->common);
-    free(stream);
+    in_standby(&in->common);
+    free(in);
 }
 
 static int adev_dump(const audio_hw_device_t *device, int fd)
@@ -1275,6 +1290,9 @@ static int adev_open(const hw_module_t* module, const char* name,
     adev->hw_device.init_check = adev_init_check;
     adev->hw_device.set_voice_volume = adev_set_voice_volume;
     adev->hw_device.set_master_volume = adev_set_master_volume;
+    adev->hw_device.get_master_volume = adev_get_master_volume;
+    adev->hw_device.set_master_mute = adev_set_master_mute;
+    adev->hw_device.get_master_mute = adev_get_master_mute;
     adev->hw_device.set_mode = adev_set_mode;
     adev->hw_device.set_mic_mute = adev_set_mic_mute;
     adev->hw_device.get_mic_mute = adev_get_mic_mute;
