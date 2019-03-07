@@ -243,7 +243,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Tools
 PRODUCT_PACKAGES += \
-    dosfsck \
     librs_jni \
     libmllite \
     libmlplatform \
