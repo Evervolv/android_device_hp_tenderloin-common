@@ -1,13 +1,12 @@
-#<src>					<mnt_point>	<type>	<mnt_flags and options>					<fs_mgr_flags>
+#<src>					<mnt_point>	<type>	<mnt_flags and options>					<fs_mgr_flags>  
 /dev/block/mmcblk0p13			/boot		ext3	ro,noatime,barrier=0					recoveryonly
 /dev/store/cm-system			/system		ext4	rw,errors=panic						wait
 /dev/store/cm-data			/data		f2fs	rw,nosuid,nodev,noatime,nodiratime,inline_data,inline_xattr,inline_dentry	wait,check,formattable
 /dev/store/cm-data			/data		ext4	nosuid,nodev,noatime,noauto_da_alloc,errors=panic	wait,check,formattable
 /dev/store/cm-cache			/cache		f2fs	rw,nosuid,nodev,noatime,nodiratime,inline_data,inline_xattr,inline_dentry	wait,check,formattable
 /dev/store/cm-cache			/cache		ext4	nosuid,nodev,barrier=1					wait,check,formattable
-/dev/store/swap	                         none           swap    defaults                                                swapprio=1, 0    0
 
-/devices/virtual/block/dm-6		auto		vfat	defaults						voldmanaged=sdcard1:auto,nonremovable,encryptable=userdata
+/devices/virtual/block/dm-6		auto		vfat	defaults						voldmanaged=sdcard1:auto,nonremovable,encryptable=userdata 
 
 /devices/platform/msm_hsusb_host.0	auto		auto	defaults						voldmanaged=usbdisk:auto,noemulatedsd
 
