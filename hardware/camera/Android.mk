@@ -26,7 +26,7 @@ ifeq ($(BOARD_DEBUG_MEMLEAKS),true)
 endif
 
 LOCAL_C_INCLUDES :=  \
-    $(TOP)/frameworks/base/include \
+    frameworks/base/include \
     $(TARGET_OUT_HEADERS)/mm-camera \
     $(TARGET_OUT_HEADERS)/mm-still/jpeg \
     $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
