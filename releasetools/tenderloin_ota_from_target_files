@@ -124,9 +124,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   # Dump fingerprints
   script.Print("Target: {}".format(target_info.fingerprint))
 
-  script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
-  device_specific.FullOTA_InstallBegin()
-
 # MOTD during flash added for Evervolv by cocide
   if (OPTIONS.motd != None):
     eachRawMotd = OPTIONS.motd.split("\\n")
@@ -149,6 +146,19 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
       for line in motdLine:
         script.Print(line)
 
+  script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
+  device_specific.FullOTA_InstallBegin()
+
+  CopyInstallTools(output_zip)
+  script.UnpackPackageDir("install", "/tmp/install")
+  script.SetPermissionsRecursive("/tmp/install", 0, 0, 0755, 0644, None, None)
+  script.SetPermissionsRecursive("/tmp/install/bin", 0, 0, 0755, 0755, None, None)
+
+  if OPTIONS.backuptool:
+    script.Mount("/system")
+    script.RunBackup("backup")
+    script.Unmount("/system")
+
   system_progress = 0.75
 
   if OPTIONS.wipe_user_data:
@@ -157,7 +167,6 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     system_progress -= 0.1
 
   script.ShowProgress(system_progress, 0)
-  script.Print("Installing Evervolv")
 
   # See the notes in WriteBlockIncrementalOTAPackage().
   allow_shared_blocks = target_info.get('ext4_share_dup_blocks') == "true"
@@ -191,6 +200,12 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra('run_program("/tmp/install/bin/e2fsck_static", "-fy", "/dev/store/cm-system");')
   script.AppendExtra('run_program("/tmp/install/bin/resize2fs_static", "/dev/store/cm-system");')
   script.AppendExtra('run_program("/tmp/install/bin/e2fsck_static", "-fy", "/dev/store/cm-system");')
+
+  if OPTIONS.backuptool:
+    script.ShowProgress(0.02, 10)
+    script.Mount("/system")
+    script.RunBackup("restore")
+    script.Unmount("/system")
 
   script.ShowProgress(0.05, 5)
 
