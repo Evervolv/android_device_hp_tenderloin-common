@@ -52,9 +52,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.sys.fw.trim_empty_percent=100 \
     ro.sys.fw.trim_cache_percent=100 \
     ro.sys.fw.trim_enable_memory=874512384 \
-    ro.sys.fw.bservice_enable=true \
-    ro.sys.fw.bservice_limit=5 \
-    ro.sys.fw.bservice_age=5000
+    ro.vendor.qti.sys.fw.bservice_enable=true \
+    ro.vendor.qti.sys.fw.bservice_limit=5 \
+    ro.vendor.qti.sys.fw.bservice_age=5000
 
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
