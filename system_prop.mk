@@ -59,8 +59,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true \
-    persist.media.treble_omx=false
+    media.stagefright.less-secure=true
 
 # Scheduler
 PRODUCT_PROPERTY_OVERRIDES += \
