@@ -230,10 +230,17 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
+service tsdriver-sh /vendor/bin/init.tsdriver.sh
+    class core
+    user root
+    group root system
+    oneshot
+
 service tsdriver /vendor/bin/ts_srv
     class core
     user root
     critical
+    disabled
 
 service lvm /sbin/lvm.static vgchange -ay
     class core

@@ -47,6 +47,7 @@ PRODUCT_PACKAGES += \
     init.tenderloin.rc \
     init.tenderloin.power.rc \
     init.tenderloin.usb.rc \
+    init.tsdriver.sh \
     ueventd.tenderloin.rc
 
 # Audio
