@@ -48,11 +48,6 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service
 
-#GNSS HAL
-PRODUCT_PACKAGES += \
-    android.hardware.gnss@1.0-impl \
-    android.hardware.gnss@1.0-service
-
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl \
