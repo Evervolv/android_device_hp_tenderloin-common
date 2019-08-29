@@ -1,6 +1,0 @@
-type serial, domain;
-type serial_exec, exec_type, file_type;
-init_daemon_domain(serial)
-
-allow serial rootfs:file { entrypoint };
-allow serial tmpfs:chr_file rw_file_perms;

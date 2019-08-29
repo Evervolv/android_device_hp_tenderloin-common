@@ -1,2 +1,0 @@
-type lvm_file, file_type;
-type ts_srv_file, file_type;

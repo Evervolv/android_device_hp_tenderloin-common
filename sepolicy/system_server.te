@@ -1,1 +1,0 @@
-allow system_server ts_srv:unix_stream_socket connectto;
